@@ -9,7 +9,7 @@ body {
     font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif;
     line-height: 1.6;
     color: #333;
-    background: linear-gradient(135deg, #87CEEB 0%, #98FB98 25%, #F0FFF0 50%, #FFB6C1 75%, #FFFFFF 100%);
+    background: linear-gradient(135deg, #87CEEB 0%, #9ACD32 25%, #F0FFFF 50%, #E0FFFF 75%, #FFFFFF 100%);
     min-height: 100vh;
 }
 
@@ -29,28 +29,28 @@ body {
 }
 
 .icon-location {
-    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
-    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+    background: linear-gradient(45deg, #87CEEB, #4682B4);
+    box-shadow: 0 2px 8px rgba(135, 206, 235, 0.4);
 }
 
 .icon-mountain {
-    background: linear-gradient(45deg, #4ECDC4, #44A08D);
-    box-shadow: 0 2px 8px rgba(78, 205, 196, 0.4);
+    background: linear-gradient(45deg, #9ACD32, #32CD32);
+    box-shadow: 0 2px 8px rgba(154, 205, 50, 0.4);
 }
 
 .icon-badge {
-    background: linear-gradient(45deg, #FFD93D, #FF6B6B);
-    box-shadow: 0 2px 8px rgba(255, 217, 61, 0.4);
+    background: linear-gradient(45deg, #87CEEB, #9ACD32);
+    box-shadow: 0 2px 8px rgba(154, 205, 50, 0.4);
 }
 
 .icon-share {
-    background: linear-gradient(45deg, #6C5CE7, #A29BFE);
-    box-shadow: 0 2px 8px rgba(108, 92, 231, 0.4);
+    background: linear-gradient(45deg, #4682B4, #87CEEB);
+    box-shadow: 0 2px 8px rgba(70, 130, 180, 0.4);
 }
 
 .icon-gallery {
-    background: linear-gradient(45deg, #FF7675, #FD79A8);
-    box-shadow: 0 2px 8px rgba(255, 118, 117, 0.4);
+    background: linear-gradient(45deg, #32CD32, #9ACD32);
+    box-shadow: 0 2px 8px rgba(50, 205, 50, 0.4);
 }
 
 /* ボタンスタイルの改善 */
@@ -71,25 +71,25 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
     color: white;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(135, 206, 235, 0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(135, 206, 235, 0.4);
 }
 
 .btn-secondary {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #9ACD32 0%, #32CD32 100%);
     color: white;
-    box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+    box-shadow: 0 4px 15px rgba(154, 205, 50, 0.3);
 }
 
 .btn-secondary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
+    box-shadow: 0 6px 20px rgba(154, 205, 50, 0.4);
 }
 
 .btn:active {
@@ -107,30 +107,30 @@ body {
 header {
     text-align: center;
     padding: 2rem 1rem;
-    background: rgba(255, 255, 255, 0.9);
+    background: linear-gradient(135deg, rgba(135, 206, 235, 0.9) 0%, rgba(154, 205, 50, 0.9) 100%);
     backdrop-filter: blur(10px);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
     font-size: 2.5rem;
-    color: #2c3e50;
+    color: #FFFFFF;
     margin-bottom: 0.5rem;
     font-family: 'serif';
     font-weight: bold;
     letter-spacing: 3px;
     text-shadow: 
-        2px 2px 0 #FFFFFF,
-        4px 4px 8px rgba(0, 0, 0, 0.2);
-    color: #4682B4;
+        2px 2px 0 #4682B4,
+        4px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 header p {
     font-size: 1.1rem;
-    color: #7f8c8d;
+    color: #FFFFFF;
     font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
     font-weight: 500;
     letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* PWAインストールボタン */
@@ -204,14 +204,14 @@ header p {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    background: rgba(0, 0, 0, 0.85);
+    background: linear-gradient(135deg, rgba(135, 206, 235, 0.9) 0%, rgba(154, 205, 50, 0.9) 100%);
     color: white;
     padding: 20px;
     border-radius: 15px;
     max-width: 400px;
     z-index: 15;
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .controls-panel h3 {
@@ -244,13 +244,13 @@ header p {
     position: fixed;
     top: 70px;
     left: 20px;
-    background: rgba(0, 0, 0, 0.85);
+    background: linear-gradient(135deg, rgba(70, 130, 180, 0.9) 0%, rgba(32, 178, 170, 0.9) 100%);
     color: white;
     padding: 15px;
     border-radius: 10px;
     z-index: 15;
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .status-item {
