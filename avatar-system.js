@@ -794,6 +794,124 @@ class HakusanAvatarSystem {
         };
     }
     
+    // RPGマップとの連携
+    setMap(mapEngine) {
+        this.mapEngine = mapEngine;
+        console.log('🔗 アバターシステム <-> マップエンジン連携完了');
+    }
+    
+    getCurrentAvatar() {
+        return {
+            ...this.currentAvatar,
+            sprite: this.generateAvatarSprite(),
+            animation: this.currentAnimation
+        };
+    }
+    
+    generateAvatarSprite() {
+        // 16x16ピクセルのアバタースプライトを生成
+        const canvas = document.createElement('canvas');
+        canvas.width = 16;
+        canvas.height = 16;
+        const ctx = canvas.getContext('2d');
+        
+        // 背景透明
+        ctx.clearRect(0, 0, 16, 16);
+        
+        // 体の描画
+        ctx.fillStyle = this.currentAvatar.colors.skin;
+        ctx.fillRect(6, 4, 4, 6); // 頭
+        ctx.fillRect(5, 10, 6, 6); // 体
+        
+        // 髪の描画
+        ctx.fillStyle = this.currentAvatar.colors.hair;
+        switch(this.currentAvatar.hair) {
+            case 'short':
+                ctx.fillRect(5, 3, 6, 3);
+                break;
+            case 'long':
+                ctx.fillRect(4, 3, 8, 4);
+                break;
+            case 'ponytail':
+                ctx.fillRect(5, 3, 6, 3);
+                ctx.fillRect(11, 4, 2, 3);
+                break;
+            case 'hat':
+                ctx.fillStyle = this.currentAvatar.colors.accessory;
+                ctx.fillRect(4, 2, 8, 4);
+                break;
+        }
+        
+        // 服装の描画
+        ctx.fillStyle = this.currentAvatar.colors.outfit;
+        switch(this.currentAvatar.outfit) {
+            case 'casual':
+                ctx.fillRect(5, 10, 6, 4);
+                break;
+            case 'outdoor':
+                ctx.fillRect(4, 10, 8, 4);
+                ctx.fillRect(5, 14, 6, 2);
+                break;
+            case 'traditional':
+                ctx.fillRect(4, 10, 8, 6);
+                break;
+        }
+        
+        // アクセサリーの描画
+        if (this.currentAvatar.accessory !== 'none') {
+            ctx.fillStyle = this.currentAvatar.colors.accessory;
+            switch(this.currentAvatar.accessory) {
+                case 'backpack':
+                    ctx.fillRect(2, 11, 2, 3);
+                    break;
+                case 'camera':
+                    ctx.fillRect(8, 12, 2, 2);
+                    break;
+                case 'badge':
+                    ctx.fillRect(4, 11, 1, 1);
+                    break;
+            }
+        }
+        
+        return canvas.toDataURL();
+    }
+    
+    playAnimation(animationType) {
+        if (this.animations[animationType]) {
+            this.currentAnimation = animationType;
+            this.animationFrame = 0;
+            this.lastAnimationTime = Date.now();
+            
+            // マップエンジンに通知
+            if (this.mapEngine) {
+                this.mapEngine.updatePlayerAppearance();
+            }
+        }
+    }
+    
+    onRegionDiscovered(regionId) {
+        // 地域発見時のアバターアニメーション
+        this.playAnimation('celebrate');
+        
+        // 新パーツのアンロック判定
+        this.checkUnlocks();
+        
+        // 発見アニメーション後に通常に戻す
+        setTimeout(() => {
+            this.playAnimation('idle');
+        }, 2000);
+    }
+    
+    onBadgeCollected(badgeType) {
+        // バッジ収集時のパーツアンロック
+        this.playAnimation('discover');
+        this.checkUnlocks();
+        
+        setTimeout(() => {
+            this.playAnimation('idle');
+        }, 1500);
+    }
+    
     // デバッグ用
     unlockAllParts() {
         Object.values(this.avatarParts).forEach(parts => {
@@ -809,7 +927,12 @@ class HakusanAvatarSystem {
 
 // グローバル初期化
 document.addEventListener('DOMContentLoaded', () => {
-    window.avatarSystem = new HakusanAvatarSystem();
+    if (!window.avatarSystem) {
+        window.avatarSystem = new HakusanAvatarSystem();
+    }
 });
+
+// エクスポート
+window.HakusanAvatar = HakusanAvatarSystem;
 
 console.log('👤 アバターシステム読み込み完了');

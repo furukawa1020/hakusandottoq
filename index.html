@@ -3,676 +3,373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>はくさんNFCバッジクエスト</title>YPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>白山ピクセル冒険マップ - リアル探索RPG</title>
-    
-    <!-- PWA設定 -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <meta name="theme-color" content="#2E8B57">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>ハクサンリーグ・旧市町村ジムバッジ - 白山市NFCジムバッジラリー</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="rpg-map.css">
+    <link rel="stylesheet" href="incentive-system.css">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Courier New', monospace;
+        /* ピクセルマップ専用スタイル */
+        .pixel-map-section {
             background: #1a1a1a;
-            color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .map-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .map-controls button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .map-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .pixel-canvas-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            border-radius: 10px;
             overflow: hidden;
         }
-
-        #gameContainer {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            background: linear-gradient(45deg, #2E8B57, #228B22);
-        }
-
+        
         #pixelCanvas {
-            display: block;
+            max-width: 100%;
+            max-height: 60vh;
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            cursor: crosshair;
+            border: 2px solid #4ECDC4;
         }
-
-        .ui-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-        }
-
-        .stats-panel {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.8);
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            padding: 15px;
-            min-width: 200px;
-            pointer-events: auto;
-            font-size: 14px;
-        }
-
-        .badge-count {
-            color: #ffff00;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .location-info {
-            color: #00ffff;
-            margin-bottom: 5px;
-        }
-
-        .action-buttons {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            pointer-events: auto;
-        }
-
-        .rpg-button {
-            background: linear-gradient(45deg, #8B4513, #A0522D);
-            border: 2px solid #DEB887;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-family: inherit;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 12px;
-        }
-
-        .rpg-button:hover {
-            background: linear-gradient(45deg, #A0522D, #CD853F);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-
-        .rpg-button.primary {
-            background: linear-gradient(45deg, #FF6347, #FF4500);
-            border-color: #FFA500;
-        }
-
-        .rpg-button.camera {
-            background: linear-gradient(45deg, #4169E1, #1E90FF);
-            border-color: #87CEEB;
-        }
-
+        
         .mini-map {
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 150px;
-            height: 150px;
-            background: rgba(0,0,0,0.7);
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            pointer-events: auto;
+            border: 2px solid #FFD700;
+            border-radius: 5px;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
         }
-
-        .avatar-customizer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9);
-            border: 3px solid #00ff00;
-            border-radius: 12px;
-            padding: 20px;
-            display: none;
-            pointer-events: auto;
-            z-index: 1000;
-        }
-
-        .avatar-customizer.show {
-            display: block;
-        }
-
-        .avatar-editor {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .avatar-preview {
+        
+        .map-mode-toggle {
+            margin: 20px 0;
             text-align: center;
         }
-
-        .avatar-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .control-group label {
-            color: #00ffff;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .color-picker {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-
-        .color-option {
-            width: 25px;
-            height: 25px;
-            border: 2px solid #fff;
-            border-radius: 4px;
+        
+        .map-mode-toggle button {
+            padding: 12px 25px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
             cursor: pointer;
-            transition: transform 0.2s;
+            font-size: 16px;
+            transition: all 0.3s ease;
         }
-
-        .color-option:hover {
-            transform: scale(1.1);
-        }
-
-        .color-option.selected {
-            border-color: #ffff00;
-            transform: scale(1.2);
-        }
-
-        .notification {
-            position: absolute;
-            top: 50px;
-            right: 20px;
-            background: rgba(0,0,0,0.9);
-            border: 2px solid #ffff00;
-            border-radius: 8px;
-            padding: 15px;
-            max-width: 300px;
-            transform: translateX(400px);
-            transition: transform 0.5s ease;
-            pointer-events: auto;
-            z-index: 999;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification .badge-icon {
-            width: 32px;
-            height: 32px;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 10px;
-            border-radius: 50%;
+        
+        .map-mode-toggle button.active {
             background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #333;
         }
-
-        .photo-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            pointer-events: auto;
-        }
-
-        .photo-modal.show {
-            display: flex;
-        }
-
-        .photo-container {
-            position: relative;
-            max-width: 90vw;
-            max-height: 90vh;
-        }
-
-        #cameraVideo {
-            max-width: 100%;
-            max-height: 70vh;
-            border-radius: 12px;
-        }
-
-        .photo-controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .region-photos {
-            position: absolute;
-            bottom: 200px;
-            left: 20px;
-            right: 20px;
-            display: none;
-            pointer-events: auto;
-        }
-
-        .region-photos.show {
-            display: block;
-        }
-
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            background: rgba(0,0,0,0.8);
-            padding: 15px;
-            border-radius: 8px;
-            border: 2px solid #00ffff;
-        }
-
-        .region-photo {
-            width: 100px;
-            height: 80px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            object-fit: cover;
-            border: 2px solid transparent;
-        }
-
-        .region-photo:hover {
-            transform: scale(1.1);
-            border-color: #ffff00;
-        }
-
+        
         @media (max-width: 768px) {
-            .stats-panel {
-                font-size: 12px;
-                padding: 10px;
-                min-width: 150px;
+            .pixel-canvas-container {
+                flex-direction: column;
             }
-
-            .action-buttons {
-                bottom: 10px;
-                gap: 5px;
-            }
-
-            .rpg-button {
-                padding: 8px 12px;
-                font-size: 11px;
-            }
-
+            
             .mini-map {
-                width: 100px;
-                height: 100px;
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 10px;
             }
-
-            .avatar-customizer {
-                width: 90vw;
-                max-width: 400px;
+            
+            .map-controls {
+                justify-content: center;
             }
-
-            .avatar-editor {
-                grid-template-columns: 1fr;
+            
+            .map-controls button {
+                font-size: 12px;
+                padding: 8px 12px;
             }
         }
     </style>
 </head>
 <body>
-    <div id="gameContainer">
-        <!-- メインゲーム画面 -->
-        <canvas id="pixelCanvas"></canvas>
-        
-        <!-- UI オーバーレイ -->
-        <div class="ui-overlay">
-            <!-- 統計パネル -->
-            <div class="stats-panel">
-                <div class="badge-count" id="badgeCount">バッジ: 0/8</div>
-                <div class="location-info" id="currentLocation">現在地: 冒険開始</div>
-                <div class="location-info" id="nearestSpot">最寄り: 探索中...</div>
-                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #333;">
-                    <div style="font-size: 11px; color: #aaa;">移動: WASD / 矢印キー</div>
-                    <div style="font-size: 11px; color: #aaa;">アクション: スペース</div>
-                </div>
-            </div>
-
-            <!-- ミニマップ -->
-            <div class="mini-map">
-                <canvas id="miniMapCanvas" width="146" height="146"></canvas>
-            </div>
-
-            <!-- アクションボタン -->
-            <div class="action-buttons">
-                <button class="rpg-button" onclick="toggleRegionPhotos()">
-                    🗺️ スポット
-                </button>
-                <button class="rpg-button camera" onclick="openARCamera()">
-                    📸 AR撮影
-                </button>
-                <button class="rpg-button primary" onclick="openAvatarCustomizer()">
-                    👤 アバター
-                </button>
-                <button class="rpg-button" onclick="exportAdventureData()">
-                    💾 データ
-                </button>
-            </div>
-        </div>
-
-        <!-- 地域写真パネル -->
-        <div class="region-photos" id="regionPhotos">
-            <div class="photo-grid" id="photoGrid">
-                <!-- 動的に生成される地域写真 -->
-            </div>
-        </div>
-
-        <!-- アバターカスタマイザー -->
-        <div class="avatar-customizer" id="avatarCustomizer">
-            <h3 style="color: #00ff00; text-align: center; margin-bottom: 15px;">⚡ アバター作成</h3>
-            <div class="avatar-editor">
-                <div class="avatar-preview">
-                    <canvas id="avatarPreview" width="80" height="80"></canvas>
-                    <div style="margin-top: 10px; font-size: 12px; color: #ffff00;">プレビュー</div>
-                </div>
-                <div class="avatar-controls">
-                    <div class="control-group">
-                        <label>髪色</label>
-                        <div class="color-picker" id="hairColors"></div>
-                    </div>
-                    <div class="control-group">
-                        <label>服装</label>
-                        <div class="color-picker" id="clothingColors"></div>
-                    </div>
-                    <div class="control-group">
-                        <label>アクセサリ</label>
-                        <div class="color-picker" id="accessoryColors"></div>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="rpg-button" onclick="saveAvatar()">保存</button>
-                        <button class="rpg-button" onclick="closeAvatarCustomizer()">閉じる</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 通知システム -->
-        <div class="notification" id="notification">
-            <div style="display: flex; align-items: center;">
-                <div class="badge-icon" id="notificationBadge"></div>
-                <div>
-                    <div style="color: #ffff00; font-weight: bold;" id="notificationTitle">新発見！</div>
-                    <div style="color: #fff; font-size: 12px;" id="notificationText"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AR写真モーダル -->
-        <div class="photo-modal" id="photoModal">
-            <div class="photo-container">
-                <video id="cameraVideo" autoplay muted></video>
-                <canvas id="arCanvas" style="position: absolute; top: 0; left: 0; pointer-events: none;"></canvas>
-                <div class="photo-controls">
-                    <button class="rpg-button camera" onclick="captureARPhoto()">📸 撮影</button>
-                    <button class="rpg-button" onclick="closeARCamera()">閉じる</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScriptファイル読み込み -->
-    <script src="rpg-map-engine.js"></script>
-    <script src="badge-system.js"></script>
-    <script src="region-photos.js"></script>
-    <script src="ar-camera.js"></script>
-    <script src="avatar-system.js"></script>
-    <script src="analytics-system.js"></script>
-
-    <!-- PWA サービスワーカー -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('✅ Service Worker registered'))
-                .catch(err => console.log('❌ Service Worker registration failed'));
-        }
-    </script>
-</body>
-</html>
-</head>
-<body>    <header>
+    <header>
         <h1>ハクサンリーグ・旧市町村ジムバッジ</h1>
-        <p>白山市の8つのジムを巡りバッジを集めよう！</p>
-        
-        <!-- PWAインストールボタン -->
-        <div class="pwa-install-section" id="pwaInstallSection">
-            <button class="pwa-install-btn" id="pwaInstallBtn">
-                📱 アプリとしてインストール
-            </button>
-        </div>
-        
-        <!-- 新機能ナビゲーション -->
-        <nav class="feature-nav">
-            <button class="nav-btn" onclick="openAvatarEditor()" title="ドット絵アバター作成">
-                🎨 アバター
-            </button>
-            <button class="nav-btn" onclick="showRealStats()" title="リアル統計データ">
-                📊 統計
-            </button>
-            <button class="nav-btn" onclick="window.open('rpg-index.html', '_blank')" title="RPGマップビュー">
-                🗺️ RPG マップ
-            </button>
-        </nav>
+        <p>白山市の8つのジムを巡り伝説のトレーナーになろう！</p>
     </header>
 
-    <main>
-        <div class="stamp-counter">
-            <h2>ジムバッジ獲得状況</h2>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+    <main class="rpg-main">
+        <!-- ゲーム状況表示 -->
+        <div class="game-status">
+            <div class="badge-counter">
+                <span class="counter-icon">🏆</span>
+                <span id="stampCount">0/8</span>
+                <button onclick="shareBadgeProgress()" class="share-progress-btn" style="
+                    margin-left: 10px; padding: 5px 10px; background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+                    color: white; border: none; border-radius: 15px; cursor: pointer; font-size: 12px;
+                    transition: transform 0.2s; opacity: 0.9;
+                " onmouseover="this.style.transform='scale(1.05)'; this.style.opacity='1'" 
+                  onmouseout="this.style.transform='scale(1)'; this.style.opacity='0.9'">
+                    📱 進捗シェア
+                </button>
             </div>
-            <p id="stampCount">0/8 バッジ獲得</p>
-        </div>
-
-        <div class="map-section">
-            <h2>ハクサンリーグ マップ</h2>
-            <div class="map-wrapper">
-                <div class="game-map" id="gameMap">
-                    <!-- マップコントロール -->
-                    <div class="map-controls">
-                        <button class="zoom-btn" onclick="zoomIn()" title="拡大">+</button>
-                        <div class="zoom-level" id="zoomLevel">100%</div>
-                        <button class="zoom-btn" onclick="zoomOut()" title="縮小">-</button>
-                        <button class="zoom-btn" onclick="resetZoom()" title="リセット">⌂</button>
-                    </div>
-                <!-- 中央の十字マーク -->
-                <div class="center-cross" style="position: absolute; top: 65%; left: 55%; font-size: 24px; color: #228B22;">+</div>
-                
-                <!-- 右下のゲームボーイアイコン -->
-                <div class="gameboy-icon" style="position: absolute; bottom: 15%; right: 15%; font-size: 20px; color: #8A2BE2;">🎮</div>
-                
-                <!-- ジムロケーション - 画像通りの配置 -->
-                
-                <!-- 美川ジム - 南西部、完全に陸地の内陸部 -->
-                <div class="gym-location" data-town="mikawa" style="top: 66%; left: 50%;">
-                    <div class="gym-pin mikawa-gym" id="gym-mikawa" onclick="visitTown('mikawa')">
-                        <div class="gym-badge">美</div>
-                    </div>
-                    <span class="gym-label">美川ジム</span>
-                </div>
-                
-                <!-- 松任ジム - 中央平野部、市の中心部 -->
-                <div class="gym-location" data-town="mattou" style="top: 60%; left: 55%;">
-                    <div class="gym-pin mattou-gym" id="gym-mattou" onclick="visitTown('mattou')">
-                        <div class="gym-badge">松</div>
-                    </div>
-                    <span class="gym-label">松任ジム</span>
-                </div>
-                
-                <!-- 鶴来ジム - 手取川扇状地・白山麓の入口、より内陸側 -->
-                <div class="gym-location" data-town="tsurugi" style="top: 52%; left: 62%;">
-                    <div class="gym-pin tsurugi-gym" id="gym-tsurugi" onclick="visitTown('tsurugi')">
-                        <div class="gym-badge">鶴</div>
-                    </div>
-                    <span class="gym-label">鶴来ジム</span>
-                </div>
-                
-                <!-- 河内ジム - 手取川中流域 -->
-                <div class="gym-location" data-town="kawachi" style="top: 48%; left: 58%;">
-                    <div class="gym-pin kawachi-gym" id="gym-kawachi" onclick="visitTown('kawachi')">
-                        <div class="gym-badge">河</div>
-                    </div>
-                    <span class="gym-label">河内ジム</span>
-                </div>
-                
-                <!-- 吉野谷ジム - 白山麓・山間部 -->
-                <div class="gym-location" data-town="yoshinodani" style="top: 38%; left: 65%;">
-                    <div class="gym-pin yoshinodani-gym" id="gym-yoshinodani" onclick="visitTown('yoshinodani')">
-                        <div class="gym-badge">吉</div>
-                    </div>
-                    <span class="gym-label">吉野谷ジム</span>
-                </div>
-                
-                <!-- 鳥越ジム - 白山麓・山間部東側 -->
-                <div class="gym-location" data-town="torigoe" style="top: 32%; left: 72%;">
-                    <div class="gym-pin torigoe-gym" id="gym-torigoe" onclick="visitTown('torigoe')">
-                        <div class="gym-badge">鳥</div>
-                    </div>
-                    <span class="gym-label">鳥越ジム</span>
-                </div>
-                
-                <!-- 尾口ジム - 手取川上流域・白山麓奥部 -->
-                <div class="gym-location" data-town="oguchi" style="top: 28%; left: 58%;">
-                    <div class="gym-pin oguchi-gym" id="gym-oguchi" onclick="visitTown('oguchi')">
-                        <div class="gym-badge">尾</div>
-                    </div>
-                    <span class="gym-label">尾口ジム</span>
-                </div>
-                
-                <!-- 白峰ジム - 白山連峰最奥部 -->
-                <div class="gym-location" data-town="shiramine" style="top: 18%; left: 65%;">
-                    <div class="gym-pin shiramine-gym" id="gym-shiramine" onclick="visitTown('shiramine')">
-                        <div class="gym-badge">白</div>
-                    </div>
-                    <span class="gym-label">白峰ジム</span>
-                </div>
-                </div>
+            <div class="progress-ring">
+                <svg class="progress-ring-svg" width="60" height="60">
+                    <circle class="progress-ring-circle-bg" cx="30" cy="30" r="25"/>
+                    <circle class="progress-ring-circle" cx="30" cy="30" r="25" id="progressCircle"/>
+                </svg>
+                <div class="progress-text">進捗</div>
             </div>
         </div>
 
-        <div class="town-grid">
-            <div class="town-card" data-town="tsurugi">
-                <div class="badge-icon">？</div>
-                <h3>鶴来ジム</h3>
-                <div class="badge-name">クレインバッジ</div>
-                <div class="stamp-status" id="stamp-tsurugi">未取得</div>
-                <div class="card-actions">
-                    <button class="visit-btn" onclick="visitTown('tsurugi')">挑戦する</button>
-                    <button class="ar-photo-btn" onclick="startARPhoto('tsurugi')" title="AR写真撮影">📸</button>
+        <!-- メインマップエリア -->
+        <div class="main-map-container">
+            <h2 class="map-title">🗺️ ハクサンリーグ 冒険マップ</h2>
+            
+            <!-- ピクセルマップキャンバス -->
+            <div class="pixel-map-section">
+                <div class="map-controls">
+                    <button onclick="toggleMapMode()" class="map-mode-btn">🎮 ピクセルマップ</button>
+                    <button onclick="openAvatarCustomizer()" class="avatar-btn">👤 アバター</button>
+                    <button onclick="openPhotoGallery()" class="photo-btn">📷 写真</button>
+                    <button onclick="openARCamera()" class="ar-btn">📱 AR</button>
+                    <button onclick="shareBadgeProgress()" class="share-btn" style="background: linear-gradient(45deg, #FF6B6B, #FF8E53);">📱 SNSシェア</button>
+                </div>
+                <div class="pixel-canvas-container">
+                    <canvas id="pixelCanvas" width="800" height="600"></canvas>
+                    <canvas id="miniMapCanvas" width="200" height="150" class="mini-map"></canvas>
                 </div>
             </div>
+            
+            <!-- 従来のRPGワールドマップ -->
+            <div class="rpg-world-map">
+                <!-- 白山の立体表現 -->
+                <div class="hakusan-mountain">
+                    <div class="mountain-peak"></div>
+                    <div class="mountain-mid"></div>
+                    <div class="mountain-base"></div>
+                    <div class="mountain-snow"></div>
+                </div>
+                
+                <!-- 手取川 -->
+                <div class="tedori-river">
+                    <div class="river-source"></div>
+                    <div class="river-main"></div>
+                    <div class="river-delta"></div>
+                    <div class="river-flow"></div>
+                </div>
+                
+                <!-- 日本海 -->
+                <div class="japan-sea">
+                    <div class="sea-waves"></div>
+                    <div class="sea-deep"></div>
+                </div>
+                
+                <!-- 森林エリア */
+                <div class="forest-area north-forest"></div>
+                <div class="forest-area east-forest"></div>
+                <div class="forest-area mountain-forest"></div>
+                
+                <!-- 平野部 -->
+                <div class="plains-area central-plains"></div>
+                <div class="plains-area coastal-plains"></div>
+                
+                <!-- ジムロケーション - 実際の地理に基づいた配置 -->
+                <div class="gym-location shrine-gym" data-town="tsurugi" style="top: 45%; left: 35%;" onclick="visitTown('tsurugi')">
+                    <div class="gym-building tsurugi-gym" id="gym-tsurugi">
+                        <div class="gym-roof shrine-roof"></div>
+                        <div class="gym-walls shrine-walls"></div>
+                        <div class="gym-door"></div>
+                        <div class="gym-badge">🕊️</div>
+                        <div class="gym-glow"></div>
+                    </div>
+                    <div class="gym-info">
+                        <span class="gym-name">鶴来神社</span>
+                        <span class="gym-type fairy">フェアリー</span>
+                        <span class="gym-status" id="status-tsurugi">未挑戦</span>
+                    </div>
+                </div>
+                
+                <div class="gym-location coastal-gym" data-town="mikawa" style="top: 75%; left: 25%;" onclick="visitTown('mikawa')">
+                    <div class="gym-building mikawa-gym" id="gym-mikawa">
+                        <div class="gym-roof port-roof"></div>
+                        <div class="gym-walls port-walls"></div>
+                        <div class="gym-door"></div>
+                        <div class="gym-badge">🎺</div>
+                        <div class="gym-glow"></div>
+                    </div>
+                    <div class="gym-info">
+                        <span class="gym-name">美川港町</span>
+                        <span class="gym-type water">みず</span>
+                        <span class="gym-status" id="status-mikawa">未挑戦</span>
+                    </div>
+                </div>
+                
+                <div class="gym-location central-gym" data-town="mattou" style="top: 60%; left: 40%;" onclick="visitTown('mattou')">
+                    <div class="gym-building mattou-gym" id="gym-mattou">
+                        <div class="gym-roof city-roof"></div>
+                        <div class="gym-walls city-walls"></div>
+                        <div class="gym-door"></div>
+                        <div class="gym-badge">🌲</div>
+                        <div class="gym-glow"></div>
+                    </div>
+                    <div class="gym-info">
+                        <span class="gym-name">松任中央</span>
+                        <span class="gym-type normal">ノーマル</span>
+                        <span class="gym-status" id="status-mattou">未挑戦</span>
+                    </div>
+                </div>
+                
+                <div class="gym-location river-gym" data-town="kawachi" style="top: 40%; left: 55%;" onclick="visitTown('kawachi')">
+                    <div class="gym-building kawachi-gym" id="gym-kawachi">
+                        <div class="gym-roof bridge-roof"></div>
+                        <div class="gym-walls bridge-walls"></div>
+                        <div class="gym-door"></div>
+                        <div class="gym-badge">🌉</div>
+                        <div class="gym-glow"></div>
+                    </div>
+                    <div class="gym-info">
+                        <span class="gym-name">河内渓谷</span>
+                        <span class="gym-type ground">じめん</span>
+                        <span class="gym-status" id="status-kawachi">未挑戦</span>
+                    </div>
+                </div>
+                
+                <div class="gym-location mountain-gym" data-town="shiramine" style="top: 25%; left: 70%;" onclick="visitTown('shiramine')">
+                    <div class="gym-building shiramine-gym" id="gym-shiramine">
+                        <div class="gym-roof snow-roof"></div>
+                        <div class="gym-walls snow-walls"></div>
+                        <div class="gym-door"></div>
+                        <div class="gym-badge">❄️</div>
+                        <div class="gym-glow"></div>
+                    </div>
+                    <div class="gym-info">
+                        <span class="gym-name">白峰雪里</span>
+                        <span class="gym-type ice">こおり</span>
+                        <span class="gym-status" id="status-shiramine">未挑戦</span>
+                    </div>
+                </div>
+                
+                <div class="gym-location forest-gym" data-town="yoshinodani" style="top: 35%; left: 65%;" onclick="visitTown('yoshinodani')">
+                    <div class="gym-building yoshinodani-gym" id="gym-yoshinodani">
+                        <div class="gym-roof forest-roof"></div>
+                        <div class="gym-walls forest-walls"></div>
+                        <div class="gym-door"></div>
+                        <div class="gym-badge">🌸</div>
+                        <div class="gym-glow"></div>
+                    </div>
+                    <div class="gym-info">
+                        <span class="gym-name">吉野谷花郷</span>
+                        <span class="gym-type grass">くさ</span>
+                        <span class="gym-status" id="status-yoshinodani">未挑戦</span>
+                    </div>
+                </div>
+                
+                <div class="gym-location castle-gym" data-town="torigoe" style="top: 50%; left: 70%;" onclick="visitTown('torigoe')">
+                    <div class="gym-building torigoe-gym" id="gym-torigoe">
+                        <div class="gym-roof castle-roof"></div>
+                        <div class="gym-walls castle-walls"></div>
+                        <div class="gym-door"></div>
+                        <div class="gym-badge">🏰</div>
+                        <div class="gym-glow"></div>
+                    </div>
+                    <div class="gym-info">
+                        <span class="gym-name">鳥越古城</span>
+                        <span class="gym-type fighting">かくとう</span>
+                        <span class="gym-status" id="status-torigoe">未挑戦</span>
+                    </div>
+                </div>
+                
+                <div class="gym-location waterfall-gym" data-town="oguchi" style="top: 30%; left: 80%;" onclick="visitTown('oguchi')">
+                    <div class="gym-building oguchi-gym" id="gym-oguchi">
+                        <div class="gym-roof falls-roof"></div>
+                        <div class="gym-walls falls-walls"></div>
+                        <div class="gym-door"></div>
+                        <div class="gym-badge">🌊</div>
+                        <div class="gym-glow"></div>
+                    </div>
+                    <div class="gym-info">
+                        <span class="gym-name">尾口瀑布</span>
+                        <span class="gym-type water">みず</span>
+                        <span class="gym-status" id="status-oguchi">未挑戦</span>
+                    </div>
+                </div>
+                
+                <!-- 冒険要素 -->
+                <div class="adventure-elements">
+                    <div class="legendary-pokemon" style="top: 20%; left: 50%;" title="伝説のポケモンが眠る白山山頂">👑</div>
+                    <div class="treasure-chest" style="top: 70%; left: 80%;" title="隠された秘宝">💎</div>
+                    <div class="wild-pokemon bird" style="top: 50%; left: 20%;" title="野生のポケモン">🦋</div>
+                    <div class="wild-pokemon fish" style="top: 75%; left: 30%;" title="川のポケモン">🐟</div>
+                </div>
+            </div>
+        </div>
 
-            <div class="town-card" data-town="mikawa">
-                <div class="badge-icon">？</div>
-                <h3>美川ジム</h3>
-                <div class="badge-name">ラッパバッジ</div>
-                <div class="stamp-status" id="stamp-mikawa">未取得</div>
-                <div class="card-actions">
-                    <button class="visit-btn" onclick="visitTown('mikawa')">挑戦する</button>
-                    <button class="ar-photo-btn" onclick="startARPhoto('mikawa')" title="AR写真撮影">📸</button>
+        <!-- サイドバー情報 -->
+        <div class="adventure-sidebar">
+            <div class="trainer-info">
+                <h3>🎒 トレーナー情報</h3>
+                <div class="trainer-avatar">🧑‍🎓</div>
+                <div class="badges-collected" id="badgesList">
+                    <!-- バッジ一覧が動的に表示される -->
                 </div>
             </div>
+            
+            <div class="map-legend">
+                <h3>🗺️ 地図の見方</h3>
+                <div class="legend-items">
+                    <div class="legend-item"><span class="legend-icon gym-icon">🏛️</span>ジム</div>
+                    <div class="legend-item"><span class="legend-icon mountain-icon">🏔️</span>白山</div>
+                    <div class="legend-item"><span class="legend-icon river-icon">🌊</span>手取川</div>
+                    <div class="legend-item"><span class="legend-icon sea-icon">🌊</span>日本海</div>
+                    <div class="legend-item"><span class="legend-icon forest-icon">🌲</span>森林</div>
+                    <div class="legend-item"><span class="legend-icon legendary-icon">👑</span>伝説</div>
+                </div>
+            </div>
+            
+            <div class="next-objective">
+                <h3>🎯 次の目標</h3>
+                <div id="nextGym" class="objective-content">
+                    最初のジムに挑戦しよう！
+                </div>
+            </div>
+        </div>
 
-            <div class="town-card" data-town="mattou">
-                <div class="badge-icon">？</div>
-                <h3>松任ジム</h3>
-                <div class="badge-name">パインバッジ</div>
-                <div class="stamp-status" id="stamp-mattou">未取得</div>
-                <div class="card-actions">
-                    <button class="visit-btn" onclick="visitTown('mattou')">挑戦する</button>
-                    <button class="ar-photo-btn" onclick="startARPhoto('mattou')" title="AR写真撮影">📸</button>
-                </div>
-            </div>
-
-            <div class="town-card" data-town="kawachi">
-                <div class="badge-icon">？</div>
-                <h3>河内ジム</h3>
-                <div class="badge-name">ブリッジバッジ</div>
-                <div class="stamp-status" id="stamp-kawachi">未取得</div>
-                <div class="card-actions">
-                    <button class="visit-btn" onclick="visitTown('kawachi')">挑戦する</button>
-                    <button class="ar-photo-btn" onclick="startARPhoto('kawachi')" title="AR写真撮影">📸</button>
-                </div>
-            </div>
-
-            <div class="town-card" data-town="shiramine">
-                <div class="badge-icon">？</div>
-                <h3>白峰ジム</h3>
-                <div class="badge-name">ピークバッジ</div>
-                <div class="stamp-status" id="stamp-shiramine">未取得</div>
-                <div class="card-actions">
-                    <button class="visit-btn" onclick="visitTown('shiramine')">挑戦する</button>
-                    <button class="ar-photo-btn" onclick="startARPhoto('shiramine')" title="AR写真撮影">📸</button>
-                </div>
-            </div>
-
-            <div class="town-card" data-town="yoshinodani">
-                <div class="badge-icon">？</div>
-                <h3>吉野谷ジム</h3>
-                <div class="badge-name">フォレストバッジ</div>
-                <div class="stamp-status" id="stamp-yoshinodani">未取得</div>
-                <div class="card-actions">
-                    <button class="visit-btn" onclick="visitTown('yoshinodani')">挑戦する</button>
-                    <button class="ar-photo-btn" onclick="startARPhoto('yoshinodani')" title="AR写真撮影">📸</button>
-                </div>
-            </div>
-
-            <div class="town-card" data-town="torigoe">
-                <div class="badge-icon">？</div>
-                <h3>鳥越ジム</h3>
-                <div class="badge-name">キャッスルバッジ</div>
-                <div class="stamp-status" id="stamp-torigoe">未取得</div>
-                <div class="card-actions">
-                    <button class="visit-btn" onclick="visitTown('torigoe')">挑戦する</button>
-                    <button class="ar-photo-btn" onclick="startARPhoto('torigoe')" title="AR写真撮影">📸</button>
-                </div>
-            </div>
-
-            <div class="town-card" data-town="oguchi">
-                <div class="badge-icon">？</div>
-                <h3>尾口ジム</h3>
-                <div class="badge-name">フォールバッジ</div>
-                <div class="stamp-status" id="stamp-oguchi">未取得</div>
-                <div class="card-actions">
-                    <button class="visit-btn" onclick="visitTown('oguchi')">挑戦する</button>
-                    <button class="ar-photo-btn" onclick="startARPhoto('oguchi')" title="AR写真撮影">📸</button>
-                </div>
-            </div>
-        </div>        <div class="complete-section" id="completeSection" style="display: none;">
-            <div class="complete-card">
+        <!-- 完了時のモーダル -->
+        <div class="complete-section" id="completeSection" style="display: none;">
+            <div class="complete-modal">
                 <h2>🏆 ハクサンリーグチャンピオン！ 🏆</h2>
                 <p>全8つのジムバッジをコンプリートしました！</p>
+                <div class="champion-effects"></div>
                 <button class="complete-btn" onclick="showSpecialContent()">殿堂入りする</button>
             </div>
         </div>
     </main>
-    
+
     <!-- Incentive Content Containers -->
     <section class="incentive-content">
         <div class="container">
@@ -688,72 +385,208 @@
             <!-- Secret Content Area -->
             <div class="secret-content" data-content-id="hot_springs">
                 <h3>🌸 隠された温泉マップ</h3>
-                <p class="locked-content">このコンテンツは1個目のバッジ獲得で解放されます。白山の秘湯スポットガイドをゲット！</p>
+                <p class="locked-content">このコンテンツは1個目のバッジ獲得で解放されます。</p>
                 <div class="unlock-requirement">🔒 解放条件: 初回バッジ獲得</div>
             </div>
             
             <div class="secret-content" data-content-id="legend_story">
                 <h3>📜 白山伝説ストーリー</h3>
-                <p class="locked-content">白山に眠る古代の伝説が明かされます。この土地の神秘的な歴史を発見！</p>
+                <p class="locked-content">白山に眠る古代の伝説が明かされます。</p>
                 <div class="unlock-requirement">🔒 解放条件: 4個のバッジ獲得</div>
             </div>
             
             <div class="secret-content" data-content-id="photo_spots">
                 <h3>📸 伝説のフォトスポット</h3>
-                <p class="locked-content">インスタ映え確実！地元カメラマンが厳選した絶景スポットを大公開！</p>
+                <p class="locked-content">インスタ映え確実の絶景スポットガイド。</p>
                 <div class="unlock-requirement">🔒 解放条件: 全バッジ獲得</div>
             </div>
         </div>
     </section>
-    
-    <!-- デバッグ用リセットボタン -->
-    <div class="debug-section">
-        <button class="debug-reset-btn" onclick="resetAllBadgesWithConfirm()">🔄 全バッジリセット（デバッグ用）</button>
-    </div>
-    
+
     <footer>
         <p>&copy; 2025 ハクサンリーグ・旧市町村ジムバッジ</p>
     </footer>
 
     <script src="script.js"></script>
+    <script src="rpg-map.js"></script>
     <script src="incentive-system.js"></script>
     <script src="marketing-effects.js"></script>
     
-    <!-- 新機能スクリプト -->
-    <script src="location-images.js"></script>
-    <script src="ar-photo.js"></script>
-    <script src="pixel-avatar.js"></script>
-    <script src="real-statistics.js"></script>
-    <script src="badge-generator.js"></script>
-    <script src="project-tester.js"></script>
+    <!-- RPGマップシステム -->
+    <script src="rpg-map-engine.js"></script>
+    <script src="avatar-system.js"></script>
     
-    <!-- PWA Service Worker登録 -->
+    <!-- バッジシステム -->
+    <script src="badge-system.js"></script>
+    <script src="badge-generator.js"></script>
+    
+    <!-- 写真・AR システム -->
+    <script src="region-photos.js"></script>
+    <script src="ar-camera.js"></script>
+    <script src="ar-photo.js"></script>
+    
+    <!-- 分析・統計システム -->
+    <script src="analytics-system.js"></script>
+    <script src="real-statistics.js"></script>
+    
+    <!-- その他の機能 -->
+    <script src="location-images.js"></script>
+    <script src="pixel-avatar.js"></script>
+    
+    <!-- システム統合初期化 -->
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('✅ PWA Service Worker登録成功:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.error('❌ PWA Service Worker登録失敗:', error);
-                    });
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎮 ハクサンリーグ RPGシステム初期化開始');
+            
+            // RPGマップエンジン初期化
+            if (window.HakusanRPGMap) {
+                window.rpgMap = new HakusanRPGMap();
+                console.log('🗺️ RPGマップエンジン初期化完了');
+            }
+            
+            // アバターシステム初期化
+            if (window.HakusanAvatar) {
+                window.avatar = new HakusanAvatar();
+                console.log('👤 アバターシステム初期化完了');
+            }
+            
+            // バッジシステム初期化
+            if (window.HakusanBadges) {
+                window.badges = new HakusanBadges();
+                console.log('🏆 バッジシステム初期化完了');
+            }
+            
+            // 写真システム初期化
+            if (window.hakusanPhotos) {
+                console.log('📸 写真システム初期化完了');
+            }
+            
+            // AR機能初期化
+            if (window.HakusanAR) {
+                window.arCamera = new HakusanAR();
+                console.log('📱 ARシステム初期化完了');
+            }
+            
+            // 分析システム初期化
+            if (window.HakusanAnalytics) {
+                console.log('📊 分析システム初期化完了');
+            }
+            
+            console.log('✅ 全システム初期化完了');
+        });
+        
+        // マップとアバターの連携
+        function connectMapAndAvatar() {
+            if (window.rpgMap && window.avatar) {
+                window.rpgMap.setAvatar(window.avatar);
+                window.avatar.setMap(window.rpgMap);
+                console.log('🔗 マップとアバターの連携完了');
+            }
         }
         
-        // PWAインストールプロンプト
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            console.log('📱 PWAインストール可能');
+        // 町ページへの移動
+        function visitTownPage(regionId) {
+            const townPages = {
+                'tsurugi': 'town/tsurugi.html',
+                'mikawa': 'town/mikawa.html', 
+                'mattou': 'town/mattou.html',
+                'kawachi': 'town/kawachi.html',
+                'shiramine': 'town/shiramine.html',
+                'yoshinodani': 'town/yoshinodani.html',
+                'torigoe': 'town/torigoe.html',
+                'oguchi': 'town/oguchi.html'
+            };
+            
+            if (townPages[regionId]) {
+                window.location.href = townPages[regionId];
+            }
+        }
+        
+        // フォトギャラリーを開く
+        function openPhotoGallery() {
+            if (window.hakusanPhotos) {
+                // 全地域の写真を表示するモーダルを作成
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                    background: rgba(0,0,0,0.9); z-index: 10000; display: flex; 
+                    align-items: center; justify-content: center; flex-direction: column;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="background: white; padding: 20px; border-radius: 10px; max-width: 90%; max-height: 90%; overflow-y: auto;">
+                        <h2 style="color: #333; text-align: center; margin-bottom: 20px;">📸 白山市の風景写真</h2>
+                        <div id="allRegionPhotos"></div>
+                        <button onclick="this.parentElement.parentElement.remove()" 
+                                style="display: block; margin: 20px auto; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            閉じる
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // 全地域の写真を表示
+                const regions = ['tsurugi', 'mikawa', 'mattou', 'kawachi', 'shiramine', 'yoshinodani', 'torigoe', 'oguchi'];
+                const container = document.getElementById('allRegionPhotos');
+                
+                regions.forEach(regionId => {
+                    const regionDiv = document.createElement('div');
+                    regionDiv.style.marginBottom = '30px';
+                    container.appendChild(regionDiv);
+                    window.hakusanPhotos.createPhotoGallery(regionId, regionDiv.id = `photos_${regionId}`);
+                });
+            }
+        }
+        
+        // ARカメラを開く
+        function openARCamera() {
+            if (window.arCamera) {
+                window.arCamera.startCamera();
+            }
+        }
+        
+        // マップモード切り替え
+        let currentMapMode = 'rpg'; // 'rpg' or 'pixel'
+        
+        function toggleMapMode() {
+            const pixelSection = document.querySelector('.pixel-map-section');
+            const rpgSection = document.querySelector('.rpg-world-map');
+            const toggleBtn = document.querySelector('.map-mode-btn');
+            
+            if (currentMapMode === 'rpg') {
+                // ピクセルマップモードに切り替え
+                currentMapMode = 'pixel';
+                pixelSection.style.display = 'block';
+                rpgSection.style.display = 'none';
+                toggleBtn.textContent = '🏛️ RPGマップ';
+                
+                // ピクセルマップエンジンを初期化
+                if (window.rpgMap && !window.rpgMap.initialized) {
+                    window.rpgMap.init();
+                    window.rpgMap.initialized = true;
+                }
+            } else {
+                // RPGマップモードに切り替え
+                currentMapMode = 'rpg';
+                pixelSection.style.display = 'none';
+                rpgSection.style.display = 'block';
+                toggleBtn.textContent = '🎮 ピクセルマップ';
+            }
+        }
+        
+        // 初期状態でピクセルマップを非表示
+        document.addEventListener('DOMContentLoaded', function() {
+            const pixelSection = document.querySelector('.pixel-map-section');
+            if (pixelSection) {
+                pixelSection.style.display = 'none';
+            }
         });
+        
+        // システム間の連携を初期化
+        setTimeout(() => {
+            connectMapAndAvatar();
+        }, 1000);
     </script>
-    <script src="rpg-map-engine.js"></script>
-    <script src="badge-system.js"></script>
-    <script src="ar-camera.js"></script>
-    <script src="avatar-system.js"></script>
-    <script src="region-photos.js"></script>
-    <script src="analytics-system.js"></script>
 </body>
 </html>

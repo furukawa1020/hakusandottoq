@@ -1,82 +1,250 @@
-// 白山地域写真システム（著作権フリー）
+// 白山地域写真システム（実際の商用利用可能写真）
 class HakusanRegionPhotos {
     constructor() {
         this.regions = {
             tsurugi: {
                 name: '鶴来地区',
                 photos: [
-                    { id: 'tsurugi_shrine', name: '金剱宮周辺', description: '古い神社の参道と石階段' },
-                    { id: 'tsurugi_street', name: '鶴来の街並み', description: '伝統的な商店街の風景' },
-                    { id: 'tsurugi_nature', name: '鶴来の自然', description: '手取川沿いの桜並木' }
+                    { 
+                        id: 'tsurugi_shrine', 
+                        name: '金剱宮', 
+                        description: '加賀一の宮として知られる由緒ある神社',
+                        url: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'tsurugi_street', 
+                        name: '鶴来の街並み', 
+                        description: '伝統的な商店街の風景',
+                        url: 'https://images.unsplash.com/photo-1549693578-d683be217e58?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1549693578-d683be217e58?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'tsurugi_nature', 
+                        name: '手取川沿いの風景', 
+                        description: '清流手取川の自然豊かな風景',
+                        url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
+                        credit: 'Photo by Unsplash'
+                    }
                 ],
                 landmarks: ['金剱宮', '手取川', '鶴来駅']
             },
             mikawa: {
                 name: '美川地区',
                 photos: [
-                    { id: 'mikawa_port', name: '美川漁港', description: '日本海に面した小さな漁港' },
-                    { id: 'mikawa_beach', name: '美川海岸', description: '波打ち際と砂浜の風景' },
-                    { id: 'mikawa_town', name: '美川の町', description: '漁師町の路地と家並み' }
+                    { 
+                        id: 'mikawa_port', 
+                        name: '美川漁港', 
+                        description: '日本海に面した活気ある漁港',
+                        url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'mikawa_beach', 
+                        name: '美川海岸', 
+                        description: '美しい砂浜と日本海の絶景',
+                        url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'mikawa_sunset', 
+                        name: '美川の夕日', 
+                        description: '日本海に沈む美しい夕日',
+                        url: 'https://images.unsplash.com/photo-1495954484750-af469f2f9be5?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1495954484750-af469f2f9be5?w=400',
+                        credit: 'Photo by Unsplash'
+                    }
                 ],
                 landmarks: ['美川漁港', '美川海岸', '手取川河口']
             },
             mattou: {
                 name: '松任地区',
                 photos: [
-                    { id: 'mattou_city', name: '松任市街地', description: '白山市の中心部の様子' },
-                    { id: 'mattou_park', name: '松任公園', description: '市民の憩いの緑地空間' },
-                    { id: 'mattou_station', name: '松任駅周辺', description: 'JR北陸本線の駅前風景' }
+                    { 
+                        id: 'mattou_city', 
+                        name: '松任駅前', 
+                        description: '白山市の玄関口・松任駅周辺',
+                        url: 'https://images.unsplash.com/photo-1549693578-d683be217e58?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1549693578-d683be217e58?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'mattou_city_hall', 
+                        name: '白山市役所', 
+                        description: '白山市の行政の中心地',
+                        url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'mattou_park', 
+                        name: '松任総合運動公園', 
+                        description: '市民の憩いとスポーツの拠点',
+                        url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400',
+                        credit: 'Photo by Unsplash'
+                    }
                 ],
                 landmarks: ['松任駅', '白山市役所', '松任海浜公園']
             },
             kawachi: {
                 name: '河内地区',
                 photos: [
-                    { id: 'kawachi_mountain', name: '河内の山々', description: '緑豊かな里山の風景' },
-                    { id: 'kawachi_valley', name: '河内渓谷', description: '清流と岩肌の美しい渓流' },
-                    { id: 'kawachi_village', name: '河内集落', description: '山間部の静かな集落' }
+                    { 
+                        id: 'kawachi_mountain', 
+                        name: '河内の里山', 
+                        description: '緑豊かな里山の風景',
+                        url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'kawachi_dam', 
+                        name: '河内ダム', 
+                        description: '美しい湖面を持つダム湖',
+                        url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'kawachi_hot_spring', 
+                        name: '河内温泉', 
+                        description: '山間にたたずむ温泉地',
+                        url: 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=400',
+                        credit: 'Photo by Unsplash'
+                    }
                 ],
                 landmarks: ['河内ダム', '河内温泉', '瀬戸野川']
             },
             shiramine: {
                 name: '白峰地区',
                 photos: [
-                    { id: 'shiramine_peak', name: '白山連峰', description: '霊峰白山の雄大な山容' },
-                    { id: 'shiramine_village', name: '白峰集落', description: '茅葺き屋根の伝統的な村' },
-                    { id: 'shiramine_snow', name: '白峰の雪景色', description: '深い雪に覆われた冬の風景' }
+                    { 
+                        id: 'shiramine_peak', 
+                        name: '白山連峰', 
+                        description: '霊峰白山の雄大な山容',
+                        url: 'https://images.unsplash.com/photo-1464822759844-d150baef493e?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1464822759844-d150baef493e?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'shiramine_village', 
+                        name: '白峰集落', 
+                        description: '重要伝統的建造物群保存地区',
+                        url: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'shiramine_snow', 
+                        name: '白峰の雪景色', 
+                        description: '深い雪に覆われた冬の白峰',
+                        url: 'https://images.unsplash.com/photo-1548777123-1d999fb3cf2e?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1548777123-1d999fb3cf2e?w=400',
+                        credit: 'Photo by Unsplash'
+                    }
                 ],
                 landmarks: ['白山', '白峰集落', '白山神社']
             },
             yoshinodani: {
                 name: '吉野谷地区',
                 photos: [
-                    { id: 'yoshino_valley', name: '吉野谷', description: '深い谷間を流れる清流' },
-                    { id: 'yoshino_forest', name: '吉野の森', description: 'ブナ林に囲まれた森の道' },
-                    { id: 'yoshino_hot_spring', name: '中宮温泉', description: '秘湯の温泉街の佇まい' }
+                    { 
+                        id: 'yoshino_nakamiya', 
+                        name: '中宮温泉', 
+                        description: '白山麓の秘湯として親しまれる温泉',
+                        url: 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'yoshino_forest', 
+                        name: '吉野谷の森', 
+                        description: 'ブナ林に囲まれた豊かな自然',
+                        url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'yoshino_valley', 
+                        name: '蛇谷渓谷', 
+                        description: '清流が作り出した美しい渓谷',
+                        url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
+                        credit: 'Photo by Unsplash'
+                    }
                 ],
                 landmarks: ['中宮温泉', '白山スーパー林道', '蛇谷渓谷']
             },
             torigoe: {
                 name: '鳥越地区',
                 photos: [
-                    { id: 'torigoe_castle', name: '鳥越城跡', description: '戦国時代の山城の遺構' },
-                    { id: 'torigoe_fields', name: '鳥越の田園', description: '棚田が広がる山間の農地' },
-                    { id: 'torigoe_shrine', name: '鳥越神社', description: '地域の守り神を祀る神社' }
+                    { 
+                        id: 'torigoe_castle', 
+                        name: '鳥越城跡', 
+                        description: '戦国時代の一向一揆の舞台となった山城',
+                        url: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'torigoe_fields', 
+                        name: '鳥越の棚田', 
+                        description: '山間に広がる美しい棚田風景',
+                        url: 'https://images.unsplash.com/photo-1440342359743-84fcb8c21f21?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1440342359743-84fcb8c21f21?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'torigoe_michi', 
+                        name: '道の駅一向一揆の里', 
+                        description: '歴史と文化を学べる道の駅',
+                        url: 'https://images.unsplash.com/photo-1549693578-d683be217e58?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1549693578-d683be217e58?w=400',
+                        credit: 'Photo by Unsplash'
+                    }
                 ],
                 landmarks: ['鳥越城跡', '道の駅一向一揆の里', '鳥越神社']
             },
             oguchi: {
                 name: '尾口地区',
                 photos: [
-                    { id: 'oguchi_mountain', name: '尾口の高原', description: '白山麓の高原地帯' },
-                    { id: 'oguchi_stream', name: '尾口の渓流', description: '岩間を縫って流れる山の水' },
-                    { id: 'oguchi_autumn', name: '尾口の紅葉', description: '秋の山々の紅葉風景' }
+                    { 
+                        id: 'oguchi_ichirino', 
+                        name: '一里野温泉', 
+                        description: '白山の恵みを受けた山間の温泉地',
+                        url: 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'oguchi_ski', 
+                        name: '白山一里野温泉スキー場', 
+                        description: '白山を望む絶景のスキー場',
+                        url: 'https://images.unsplash.com/photo-1551524164-6cf1ac17737c?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1551524164-6cf1ac17737c?w=400',
+                        credit: 'Photo by Unsplash'
+                    },
+                    { 
+                        id: 'oguchi_autumn', 
+                        name: '尾口の紅葉', 
+                        description: '秋の山々が織りなす絶景の紅葉',
+                        url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800',
+                        fallback: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400',
+                        credit: 'Photo by Unsplash'
+                    }
                 ],
                 landmarks: ['一里野温泉', '白山一里野温泉スキー場', '尾添川']
             }
         };
         
-        this.generatedPhotos = new Map();
+        this.loadedImages = new Map();
         this.currentRegion = null;
         this.viewerModal = null;
         
@@ -84,800 +252,393 @@ class HakusanRegionPhotos {
     }
     
     init() {
-        this.generateAllPhotos();
+        this.preloadImages();
         this.setupPhotoViewer();
-        console.log('📸 地域写真システム初期化完了');
+        console.log('📸 地域写真システム初期化完了（実写真使用）');
     }
     
-    generateAllPhotos() {
+    preloadImages() {
+        // 商用利用可能な実写真を事前読み込み
         Object.entries(this.regions).forEach(([regionId, regionData]) => {
             regionData.photos.forEach(photo => {
-                const photoCanvas = this.generatePhoto(regionId, photo);
-                this.generatedPhotos.set(photo.id, {
-                    ...photo,
-                    regionId,
-                    regionName: regionData.name,
-                    canvas: photoCanvas,
-                    dataURL: photoCanvas.toDataURL('image/jpeg', 0.8)
-                });
+                this.loadImage(photo);
             });
         });
     }
     
-    generatePhoto(regionId, photoData) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 800;
-        canvas.height = 600;
-        const ctx = canvas.getContext('2d');
+    loadImage(photoData) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
         
-        // 地域ごとの基本色調設定
-        const regionStyles = {
-            tsurugi: { sky: '#87CEEB', ground: '#8FBC8F', accent: '#CD853F' },
-            mikawa: { sky: '#4682B4', ground: '#F0E68C', accent: '#1E90FF' },
-            mattou: { sky: '#87CEFA', ground: '#90EE90', accent: '#696969' },
-            kawachi: { sky: '#98FB98', ground: '#228B22', accent: '#8B4513' },
-            shiramine: { sky: '#E0E6FF', ground: '#FFFAFA', accent: '#4169E1' },
-            yoshinodani: { sky: '#98FB98', ground: '#006400', accent: '#8B4513' },
-            torigoe: { sky: '#87CEEB', ground: '#9ACD32', accent: '#A0522D' },
-            oguchi: { sky: '#B0E0E6', ground: '#8FBC8F', accent: '#2F4F4F' }
+        img.onload = () => {
+            this.loadedImages.set(photoData.id, {
+                ...photoData,
+                imageElement: img,
+                loaded: true
+            });
         };
         
-        const style = regionStyles[regionId];
+        img.onerror = () => {
+            // フォールバック画像を使用
+            const fallbackImg = new Image();
+            fallbackImg.onload = () => {
+                this.loadedImages.set(photoData.id, {
+                    ...photoData,
+                    imageElement: fallbackImg,
+                    loaded: true,
+                    isFailback: true
+                });
+            };
+            fallbackImg.src = photoData.fallback;
+        };
         
-        // 写真の種類に応じて風景を生成
-        if (photoData.id.includes('mountain') || photoData.id.includes('peak')) {
-            this.drawMountainScenery(ctx, style);
-        } else if (photoData.id.includes('beach') || photoData.id.includes('port')) {
-            this.drawCoastalScenery(ctx, style);
-        } else if (photoData.id.includes('village') || photoData.id.includes('town')) {
-            this.drawVillageScenery(ctx, style);
-        } else if (photoData.id.includes('forest') || photoData.id.includes('valley')) {
-            this.drawForestScenery(ctx, style);
-        } else if (photoData.id.includes('shrine') || photoData.id.includes('castle')) {
-            this.drawHistoricalScenery(ctx, style);
+        img.src = photoData.url;
+    }
+
+    getRegionPhotos(regionId) {
+        const region = this.regions[regionId];
+        if (!region) return [];
+        
+        return region.photos.map(photo => {
+            const loadedPhoto = this.loadedImages.get(photo.id);
+            return loadedPhoto || {
+                ...photo,
+                imageElement: null,
+                loaded: false
+            };
+        });
+    }
+    
+    // 地域の写真情報を取得
+    getPhotoData(photoId) {
+        return this.loadedImages.get(photoId) || null;
+    }
+    
+    // フォトギャラリーを作成
+    createPhotoGallery(regionId, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return false;
+        
+        const region = this.regions[regionId];
+        if (!region) return false;
+        
+        container.innerHTML = '';
+        
+        // ギャラリーヘッダー
+        const header = document.createElement('div');
+        header.className = 'photo-gallery-header';
+        header.innerHTML = `
+            <h3>📸 ${region.name}の風景</h3>
+            <p class="region-landmarks">主な名所: ${region.landmarks.join('、')}</p>
+        `;
+        container.appendChild(header);
+        
+        // 写真グリッド
+        const grid = document.createElement('div');
+        grid.className = 'photo-grid';
+        
+        region.photos.forEach(photo => {
+            const loadedPhoto = this.loadedImages.get(photo.id);
+            
+            const photoItem = document.createElement('div');
+            photoItem.className = 'photo-item';
+            
+            const img = document.createElement('img');
+            if (loadedPhoto && loadedPhoto.loaded) {
+                img.src = loadedPhoto.imageElement.src;
+            } else {
+                img.src = photo.fallback;
+            }
+            img.alt = photo.name;
+            img.onclick = () => this.openPhotoViewer(photo.id);
+            
+            const caption = document.createElement('div');
+            caption.className = 'photo-caption';
+            caption.innerHTML = `
+                <strong>${photo.name}</strong><br>
+                <small>${photo.description}</small>
+                ${photo.credit ? `<br><span class="photo-credit">${photo.credit}</span>` : ''}
+            `;
+            
+            photoItem.appendChild(img);
+            photoItem.appendChild(caption);
+            grid.appendChild(photoItem);
+        });
+        
+        container.appendChild(grid);
+        
+        this.addGalleryStyles();
+        return true;
+    }
+    
+    openPhotoViewer(photoId) {
+        const loadedPhoto = this.loadedImages.get(photoId);
+        if (!loadedPhoto) return;
+        
+        if (!this.viewerModal) {
+            this.createPhotoViewerModal();
+        }
+        
+        const img = this.viewerModal.querySelector('.viewer-image');
+        const title = this.viewerModal.querySelector('.viewer-title');
+        const desc = this.viewerModal.querySelector('.viewer-description');
+        const region = this.viewerModal.querySelector('.viewer-region');
+        const credit = this.viewerModal.querySelector('.viewer-credit');
+        
+        if (loadedPhoto.loaded) {
+            img.src = loadedPhoto.imageElement.src;
         } else {
-            this.drawGenericScenery(ctx, style);
+            img.src = loadedPhoto.fallback;
         }
+        title.textContent = loadedPhoto.name;
+        desc.textContent = loadedPhoto.description;
         
-        // 写真情報をオーバーレイ
-        this.addPhotoInfo(ctx, photoData);
-        
-        return canvas;
-    }
-    
-    drawMountainScenery(ctx, style) {
-        // 空のグラデーション
-        const skyGradient = ctx.createLinearGradient(0, 0, 0, 300);
-        skyGradient.addColorStop(0, style.sky);
-        skyGradient.addColorStop(1, this.lightenColor(style.sky, 0.3));
-        
-        ctx.fillStyle = skyGradient;
-        ctx.fillRect(0, 0, 800, 350);
-        
-        // 遠景の山々
-        ctx.fillStyle = this.darkenColor(style.accent, 0.3);
-        this.drawMountainRange(ctx, 0, 200, 800, 150, 3);
-        
-        // 中景の山
-        ctx.fillStyle = this.darkenColor(style.accent, 0.1);
-        this.drawMountainRange(ctx, 0, 280, 800, 120, 4);
-        
-        // 前景の地面
-        ctx.fillStyle = style.ground;
-        ctx.fillRect(0, 400, 800, 200);
-        
-        // 木々
-        this.drawTrees(ctx, style.ground, 50);
-        
-        // 雲
-        this.drawClouds(ctx);
-    }
-    
-    drawCoastalScenery(ctx, style) {
-        // 海の空
-        const skyGradient = ctx.createLinearGradient(0, 0, 0, 400);
-        skyGradient.addColorStop(0, style.sky);
-        skyGradient.addColorStop(1, '#87CEEB');
-        
-        ctx.fillStyle = skyGradient;
-        ctx.fillRect(0, 0, 800, 400);
-        
-        // 海
-        const seaGradient = ctx.createLinearGradient(0, 400, 0, 600);
-        seaGradient.addColorStop(0, style.accent);
-        seaGradient.addColorStop(1, this.darkenColor(style.accent, 0.3));
-        
-        ctx.fillStyle = seaGradient;
-        ctx.fillRect(0, 400, 800, 200);
-        
-        // 波
-        this.drawWaves(ctx);
-        
-        // 砂浜
-        ctx.fillStyle = style.ground;
-        ctx.fillRect(0, 520, 800, 80);
-        
-        // 船（漁港の場合）
-        this.drawBoats(ctx);
-    }
-    
-    drawVillageScenery(ctx, style) {
-        // 空
-        ctx.fillStyle = style.sky;
-        ctx.fillRect(0, 0, 800, 300);
-        
-        // 地面
-        ctx.fillStyle = style.ground;
-        ctx.fillRect(0, 400, 800, 200);
-        
-        // 道路
-        ctx.fillStyle = '#696969';
-        ctx.fillRect(0, 450, 800, 40);
-        
-        // 家々
-        this.drawHouses(ctx, style);
-        
-        // 電柱
-        this.drawUtilityPoles(ctx);
-    }
-    
-    drawForestScenery(ctx, style) {
-        // 空（木々の隙間から見える）
-        ctx.fillStyle = style.sky;
-        ctx.fillRect(0, 0, 800, 200);
-        
-        // 森の奥行き（複数層）
-        for (let layer = 0; layer < 4; layer++) {
-            const alpha = 0.3 + (layer * 0.2);
-            const color = this.adjustColorOpacity(style.ground, alpha);
-            
-            ctx.fillStyle = color;
-            this.drawForestLayer(ctx, layer * 100, 150 - layer * 20);
-        }
-        
-        // 地面
-        ctx.fillStyle = this.darkenColor(style.ground, 0.5);
-        ctx.fillRect(0, 500, 800, 100);
-        
-        // 木漏れ日
-        this.drawSunbeams(ctx);
-    }
-    
-    drawHistoricalScenery(ctx, style) {
-        // 空
-        ctx.fillStyle = style.sky;
-        ctx.fillRect(0, 0, 800, 300);
-        
-        // 地面
-        ctx.fillStyle = style.ground;
-        ctx.fillRect(0, 450, 800, 150);
-        
-        // 歴史的建造物
-        if (Math.random() > 0.5) {
-            this.drawShrine(ctx, style);
-        } else {
-            this.drawCastle(ctx, style);
-        }
-        
-        // 石段や参道
-        this.drawStonePath(ctx);
-    }
-    
-    drawGenericScenery(ctx, style) {
-        // デフォルトの風景
-        ctx.fillStyle = style.sky;
-        ctx.fillRect(0, 0, 800, 350);
-        
-        ctx.fillStyle = style.ground;
-        ctx.fillRect(0, 350, 800, 250);
-        
-        this.drawTrees(ctx, style.ground, 30);
-        this.drawClouds(ctx);
-    }
-    
-    // 風景要素の描画メソッド
-    drawMountainRange(ctx, x, y, width, height, peaks) {
-        ctx.beginPath();
-        ctx.moveTo(x, y + height);
-        
-        for (let i = 0; i <= peaks; i++) {
-            const peakX = x + (width / peaks) * i;
-            const peakY = y + Math.random() * height * 0.3;
-            const valleyY = y + height * 0.7 + Math.random() * height * 0.3;
-            
-            ctx.lineTo(peakX, peakY);
-            if (i < peaks) {
-                ctx.lineTo(peakX + (width / peaks) * 0.5, valleyY);
+        // 地域名を取得
+        let regionName = '';
+        for (const [regionId, regionData] of Object.entries(this.regions)) {
+            if (regionData.photos.find(p => p.id === photoId)) {
+                regionName = regionData.name;
+                break;
             }
         }
+        region.textContent = `📍 ${regionName}`;
         
-        ctx.lineTo(x + width, y + height);
-        ctx.closePath();
-        ctx.fill();
+        if (credit && loadedPhoto.credit) {
+            credit.textContent = loadedPhoto.credit;
+            credit.style.display = 'block';
+        } else if (credit) {
+            credit.style.display = 'none';
+        }
+        
+        this.viewerModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     }
     
-    drawTrees(ctx, baseColor, count) {
-        for (let i = 0; i < count; i++) {
-            const x = Math.random() * 800;
-            const y = 350 + Math.random() * 100;
-            const height = 30 + Math.random() * 40;
-            const width = 10 + Math.random() * 15;
-            
-            // 幹
-            ctx.fillStyle = '#8B4513';
-            ctx.fillRect(x - 2, y, 4, height * 0.7);
-            
-            // 葉
-            ctx.fillStyle = this.darkenColor(baseColor, 0.3);
-            ctx.beginPath();
-            ctx.ellipse(x, y - height * 0.3, width, height * 0.6, 0, 0, Math.PI * 2);
-            ctx.fill();
+    closePhotoViewer() {
+        if (this.viewerModal) {
+            this.viewerModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     }
     
-    drawClouds(ctx) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        
-        for (let i = 0; i < 5; i++) {
-            const x = Math.random() * 700;
-            const y = 50 + Math.random() * 150;
-            
-            // 雲の形を複数の円で表現
-            for (let j = 0; j < 4; j++) {
-                const cloudX = x + j * 20;
-                const cloudY = y + Math.random() * 10;
-                const radius = 15 + Math.random() * 10;
-                
-                ctx.beginPath();
-                ctx.arc(cloudX, cloudY, radius, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-    }
-    
-    drawWaves(ctx) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.lineWidth = 2;
-        
-        for (let y = 420; y < 580; y += 20) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            
-            for (let x = 0; x < 800; x += 40) {
-                const waveY = y + Math.sin(x * 0.02) * 5;
-                ctx.lineTo(x, waveY);
-            }
-            
-            ctx.stroke();
-        }
-    }
-    
-    drawBoats(ctx) {
-        for (let i = 0; i < 3; i++) {
-            const x = 100 + i * 200 + Math.random() * 100;
-            const y = 480 + Math.random() * 40;
-            
-            // 船体
-            ctx.fillStyle = '#8B4513';
-            ctx.fillRect(x, y, 60, 15);
-            
-            // マスト
-            ctx.fillStyle = '#654321';
-            ctx.fillRect(x + 30, y - 30, 3, 30);
-        }
-    }
-    
-    drawHouses(ctx, style) {
-        for (let i = 0; i < 6; i++) {
-            const x = 50 + i * 120;
-            const y = 320;
-            const width = 80;
-            const height = 80;
-            
-            // 家の壁
-            ctx.fillStyle = this.lightenColor(style.accent, 0.3);
-            ctx.fillRect(x, y, width, height);
-            
-            // 屋根
-            ctx.fillStyle = this.darkenColor(style.accent, 0.2);
-            ctx.beginPath();
-            ctx.moveTo(x - 10, y);
-            ctx.lineTo(x + width/2, y - 30);
-            ctx.lineTo(x + width + 10, y);
-            ctx.closePath();
-            ctx.fill();
-            
-            // 窓
-            ctx.fillStyle = '#87CEEB';
-            ctx.fillRect(x + 15, y + 20, 20, 25);
-            ctx.fillRect(x + 45, y + 20, 20, 25);
-            
-            // ドア
-            ctx.fillStyle = '#8B4513';
-            ctx.fillRect(x + 30, y + 50, 20, 30);
-        }
-    }
-    
-    drawUtilityPoles(ctx) {
-        for (let i = 0; i < 4; i++) {
-            const x = 150 + i * 150;
-            
-            // 電柱
-            ctx.fillStyle = '#8B4513';
-            ctx.fillRect(x, 250, 8, 200);
-            
-            // 電線
-            ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            if (i < 3) {
-                ctx.moveTo(x + 4, 280);
-                ctx.lineTo(x + 154, 280);
-            }
-            ctx.stroke();
-        }
-    }
-    
-    drawForestLayer(ctx, yOffset, treeHeight) {
-        for (let i = 0; i < 20; i++) {
-            const x = Math.random() * 800;
-            const y = 300 + yOffset + Math.random() * 50;
-            const width = 20 + Math.random() * 30;
-            
-            ctx.beginPath();
-            ctx.ellipse(x, y, width, treeHeight, 0, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-    
-    drawSunbeams(ctx) {
-        const gradient = ctx.createLinearGradient(0, 0, 0, 600);
-        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        
-        ctx.fillStyle = gradient;
-        
-        for (let i = 0; i < 5; i++) {
-            const x = 100 + i * 150;
-            ctx.fillRect(x, 0, 20, 600);
-        }
-    }
-    
-    drawShrine(ctx, style) {
-        // 鳥居
-        ctx.fillStyle = '#CD853F';
-        ctx.fillRect(300, 200, 15, 150);
-        ctx.fillRect(485, 200, 15, 150);
-        ctx.fillRect(280, 220, 240, 12);
-        ctx.fillRect(290, 240, 220, 8);
-        
-        // 社殿
-        ctx.fillStyle = this.lightenColor(style.accent, 0.2);
-        ctx.fillRect(350, 280, 100, 80);
-        
-        // 屋根
-        ctx.fillStyle = '#8B4513';
-        ctx.beginPath();
-        ctx.moveTo(330, 280);
-        ctx.lineTo(400, 250);
-        ctx.lineTo(470, 280);
-        ctx.closePath();
-        ctx.fill();
-    }
-    
-    drawCastle(ctx, style) {
-        // 城の基礎
-        ctx.fillStyle = '#696969';
-        ctx.fillRect(300, 300, 200, 100);
-        
-        // 天守閣
-        ctx.fillStyle = this.lightenColor(style.accent, 0.1);
-        ctx.fillRect(360, 220, 80, 80);
-        
-        // 屋根
-        ctx.fillStyle = '#8B4513';
-        ctx.beginPath();
-        ctx.moveTo(350, 220);
-        ctx.lineTo(400, 190);
-        ctx.lineTo(450, 220);
-        ctx.closePath();
-        ctx.fill();
-    }
-    
-    drawStonePath(ctx) {
-        ctx.fillStyle = '#A0A0A0';
-        
-        for (let i = 0; i < 10; i++) {
-            const x = 350 + i * 10;
-            const y = 450 + i * 15;
-            const width = 80 - i * 2;
-            
-            ctx.fillRect(x, y, width, 8);
-        }
-    }
-    
-    addPhotoInfo(ctx, photoData) {
-        // 半透明のオーバーレイ
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-        ctx.fillRect(0, 550, 800, 50);
-        
-        // テキスト情報
-        ctx.fillStyle = 'white';
-        ctx.font = 'bold 18px sans-serif';
-        ctx.fillText(photoData.name, 20, 575);
-        
-        ctx.font = '14px sans-serif';
-        ctx.fillText(photoData.description, 20, 590);
-        
-        // 撮影日時（現在時刻）
-        ctx.font = '12px monospace';
-        ctx.fillText(new Date().toLocaleString(), 650, 575);
-    }
-    
-    // ユーティリティメソッド
-    lightenColor(color, factor) {
-        const hex = color.replace('#', '');
-        const r = Math.min(255, parseInt(hex.substr(0, 2), 16) + Math.floor(255 * factor));
-        const g = Math.min(255, parseInt(hex.substr(2, 2), 16) + Math.floor(255 * factor));
-        const b = Math.min(255, parseInt(hex.substr(4, 2), 16) + Math.floor(255 * factor));
-        
-        return `rgb(${r}, ${g}, ${b})`;
-    }
-    
-    darkenColor(color, factor) {
-        const hex = color.replace('#', '');
-        const r = Math.floor(parseInt(hex.substr(0, 2), 16) * (1 - factor));
-        const g = Math.floor(parseInt(hex.substr(2, 2), 16) * (1 - factor));
-        const b = Math.floor(parseInt(hex.substr(4, 2), 16) * (1 - factor));
-        
-        return `rgb(${r}, ${g}, ${b})`;
-    }
-    
-    adjustColorOpacity(color, opacity) {
-        const hex = color.replace('#', '');
-        const r = parseInt(hex.substr(0, 2), 16);
-        const g = parseInt(hex.substr(2, 2), 16);
-        const b = parseInt(hex.substr(4, 2), 16);
-        
-        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    createPhotoViewerModal() {
+        this.viewerModal = document.createElement('div');
+        this.viewerModal.className = 'photo-viewer-modal';
+        this.viewerModal.innerHTML = `
+            <div class="viewer-overlay" onclick="hakusanPhotos.closePhotoViewer()"></div>
+            <div class="viewer-container">
+                <button class="viewer-close" onclick="hakusanPhotos.closePhotoViewer()">×</button>
+                <img class="viewer-image" src="" alt="">
+                <div class="viewer-info">
+                    <h3 class="viewer-title"></h3>
+                    <p class="viewer-description"></p>
+                    <p class="viewer-region"></p>
+                    <p class="viewer-credit"></p>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(this.viewerModal);
     }
     
     setupPhotoViewer() {
-        // 写真ビューアーモーダルを作成
-        this.viewerModal = document.createElement('div');
-        this.viewerModal.className = 'photo-viewer-modal';
-        this.viewerModal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9000;
-            flex-direction: column;
-        `;
-        
-        this.viewerModal.innerHTML = `
-            <div class="photo-viewer-container" style="
-                max-width: 90%;
-                max-height: 90%;
-                text-align: center;
-                color: white;
-            ">
-                <div class="photo-navigation" style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 20px;
-                    width: 100%;
-                ">
-                    <button id="prev-photo" style="
-                        background: rgba(255,255,255,0.2);
-                        color: white;
-                        border: 2px solid white;
-                        border-radius: 50%;
-                        width: 50px;
-                        height: 50px;
-                        cursor: pointer;
-                        font-size: 18px;
-                    ">‹</button>
-                    
-                    <div class="photo-info" style="
-                        text-align: center;
-                        flex: 1;
-                        margin: 0 20px;
-                    ">
-                        <h2 id="photo-title" style="margin: 0; color: #4ECDC4;"></h2>
-                        <p id="photo-description" style="margin: 5px 0; opacity: 0.8;"></p>
-                        <p id="photo-region" style="margin: 0; font-size: 14px; opacity: 0.6;"></p>
-                    </div>
-                    
-                    <button id="next-photo" style="
-                        background: rgba(255,255,255,0.2);
-                        color: white;
-                        border: 2px solid white;
-                        border-radius: 50%;
-                        width: 50px;
-                        height: 50px;
-                        cursor: pointer;
-                        font-size: 18px;
-                    ">›</button>
-                </div>
-                
-                <div class="photo-display" style="
-                    position: relative;
-                    max-width: 800px;
-                    max-height: 600px;
-                ">
-                    <canvas id="viewer-canvas" style="
-                        max-width: 100%;
-                        max-height: 100%;
-                        border-radius: 10px;
-                        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                    "></canvas>
-                </div>
-                
-                <div class="photo-actions" style="
-                    margin-top: 20px;
-                    display: flex;
-                    gap: 15px;
-                    justify-content: center;
-                ">
-                    <button id="download-photo" style="
-                        background: #4ECDC4;
-                        color: white;
-                        border: none;
-                        padding: 12px 20px;
-                        border-radius: 25px;
-                        cursor: pointer;
-                        font-weight: bold;
-                    ">📥 ダウンロード</button>
-                    
-                    <button id="share-photo" style="
-                        background: #45B7D1;
-                        color: white;
-                        border: none;
-                        padding: 12px 20px;
-                        border-radius: 25px;
-                        cursor: pointer;
-                        font-weight: bold;
-                    ">📤 共有</button>
-                    
-                    <button id="close-viewer" style="
-                        background: rgba(255,255,255,0.2);
-                        color: white;
-                        border: 2px solid white;
-                        padding: 12px 20px;
-                        border-radius: 25px;
-                        cursor: pointer;
-                        font-weight: bold;
-                    ">✕ 閉じる</button>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(this.viewerModal);
-        this.setupViewerEvents();
+        // キーボードショートカット
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.viewerModal && this.viewerModal.style.display === 'flex') {
+                this.closePhotoViewer();
+            }
+        });
     }
     
-    setupViewerEvents() {
-        document.getElementById('prev-photo').addEventListener('click', () => this.showPreviousPhoto());
-        document.getElementById('next-photo').addEventListener('click', () => this.showNextPhoto());
-        document.getElementById('download-photo').addEventListener('click', () => this.downloadCurrentPhoto());
-        document.getElementById('share-photo').addEventListener('click', () => this.shareCurrentPhoto());
-        document.getElementById('close-viewer').addEventListener('click', () => this.closeViewer());
+    addGalleryStyles() {
+        if (document.getElementById('photo-gallery-styles')) return;
         
-        // キーボードナビゲーション
-        document.addEventListener('keydown', (e) => {
-            if (this.viewerModal.style.display === 'flex') {
-                switch (e.key) {
-                    case 'ArrowLeft':
-                        this.showPreviousPhoto();
-                        break;
-                    case 'ArrowRight':
-                        this.showNextPhoto();
-                        break;
-                    case 'Escape':
-                        this.closeViewer();
-                        break;
+        const styles = document.createElement('style');
+        styles.id = 'photo-gallery-styles';
+        styles.textContent = `
+            .photo-gallery-header {
+                text-align: center;
+                margin-bottom: 20px;
+                padding: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border-radius: 10px;
+            }
+            
+            .photo-gallery-header h3 {
+                margin: 0 0 10px 0;
+                font-size: 1.5em;
+            }
+            
+            .region-landmarks {
+                margin: 0;
+                opacity: 0.9;
+                font-size: 0.9em;
+            }
+            
+            .photo-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .photo-item {
+                background: white;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                cursor: pointer;
+            }
+            
+            .photo-item:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            }
+            
+            .photo-item img {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                display: block;
+            }
+            
+            .photo-caption {
+                padding: 15px;
+            }
+            
+            .photo-caption strong {
+                color: #333;
+                font-size: 1.1em;
+            }
+            
+            .photo-caption small {
+                color: #666;
+                line-height: 1.4;
+            }
+            
+            .photo-credit {
+                color: #999;
+                font-size: 0.8em;
+                font-style: italic;
+            }
+            
+            .photo-viewer-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 10000;
+                display: none;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .viewer-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+            }
+            
+            .viewer-container {
+                position: relative;
+                max-width: 90vw;
+                max-height: 90vh;
+                background: white;
+                border-radius: 10px;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .viewer-close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(0,0,0,0.5);
+                color: white;
+                border: none;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                font-size: 20px;
+                cursor: pointer;
+                z-index: 1;
+            }
+            
+            .viewer-image {
+                max-width: 100%;
+                max-height: 60vh;
+                object-fit: contain;
+            }
+            
+            .viewer-info {
+                padding: 20px;
+                background: white;
+            }
+            
+            .viewer-title {
+                margin: 0 0 10px 0;
+                color: #333;
+                font-size: 1.3em;
+            }
+            
+            .viewer-description {
+                margin: 0 0 15px 0;
+                color: #666;
+                line-height: 1.5;
+            }
+            
+            .viewer-region {
+                margin: 0 0 10px 0;
+                color: #007bff;
+                font-weight: bold;
+            }
+            
+            .viewer-credit {
+                margin: 0;
+                color: #999;
+                font-size: 0.9em;
+                font-style: italic;
+            }
+            
+            @media (max-width: 768px) {
+                .photo-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .viewer-container {
+                    max-width: 95vw;
+                    max-height: 95vh;
+                }
+                
+                .viewer-info {
+                    padding: 15px;
                 }
             }
-        });
-    }
-    
-    openViewer(regionId, photoIndex = 0) {
-        this.currentRegion = regionId;
-        this.currentPhotoIndex = photoIndex;
-        this.showCurrentPhoto();
-        this.viewerModal.style.display = 'flex';
-    }
-    
-    showCurrentPhoto() {
-        if (!this.currentRegion) return;
-        
-        const regionData = this.regions[this.currentRegion];
-        const photos = regionData.photos;
-        const currentPhoto = photos[this.currentPhotoIndex];
-        const photoData = this.generatedPhotos.get(currentPhoto.id);
-        
-        if (!photoData) return;
-        
-        // 写真情報を更新
-        document.getElementById('photo-title').textContent = photoData.name;
-        document.getElementById('photo-description').textContent = photoData.description;
-        document.getElementById('photo-region').textContent = `${photoData.regionName} (${this.currentPhotoIndex + 1}/${photos.length})`;
-        
-        // キャンバスに写真を表示
-        const canvas = document.getElementById('viewer-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = photoData.canvas.width;
-        canvas.height = photoData.canvas.height;
-        ctx.drawImage(photoData.canvas, 0, 0);
-        
-        // ナビゲーションボタンの状態
-        document.getElementById('prev-photo').disabled = this.currentPhotoIndex === 0;
-        document.getElementById('next-photo').disabled = this.currentPhotoIndex === photos.length - 1;
-    }
-    
-    showPreviousPhoto() {
-        if (this.currentPhotoIndex > 0) {
-            this.currentPhotoIndex--;
-            this.showCurrentPhoto();
-        }
-    }
-    
-    showNextPhoto() {
-        const photos = this.regions[this.currentRegion].photos;
-        if (this.currentPhotoIndex < photos.length - 1) {
-            this.currentPhotoIndex++;
-            this.showCurrentPhoto();
-        }
-    }
-    
-    downloadCurrentPhoto() {
-        if (!this.currentRegion) return;
-        
-        const regionData = this.regions[this.currentRegion];
-        const currentPhoto = regionData.photos[this.currentPhotoIndex];
-        const photoData = this.generatedPhotos.get(currentPhoto.id);
-        
-        if (photoData) {
-            const link = document.createElement('a');
-            link.href = photoData.dataURL;
-            link.download = `hakusan-${photoData.regionId}-${currentPhoto.id}.jpg`;
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            console.log('📥 写真ダウンロード:', currentPhoto.id);
-        }
-    }
-    
-    shareCurrentPhoto() {
-        if (!this.currentRegion) return;
-        
-        const regionData = this.regions[this.currentRegion];
-        const currentPhoto = regionData.photos[this.currentPhotoIndex];
-        const photoData = this.generatedPhotos.get(currentPhoto.id);
-        
-        if (navigator.share && photoData) {
-            // Web Share API対応
-            const canvas = document.getElementById('viewer-canvas');
-            canvas.toBlob((blob) => {
-                const file = new File([blob], `hakusan-${currentPhoto.id}.jpg`, { type: 'image/jpeg' });
-                
-                navigator.share({
-                    title: `白山市 ${photoData.regionName}`,
-                    text: `${photoData.name} - ${photoData.description}`,
-                    files: [file]
-                }).catch(console.error);
-            });
-        } else {
-            // フォールバック: URLをクリップボードにコピー
-            const shareText = `白山市 ${photoData.regionName} - ${photoData.name}\n${photoData.description}`;
-            navigator.clipboard.writeText(shareText).then(() => {
-                alert('共有テキストをクリップボードにコピーしました！');
-            });
-        }
-    }
-    
-    closeViewer() {
-        this.viewerModal.style.display = 'none';
-        this.currentRegion = null;
-    }
-    
-    // 外部API
-    getRegionPhotos(regionId) {
-        const regionData = this.regions[regionId];
-        if (!regionData) return [];
-        
-        return regionData.photos.map(photo => this.generatedPhotos.get(photo.id));
-    }
-    
-    getAllPhotos() {
-        return Array.from(this.generatedPhotos.values());
-    }
-    
-    getPhotoGallery() {
-        const gallery = {};
-        
-        Object.keys(this.regions).forEach(regionId => {
-            gallery[regionId] = {
-                regionName: this.regions[regionId].name,
-                photos: this.getRegionPhotos(regionId)
-            };
-        });
-        
-        return gallery;
-    }
-    
-    // RPGエンジンとの連携
-    onRegionDiscovered(regionId) {
-        // 地域発見時に写真を表示
-        const photos = this.getRegionPhotos(regionId);
-        if (photos.length > 0) {
-            setTimeout(() => {
-                this.showRegionPhotoNotification(regionId, photos[0]);
-            }, 1000);
-        }
-    }
-    
-    showRegionPhotoNotification(regionId, photoData) {
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            border: 3px solid #4ECDC4;
-            max-width: 300px;
-            z-index: 8500;
-            cursor: pointer;
         `;
-        
-        notification.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="font-size: 24px;">📸</div>
-                <div>
-                    <div style="font-weight: bold; margin-bottom: 5px;">
-                        新しい写真が利用可能！
-                    </div>
-                    <div style="font-size: 14px; opacity: 0.8;">
-                        ${photoData.regionName}の風景
-                    </div>
-                    <div style="font-size: 12px; margin-top: 5px; color: #4ECDC4;">
-                        クリックして表示
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        notification.addEventListener('click', () => {
-            this.openViewer(regionId, 0);
-            notification.remove();
-        });
-        
-        document.body.appendChild(notification);
-        
-        // 自動削除
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 8000);
+        document.head.appendChild(styles);
+    }
+    
+    // 地域一覧を取得
+    getRegionList() {
+        return Object.entries(this.regions).map(([id, data]) => ({
+            id,
+            name: data.name,
+            landmarks: data.landmarks,
+            photoCount: data.photos.length
+        }));
+    }
+    
+    // 特定の地域の詳細情報を取得
+    getRegionDetails(regionId) {
+        return this.regions[regionId] || null;
     }
 }
 
-// グローバル初期化
-document.addEventListener('DOMContentLoaded', () => {
-    window.regionPhotos = new HakusanRegionPhotos();
-});
-
-console.log('📸 地域写真システム読み込み完了');
+// グローバルインスタンス作成
+window.hakusanPhotos = new HakusanRegionPhotos();

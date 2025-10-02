@@ -36,18 +36,32 @@
                 </p>
             </section>
 
-            <section class="story-section">
-                <h2>🌸 文化と教育</h2>
-                <p>
-                    松任には多くの学校や文化施設があり、
-                    地域の教育・文化の発展に大きく貢献しています。
-                    松任文化会館では様々な催し物が開催され、
-                    市民の文化活動の拠点となっています。
-                </p>
-                <p>
-                    また、松任駅周辺は商業施設が集まり、
-                    買い物や食事を楽しむことができます。
-                </p>
+            <section class="photo-gallery-section">
+                <h2>📷 松任の風景</h2>
+                <p>商用利用フリーの美しい風景写真をご覧ください。</p>
+                <div class="region-photos" id="mattouPhotos">
+                    <!-- region-photos.jsで生成される写真がここに表示 -->
+                </div>
+                <button class="photo-view-btn" onclick="openRegionPhotoViewer('mattou')">
+                    🖼️ 全写真を見る
+                </button>
+            </section>
+
+            <section class="share-section">
+                <h2>🎆 シェアしよう！</h2>
+                <p>松任での体験を友達や家族とシェアしませんか？</p>
+                <div class="share-buttons">
+                    <button class="share-btn twitter" onclick="shareTownExperience('mattou', 'twitter')">
+                        🐦 Twitterでシェア
+                    </button>
+                    <button class="share-btn line" onclick="shareTownExperience('mattou', 'line')">
+                        📱 LINEでシェア
+                    </button>
+                    <button class="share-btn general" onclick="shareTownExperience('mattou', 'general')">
+                        🔗 リンクをコピー
+                    </button>
+                </div>
+            </section>
             </section>
 
             <section class="story-section">
@@ -85,6 +99,138 @@
     </footer>
 
     <script src="../script.js"></script>
+    <!-- 統合システム -->
+    <script src="../region-photos.js"></script>
+    <script src="../badge-system.js"></script>
+    <script>
+        // 町ページ用の統合機能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 地域写真を表示
+            displayRegionPhotos('mattou');
+            
+            // バッジ状態を確認
+            checkBadgeStatus('mattou');
+        });
+        
+        function displayRegionPhotos(regionId) {
+            if (window.hakusanPhotos) {
+                // 実写真システムを使用してフォトギャラリーを作成
+                const success = window.hakusanPhotos.createPhotoGallery(regionId, `${regionId}Photos`);
+                
+                if (!success) {
+                    // フォールバック：手動で写真を表示
+                    const photos = window.hakusanPhotos.getRegionPhotos(regionId);
+                    const container = document.getElementById(`${regionId}Photos`);
+                    
+                    if (container && photos && photos.length > 0) {
+                        container.innerHTML = `
+                            <div class="photo-grid">
+                                ${photos.map(photo => `
+                                    <div class="photo-item" onclick="openPhotoDetail('${photo.id}')">
+                                        <img src="${photo.url || photo.fallback}" alt="${photo.name}" />
+                                        <div class="photo-caption">
+                                            <strong>${photo.name}</strong><br>
+                                            <small>${photo.description}</small>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+                }
+            }
+        }
+        
+        function openRegionPhotoViewer(regionId) {
+            if (window.hakusanPhotos) {
+                // 最初の写真を開く
+                const photos = window.hakusanPhotos.getRegionPhotos(regionId);
+                if (photos && photos.length > 0) {
+                    window.hakusanPhotos.openPhotoViewer(photos[0].id);
+                }
+            }
+        }
+        
+        function openPhotoDetail(photoId) {
+            if (window.hakusanPhotos) {
+                window.hakusanPhotos.openPhotoViewer(photoId);
+            }
+        }
+        
+        function shareTownExperience(townId, platform) {
+            const townNames = {
+                'mattou': '松任',
+                'mikawa': '美川',
+                'tsurugi': '鶴来',
+                'kawachi': '河内',
+                'shiramine': '白峰',
+                'yoshinodani': '吉野谷',
+                'torigoe': '鳥越',
+                'oguchi': '尾口'
+            };
+            
+            const townName = townNames[townId];
+            const shareText = `はくさんNFCバッジクエストで${townName}地区を探索中！🏄️ #はくさんNFCバッジクエスト #白山市 #${townName}`;
+            const shareUrl = window.location.href;
+            
+            switch (platform) {
+                case 'twitter':
+                    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+                    window.open(twitterUrl, '_blank');
+                    break;
+                    
+                case 'line':
+                    const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+                    window.open(lineUrl, '_blank');
+                    break;
+                    
+                case 'general':
+                    if (navigator.share) {
+                        navigator.share({
+                            title: `はくさんNFCバッジクエスト - ${townName}`,
+                            text: shareText,
+                            url: shareUrl
+                        });
+                    } else {
+                        navigator.clipboard.writeText(`${shareText}\n${shareUrl}`).then(() => {
+                            alert('シリアル用テキストをクリップボードにコピーしました！');
+                        });
+                    }
+                    break;
+            }
+            
+            // 分析データ記録
+            if (window.analyticsSystem) {
+                window.analyticsSystem.recordFeatureUsage('town_share', {
+                    townId,
+                    platform
+                });
+            }
+        }
+        
+        function checkBadgeStatus(regionId) {
+            if (window.badgeSystem) {
+                const badges = window.badgeSystem.getCollectedBadges();
+                const hasBadge = badges.some(badge => badge.regionId === regionId);
+                
+                const statusElement = document.getElementById('stampStatus');
+                if (statusElement) {
+                    if (hasBadge) {
+                        statusElement.innerHTML = `
+                            <span class="stamp-icon obtained">✅</span>
+                            <span class="stamp-text">バッジ取得済み！</span>
+                        `;
+                        statusElement.classList.add('obtained');
+                    } else {
+                        statusElement.innerHTML = `
+                            <span class="stamp-icon pending">📍</span>
+                            <span class="stamp-text">バッジを取得しよう！</span>
+                        `;
+                    }
+                }
+            }
+        }
+    </script>
     <script src="town-script.js"></script>
 </body>
 </html>

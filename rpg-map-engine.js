@@ -34,16 +34,16 @@ class HakusanRPGEngine {
             isMoving: false
         };
         
-        // バッジポイント（白山.pngの実際の地形に合わせて設定）
+        // バッジポイント（白山.pngの正確な地理位置に基づく）
         this.badgePoints = {
-            tsurugi: { x: 320, y: 280, name: '鶴来', discovered: false },
-            mikawa: { x: 280, y: 350, name: '美川', discovered: false },
-            mattou: { x: 300, y: 300, name: '松任', discovered: false },
-            kawachi: { x: 380, y: 200, name: '河内', discovered: false },
-            shiramine: { x: 450, y: 150, name: '白峰', discovered: false },
-            yoshinodani: { x: 420, y: 180, name: '吉野谷', discovered: false },
-            torigoe: { x: 350, y: 220, name: '鳥越', discovered: false },
-            oguchi: { x: 480, y: 120, name: '尾口', discovered: false }
+            mattou: { x: 200, y: 320, name: '松任', discovered: false },      // 市中心部・平野部
+            mikawa: { x: 160, y: 380, name: '美川', discovered: false },      // 海岸部・西端
+            tsurugi: { x: 280, y: 280, name: '鶴来', discovered: false },     // 東部・手取川沿い
+            kawachi: { x: 350, y: 240, name: '河内', discovered: false },     // 東南部・山間入口
+            yoshinodani: { x: 420, y: 180, name: '吉野谷', discovered: false }, // 東部山間・中宮温泉
+            torigoe: { x: 380, y: 140, name: '鳥越', discovered: false },     // 東北部・鳥越城跡
+            oguchi: { x: 460, y: 100, name: '尾口', discovered: false },      // 最東部・一里野温泉
+            shiramine: { x: 500, y: 60, name: '白峰', discovered: false }     // 最奥部・白山登山口
         };
         
         // 入力管理
@@ -779,3 +779,115 @@ window.exportAdventureData = function() {
         document.body.removeChild(link);
     }
 };
+
+// マップエンジン拡張 - アバター連携機能
+if (typeof HakusanRPGEngine !== 'undefined') {
+    // アバターシステムとの連携メソッドを追加
+    HakusanRPGEngine.prototype.setAvatar = function(avatarSystem) {
+        this.avatarSystem = avatarSystem;
+        if (avatarSystem) {
+            // アバターの外見をプレイヤーに反映
+            this.updatePlayerAppearance();
+            console.log('🔗 アバターシステム連携完了');
+        }
+    };
+    
+    HakusanRPGEngine.prototype.updatePlayerAppearance = function() {
+        if (this.avatarSystem) {
+            const avatarData = this.avatarSystem.getCurrentAvatar();
+            if (avatarData) {
+                this.player.appearance = avatarData;
+                this.player.sprite = avatarData.sprite || null;
+            }
+        }
+    };
+    
+    // 町ページナビゲーション機能を追加
+    HakusanRPGEngine.prototype.navigateToTown = function(regionId) {
+        const townPages = {
+            'tsurugi': 'town/tsurugi.html',
+            'mikawa': 'town/mikawa.html', 
+            'mattou': 'town/mattou.html',
+            'kawachi': 'town/kawachi.html',
+            'shiramine': 'town/shiramine.html',
+            'yoshinodani': 'town/yoshinodani.html',
+            'torigoe': 'town/torigoe.html',
+            'oguchi': 'town/oguchi.html'
+        };
+        
+        if (townPages[regionId]) {
+            // アナリティクス記録
+            if (window.HakusanAnalytics) {
+                window.HakusanAnalytics.recordEvent('town_visit', { region: regionId });
+            }
+            
+            // ページ遷移
+            window.location.href = townPages[regionId];
+        }
+    };
+    
+    // バッジ発見時の処理を強化
+    HakusanRPGEngine.prototype.onBadgeDiscovered = function(regionId) {
+        const point = this.badgePoints[regionId];
+        if (point && !point.discovered) {
+            point.discovered = true;
+            this.gameState.badgesCollected++;
+            
+            // バッジシステムとの連携
+            if (window.badges) {
+                window.badges.collectBadge(regionId, 'common');
+            }
+            
+            // 発見通知
+            this.showDiscoveryNotification(regionId, point.name);
+            
+            // 町ページへの案内
+            setTimeout(() => {
+                if (confirm(`${point.name}地区を発見しました！詳細を見に行きますか？`)) {
+                    this.navigateToTown(regionId);
+                }
+            }, 2000);
+            
+            // プログレス更新
+            this.updateProgress();
+            this.savePlayerProgress();
+        }
+    };
+    
+    HakusanRPGEngine.prototype.showDiscoveryNotification = function(regionId, regionName) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #FFD700, #FFA500); color: #333;
+            padding: 20px 30px; border-radius: 15px; z-index: 10000;
+            box-shadow: 0 4px 20px rgba(255,215,0,0.5);
+            font-size: 18px; font-weight: bold; text-align: center;
+            animation: discoveryPulse 0.5s ease-in-out;
+        `;
+        notification.innerHTML = `
+            🎉 ${regionName}地区を発見！<br>
+            <small>バッジを獲得しました</small>
+        `;
+        
+        // アニメーションCSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes discoveryPulse {
+                0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+                50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+                100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+            style.remove();
+        }, 3000);
+    };
+}
+
+// グローバルRPGマップインスタンス作成
+window.HakusanRPGMap = HakusanRPGEngine;

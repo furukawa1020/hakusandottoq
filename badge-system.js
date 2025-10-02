@@ -208,6 +208,11 @@ class HakusanBadgeSystem {
             this.showBadgeNotification(regionId, rarity);
             this.playCollectionSound(rarity);
             
+            // SNSシェア提案（3秒後）
+            setTimeout(() => {
+                this.promptSocialShare(regionId, rarity);
+            }, 3000);
+            
             // 分析データに記録
             if (window.analyticsSystem) {
                 window.analyticsSystem.recordBadgeCollection(regionId, rarity);
@@ -437,12 +442,295 @@ class HakusanBadgeSystem {
             this.collectBadge(regionId, rarity);
         }
     }
+    
+    // SNSシェア機能
+    promptSocialShare(regionId, rarity) {
+        const regionData = this.regions[regionId];
+        const rarityData = this.rarityLevels[rarity];
+        const stats = this.getCollectionStats();
+        
+        // シェアモーダルを作成
+        const modal = this.createShareModal(regionId, rarity, stats);
+        document.body.appendChild(modal);
+        
+        // 3秒後に自動で閉じる（ユーザーが操作しなかった場合）
+        setTimeout(() => {
+            if (modal.parentNode) {
+                modal.remove();
+            }
+        }, 15000);
+    }
+    
+    createShareModal(regionId, rarity, stats) {
+        const regionData = this.regions[regionId];
+        const rarityData = this.rarityLevels[rarity];
+        const badgeImage = this.badgeImages.get(`${regionId}_${rarity}`);
+        
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 10000; display: flex;
+            align-items: center; justify-content: center; animation: fadeIn 0.3s ease;
+        `;
+        
+        modal.innerHTML = `
+            <div style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 30px; border-radius: 20px; max-width: 90%; max-width: 400px;
+                text-align: center; color: white; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            ">
+                <h2 style="margin: 0 0 20px 0;">🎉 バッジ獲得おめでとう！</h2>
+                
+                <div style="margin: 20px 0;">
+                    <img src="${badgeImage}" style="width: 80px; height: 80px; border-radius: 50%;">
+                    <h3 style="margin: 10px 0;">${regionData.name} ${rarityData.name}バッジ</h3>
+                    <p style="margin: 5px 0; opacity: 0.9;">コレクション進捗: ${stats.collectedCount}/${stats.totalPossible}</p>
+                </div>
+                
+                <p style="margin: 20px 0; font-size: 16px;">みんなにシェアしませんか？</p>
+                
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 20px 0;">
+                    <button onclick="badgeSystem.shareToTwitter('${regionId}', '${rarity}')" style="
+                        background: #1DA1F2; color: white; border: none; padding: 12px 20px;
+                        border-radius: 25px; cursor: pointer; font-size: 14px; display: flex;
+                        align-items: center; gap: 8px; transition: transform 0.2s;
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        🐦 X (Twitter)
+                    </button>
+                    
+                    <button onclick="badgeSystem.shareToLine('${regionId}', '${rarity}')" style="
+                        background: #00C300; color: white; border: none; padding: 12px 20px;
+                        border-radius: 25px; cursor: pointer; font-size: 14px; display: flex;
+                        align-items: center; gap: 8px; transition: transform 0.2s;
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        💬 LINE
+                    </button>
+                    
+                    <button onclick="badgeSystem.shareToInstagram('${regionId}', '${rarity}')" style="
+                        background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+                        color: white; border: none; padding: 12px 20px; border-radius: 25px;
+                        cursor: pointer; font-size: 14px; display: flex; align-items: center;
+                        gap: 8px; transition: transform 0.2s;
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        📸 Instagram
+                    </button>
+                </div>
+                
+                <button onclick="badgeSystem.shareGeneral('${regionId}', '${rarity}')" style="
+                    background: #666; color: white; border: none; padding: 10px 20px;
+                    border-radius: 20px; cursor: pointer; font-size: 14px; margin: 10px 5px;
+                ">
+                    📋 その他の方法でシェア
+                </button>
+                
+                <div style="margin-top: 20px;">
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" style="
+                        background: rgba(255,255,255,0.2); color: white; border: none;
+                        padding: 8px 16px; border-radius: 15px; cursor: pointer; font-size: 12px;
+                    ">
+                        後で
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // フェードインアニメーション
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: scale(0.9); }
+                to { opacity: 1; transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        return modal;
+    }
+    
+    // X (Twitter) シェア
+    shareToTwitter(regionId, rarity) {
+        const regionData = this.regions[regionId];
+        const rarityData = this.rarityLevels[rarity];
+        const stats = this.getCollectionStats();
+        
+        const shareText = `🏆 はくさんNFCバッジクエストで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
+        
+現在の進捗: ${stats.collectedCount}/${stats.totalPossible} (${Math.round(stats.completionRate)}%)
+        
+#はくさんNFCバッジクエスト #白山市 #${regionData.name} #NFCバッジ #地域探索 #石川県観光`;
+        
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.href)}`;
+        window.open(twitterUrl, '_blank', 'width=550,height=420');
+        
+        this.closeShareModal();
+    }
+    
+    // LINE シェア
+    shareToLine(regionId, rarity) {
+        const regionData = this.regions[regionId];
+        const rarityData = this.rarityLevels[rarity];
+        const stats = this.getCollectionStats();
+        
+        const shareText = `🏆 はくさんNFCバッジクエストで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
+        
+現在の進捗: ${stats.collectedCount}/${stats.totalPossible}
+あなたも一緒に白山市を探索しませんか？`;
+        
+        const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareText)}`;
+        window.open(lineUrl, '_blank', 'width=550,height=420');
+        
+        this.closeShareModal();
+    }
+    
+    // Instagram シェア（ストーリー用テキスト）
+    shareToInstagram(regionId, rarity) {
+        const regionData = this.regions[regionId];
+        const rarityData = this.rarityLevels[rarity];
+        const stats = this.getCollectionStats();
+        
+        const shareText = `🏆 ${regionData.name}の${rarityData.name}バッジ獲得！${regionData.symbol}
+        
+進捗: ${stats.collectedCount}/${stats.totalPossible}
+        
+#はくさんNFCバッジクエスト #白山市 #${regionData.name} #NFCバッジ #地域探索 #石川県 #観光 #バッジコレクション`;
+        
+        // Instagram用のテキストをクリップボードにコピー
+        navigator.clipboard.writeText(shareText).then(() => {
+            alert('📸 Instagramシェア用のテキストをコピーしました！\n\nInstagramアプリを開いて、ストーリーまたは投稿に貼り付けてください。');
+        }).catch(() => {
+            // フォールバック: テキストエリアに表示
+            this.showCopyText(shareText, 'Instagram');
+        });
+        
+        this.closeShareModal();
+    }
+    
+    // その他の方法でシェア
+    shareGeneral(regionId, rarity) {
+        const regionData = this.regions[regionId];
+        const rarityData = this.rarityLevels[rarity];
+        const stats = this.getCollectionStats();
+        
+        const shareText = `🏆 はくさんNFCバッジクエストで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
+        
+現在の進捗: ${stats.collectedCount}/${stats.totalPossible} (${Math.round(stats.completionRate)}%)
+        
+白山市の8地域を巡って、すべてのバッジを集めよう！
+${window.location.href}
+        
+#はくさんNFCバッジクエスト #白山市 #地域探索`;
+        
+        if (navigator.share) {
+            // Web Share API が利用可能な場合
+            navigator.share({
+                title: `${regionData.name}バッジを獲得！ - はくさんNFCバッジクエスト`,
+                text: shareText,
+                url: window.location.href
+            }).catch(() => {
+                this.showCopyText(shareText, '一般');
+            });
+        } else {
+            // クリップボードにコピー
+            this.showCopyText(shareText, '一般');
+        }
+        
+        this.closeShareModal();
+    }
+    
+    showCopyText(text, platform) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert(`📋 ${platform}シェア用のテキストをクリップボードにコピーしました！\n\nお好きなアプリやSNSに貼り付けてシェアしてください。`);
+        }).catch(() => {
+            // 最終手段: テキストを表示
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.9); z-index: 10001; display: flex;
+                align-items: center; justify-content: center;
+            `;
+            modal.innerHTML = `
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 90%; max-width: 500px;">
+                    <h3 style="color: #333; margin-bottom: 15px;">📋 シェア用テキスト</h3>
+                    <textarea style="width: 100%; height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" readonly>${text}</textarea>
+                    <div style="margin-top: 15px; text-align: center;">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" style="
+                            background: #007bff; color: white; border: none; padding: 10px 20px;
+                            border-radius: 5px; cursor: pointer;">
+                            閉じる
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        });
+    }
+    
+    closeShareModal() {
+        const modal = document.querySelector('[style*="z-index: 10000"]');
+        if (modal) {
+            modal.remove();
+        }
+    }
+    
+    // バッジコレクション全体をシェア
+    shareCollectionProgress() {
+        const stats = this.getCollectionStats();
+        const completedRegions = this.getCompletedRegions();
+        
+        let shareText = `🏆 はくさんNFCバッジクエスト 進捗報告！
+        
+📊 コンプリート率: ${Math.round(stats.completionRate)}%
+🏅 獲得バッジ数: ${stats.collectedCount}/${stats.totalPossible}
+`;
+        
+        if (completedRegions.length > 0) {
+            shareText += `\n✅ 制覇済み地域: ${completedRegions.map(r => this.regions[r].name).join('、')}\n`;
+        }
+        
+        shareText += `
+白山市の8地域を巡る地域探索ゲーム！
+${window.location.href}
+
+#はくさんNFCバッジクエスト #白山市 #地域探索 #バッジコレクション #石川県観光`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'はくさんNFCバッジクエスト 進捗報告',
+                text: shareText,
+                url: window.location.href
+            });
+        } else {
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+            window.open(twitterUrl, '_blank');
+        }
+    }
+    
+    getCompletedRegions() {
+        const completedRegions = [];
+        Object.keys(this.regions).forEach(regionId => {
+            let hasAllRarities = true;
+            Object.keys(this.rarityLevels).forEach(rarity => {
+                if (!this.collectedBadges.includes(`${regionId}_${rarity}`)) {
+                    hasAllRarities = false;
+                }
+            });
+            if (hasAllRarities) {
+                completedRegions.push(regionId);
+            }
+        });
+        return completedRegions;
+    }
 }
 
 // グローバル初期化
 document.addEventListener('DOMContentLoaded', () => {
-    window.badgeSystem = new HakusanBadgeSystem();
+    if (!window.badgeSystem) {
+        window.badgeSystem = new HakusanBadgeSystem();
+    }
 });
+
+// グローバルエクスポート
+window.HakusanBadges = HakusanBadgeSystem;
 
 console.log('🏅 白山バッジシステム読み込み完了');
 
@@ -452,4 +740,11 @@ window.debugBadges = () => {
     console.log('取得済み:', window.badgeSystem.getCollectedBadges());
     console.log('統計:', window.badgeSystem.getCollectionStats());
     console.log('URL一覧:', window.badgeSystem.generateUniqueURLs());
+};
+
+// 進捗シェア用グローバル関数
+window.shareBadgeProgress = () => {
+    if (window.badgeSystem) {
+        window.badgeSystem.shareCollectionProgress();
+    }
 };

@@ -440,21 +440,29 @@ class HakusanAnalyticsSystem {
         });
     }
     
-    // データ分析メソッド
-    getSessionStats() {
-        const sessions = this.analytics.sessions;
-        const totalSessions = sessions.length;
-        
-        if (totalSessions === 0) return {};
-        
-        const durations = sessions.filter(s => s.duration > 0).map(s => s.duration);
-        const avgDuration = durations.reduce((a, b) => a + b, 0) / durations.length;
+    // 運営専用データアクセス（一般ユーザーには非表示）
+    getOperatorData(operatorKey) {
+        if (operatorKey !== 'hakusan_admin_2025') {
+            console.warn('⚠️ 運営者専用データです');
+            return null;
+        }
         
         return {
-            totalSessions,
-            averageDuration: avgDuration,
-            totalEvents: this.analytics.events.length,
-            activeSession: this.getCurrentSession()
+            analytics: this.analytics,
+            report: this.generateReport(),
+            rawEvents: this.analytics.events,
+            systemMetrics: this.getSystemMetrics()
+        };
+    }
+    
+    getSystemMetrics() {
+        return {
+            totalMemoryUsage: this.calculateTotalMemoryUsage(),
+            averageSessionLength: this.calculateAverageSessionLength(),
+            errorRate: this.calculateErrorRate(),
+            userRetention: this.calculateUserRetention(),
+            popularRegions: this.getPopularRegions(),
+            peakUsageTimes: this.getPeakUsageTimes()
         };
     }
     

@@ -106,5 +106,128 @@
 
     <script src="../script.js"></script>
     <script src="town-script.js"></script>
+    <script src="../script.js"></script>
+    <!-- 統合システム -->
+    <script src="../region-photos.js"></script>
+    <script src="../badge-system.js"></script>
+    <script>
+        // 町ページ用の統合機能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 地域写真を表示
+            displayRegionPhotos('tsurugi');
+            
+            // バッジ状態を確認
+            checkBadgeStatus('tsurugi');
+        });
+        
+        function displayRegionPhotos(regionId) {
+            if (window.hakusanPhotos) {
+                // 実写真システムを使用してフォトギャラリーを作成
+                const success = window.hakusanPhotos.createPhotoGallery(regionId, `${regionId}Photos`);
+                
+                if (!success) {
+                    // フォールバック：手動で写真を表示
+                    const photos = window.hakusanPhotos.getRegionPhotos(regionId);
+                    const container = document.getElementById(`${regionId}Photos`);
+                    
+                    if (container && photos && photos.length > 0) {
+                        container.innerHTML = `
+                            <div class="photo-grid">
+                                ${photos.map(photo => `
+                                    <div class="photo-item" onclick="openPhotoDetail('${photo.id}')">
+                                        <img src="${photo.url || photo.fallback}" alt="${photo.name}" />
+                                        <div class="photo-caption">
+                                            <strong>${photo.name}</strong><br>
+                                            <small>${photo.description}</small>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+                }
+            }
+        }
+        
+        function openRegionPhotoViewer(regionId) {
+            if (window.hakusanPhotos) {
+                // 最初の写真を開く
+                const photos = window.hakusanPhotos.getRegionPhotos(regionId);
+                if (photos && photos.length > 0) {
+                    window.hakusanPhotos.openPhotoViewer(photos[0].id);
+                }
+            }
+        }
+        
+        function openPhotoDetail(photoId) {
+            if (window.hakusanPhotos) {
+                window.hakusanPhotos.openPhotoViewer(photoId);
+            }
+        }
+        
+        function shareTownExperience(townId, platform) {
+            const townNames = {
+                'mattou': '松任',
+                'mikawa': '美川',
+                'tsurugi': '鶴来',
+                'kawachi': '河内',
+                'shiramine': '白峰',
+                'yoshinodani': '吉野谷',
+                'torigoe': '鳥越',
+                'oguchi': '尾口'
+            };
+            
+            const townName = townNames[townId];
+            const shareText = `はくさんNFCバッジクエストで${townName}地区を探索中！🏄️ #はくさんNFCバッジクエスト #白山市 #${townName}`;
+            const shareUrl = window.location.href;
+            
+            switch (platform) {
+                case 'twitter':
+                    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+                    window.open(twitterUrl, '_blank');
+                    break;
+                    
+                case 'line':
+                    const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+                    window.open(lineUrl, '_blank');
+                    break;
+                    
+                case 'general':
+                    if (navigator.share) {
+                        navigator.share({
+                            title: `${townName} - はくさんNFCバッジクエスト`,
+                            text: shareText,
+                            url: shareUrl
+                        });
+                    } else {
+                        navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+                        alert('共有テキストをクリップボードにコピーしました！');
+                    }
+                    break;
+            }
+        }
+        
+        function checkBadgeStatus(regionId) {
+            if (window.hakusanBadges) {
+                const badges = window.hakusanBadges.getUserBadges();
+                const regionBadge = badges.find(b => b.region === regionId);
+                
+                const statusElement = document.getElementById('stampStatus');
+                if (statusElement) {
+                    if (regionBadge) {
+                        statusElement.innerHTML = `
+                            <span id="stampIcon">🏅</span>
+                            <span id="stampText">コンプリート！</span>
+                        `;
+                    } else {
+                        statusElement.innerHTML = `
+                            <span id="stampIcon">📍</span>
+                            <span id="stampText">未取得</span>
+                        `;
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>
