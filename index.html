@@ -156,8 +156,8 @@
                     <button onclick="toggleMapMode()" class="map-mode-btn">🎮 ピクセルマップ</button>
                     <button onclick="openAvatarCustomizer()" class="avatar-btn">👤 アバター</button>
                     <button onclick="openPhotoGallery()" class="photo-btn">📷 写真</button>
-                    <button onclick="openARCamera()" class="ar-btn">📱 AR</button>
-                    <button onclick="shareBadgeProgress()" class="share-btn" style="background: linear-gradient(45deg, #FF6B6B, #FF8E53);">📱 SNSシェア</button>
+                    <button onclick="openARCamera()" class="ar-btn" style="background: linear-gradient(45deg, #FF6B6B, #FF8E53);">📱 AR撮影</button>
+                    <button onclick="shareBadgeProgress()" class="share-btn" style="background: linear-gradient(45deg, #9370DB, #BA55D3);">📱 SNSシェア</button>
                 </div>
                 <div class="pixel-canvas-container">
                     <canvas id="pixelCanvas" width="800" height="600"></canvas>
@@ -465,6 +465,8 @@
             if (window.HakusanAR) {
                 window.arCamera = new HakusanAR();
                 console.log('📱 ARシステム初期化完了');
+            } else {
+                console.warn('⚠️ ARシステムが読み込まれていません');
             }
             
             // 分析システム初期化
@@ -542,7 +544,34 @@
         // ARカメラを開く
         function openARCamera() {
             if (window.arCamera) {
-                window.arCamera.startCamera();
+                window.arCamera.open();
+            } else if (window.HakusanAR) {
+                // ARシステムが初期化されていない場合
+                window.arCamera = new HakusanAR();
+                window.arCamera.open();
+            } else {
+                alert('ARカメラシステムが利用できません。ページを再読み込みしてください。');
+            }
+        }
+        
+        // バッジ付きAR撮影（テスト用）
+        function openARCameraWithBadge(regionId, rarity = 'common') {
+            if (window.arCamera) {
+                window.arCamera.openWithBadge(regionId, rarity);
+            } else {
+                openARCamera();
+            }
+        }
+        
+        // カメラ機能テスト
+        function testCamera() {
+            console.log('📷 カメラ機能テスト開始');
+            
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                console.log('✅ カメラAPIサポート確認済み');
+                openARCamera();
+            } else {
+                alert('❌ このブラウザはカメラ機能をサポートしていません。');
             }
         }
         

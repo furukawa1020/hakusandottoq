@@ -672,7 +672,12 @@ class HakusanARCamera {
 
 // グローバル初期化
 document.addEventListener('DOMContentLoaded', () => {
-    window.arCamera = new HakusanARCamera();
+    if (!window.arCamera) {
+        window.arCamera = new HakusanARCamera();
+    }
 });
+
+// グローバルエクスポート
+window.HakusanAR = HakusanARCamera;
 
 console.log('📷 ARカメラシステム読み込み完了');
