@@ -254,7 +254,7 @@ class HakusanRegionPhotos {
     init() {
         this.preloadImages();
         this.setupPhotoViewer();
-        console.log('📸 地域写真システム初期化完了（実写真使用）');
+        console.log('地域写真システム初期化完了（実写真使用）');
     }
     
     preloadImages() {

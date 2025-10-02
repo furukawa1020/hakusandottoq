@@ -65,7 +65,7 @@ class HakusanAvatarSystem {
         this.loadAvatar();
         this.checkUnlocks();
         this.setupCustomizer();
-        console.log('👤 アバターシステム初期化完了');
+        console.log('アバターシステム初期化完了');
     }
     
     setupCustomizer() {
@@ -711,7 +711,7 @@ class HakusanAvatarSystem {
             const saved = localStorage.getItem('hakusan_avatar');
             if (saved) {
                 this.currentAvatar = { ...this.currentAvatar, ...JSON.parse(saved) };
-                console.log('👤 アバター読み込み完了');
+                console.log('アバター読み込み完了');
             }
         } catch (e) {
             console.error('アバター読み込みエラー:', e);
@@ -933,4 +933,4 @@ if (typeof window !== 'undefined') {
     window.avatarSystemReady = true;
 }
 
-console.log('👤 アバターシステム読み込み完了 - HakusanAvatarSystem利用可能');
+console.log('アバターシステム読み込み完了 - HakusanAvatarSystem利用可能');

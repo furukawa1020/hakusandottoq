@@ -16,7 +16,7 @@ class HakusanARCamera {
     init() {
         this.setupModal();
         this.setupEventListeners();
-        console.log('📷 ARカメラシステム初期化完了');
+        console.log('ARカメラシステム初期化完了');
     }
     
     setupModal() {
@@ -676,7 +676,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.arCamera = new HakusanARCamera();
         // startCamera エイリアスを追加
         window.arCamera.startCamera = function() {
-            this.showARPhotoInterface();
+            this.open();
         };
     }
 });

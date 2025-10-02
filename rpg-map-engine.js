@@ -1,7 +1,7 @@
 // 白山ピクセルマップRPGエンジン
 class HakusanRPGEngine {
     constructor() {
-        this.canvas = document.getElementById('pixelCanvas');
+        this.canvas = document.getElementById('rpgCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.miniMapCanvas = document.getElementById('miniMapCanvas');
         this.miniMapCtx = this.miniMapCanvas.getContext('2d');
