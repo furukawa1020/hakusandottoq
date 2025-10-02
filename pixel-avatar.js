@@ -82,7 +82,7 @@ class PixelAvatarSystem {
         avatarContainer.innerHTML = `
             <div class="avatar-editor" style="display: none;">
                 <div class="editor-header">
-                    <h3>🎨 ドット絵アバター作成</h3>
+                    <h3>ドット絵アバター作成</h3>
                     <button class="close-editor-btn" onclick="pixelAvatarSystem.closeEditor()">✕</button>
                 </div>
                 

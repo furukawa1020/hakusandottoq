@@ -3,8 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="白山市の地域探索とバッジ収集を楽しむRPGシステム">
-    <meta name="keywords" content="白山,地域探索,バッジ収集,RPG,ARカメラ">
+    <meta name="description" content="白山市旧市町村8地域を巡るNFCバッジクエスト - 地域探索RPGシステム">
+    <meta name="key            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showBadgeCollection()">
+                    <span class="icon-badge">★</span> バッジ一覧
+                </button>
+                <button class="btn btn-secondary" onclick="openARCamera()">
+                    <span class="icon-gallery">▣</span> AR写真
+                </button>
+                <button class="btn btn-secondary" onclick="openAvatarCustomizer()">
+                    <span class="icon-location">●</span> アバター
+                </button>
+                <button class="btn btn-secondary" onclick="shareBadgeProgress()">
+                    <span class="icon-share">◆</span> SNS共有
+                </button>
+                <button class="btn btn-secondary" onclick="showRegionPhotos()">
+                    <span class="icon-gallery">▣</span> 地域写真
+                </button>
+            </div>="はくさんNFCバッジクエスト,白山市,旧市町村,8地域,地域探索,バッジ収集,RPG,NFC">
     <meta name="author" content="Hakusan Development Team">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#97bc62">
@@ -18,7 +34,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="白山探索">
+    <meta name="apple-mobile-web-app-title" content="はくさんNFC">
     
     <!-- プリロード最適化 -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +46,7 @@
     <link rel="preload" href="/白山.png" as="image">
     <link rel="modulepreload" href="/rpg-map-engine.js">
     
-    <title>白山地域探索システム</title>
+    <title>はくさんNFCバッジクエスト</title>
     <link rel="manifest" href="manifest.json">
     
     <style>
@@ -215,7 +231,7 @@
 <body>
     <!-- ヘッダー -->
     <header class="header">
-        <h1>🏔️ 白山地域探索システム</h1>
+        <h1>はくさんNFCバッジクエスト</h1>
         <p>8つの地域を巡り、白山の魅力を発見しよう！</p>
     </header>
 
@@ -224,22 +240,22 @@
         <!-- ゲーム状況 -->
         <div class="game-status">
             <div class="status-item">
-                <span>📍</span>
-                <span>発見地域: <span id="badgeCount">0</span>/8</span>
+                <span class="icon-badge">★</span>
+                <span>攻略地域: <span id="badgeCount">0</span>/8地域</span>
             </div>
             <div class="status-item">
-                <span>🏔️</span>
+                <span class="icon-mountain">▲</span>
                 <span id="currentRegion">探索開始</span>
             </div>
             <div class="status-item">
-                <span>📍</span>
+                <span class="icon-location">●</span>
                 <span id="nearestSpot">最寄り: 探索中...</span>
             </div>
         </div>
 
         <!-- コントロールパネル -->
         <div class="controls-panel">
-            <h3>🎮 操作方法</h3>
+            <h3>操作方法</h3>
             <p><strong>PC:</strong> WASD または矢印キー、スペースキーで調査</p>
             <p><strong>モバイル:</strong> スワイプで移動、タップで移動先指定</p>
             
@@ -251,33 +267,40 @@
                     <span>📷</span> AR写真
                 </button>
                 <button class="btn btn-secondary" onclick="shareBadgeProgress()">
-                    <span>📱</span> SNS共有
+                    <span class="icon-share">◆</span> SNS共有
                 </button>
                 <button class="btn btn-secondary" onclick="showRegionPhotos()">
-                    <span>🖼️</span> 地域写真
+                    <span class="icon-gallery">■</span> 地域写真
                 </button>
             </div>
         </div>
 
         <!-- RPGマップエリア -->
         <div class="map-container">
-            <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+            <div style="position: relative; width: 100%; height: 100%;">
                 <!-- メインマップ -->
-                <div style="flex: 1; min-width: 400px;">
-                    <h3>🗺️ 白山探索マップ</h3>
-                    <canvas id="rpgCanvas" width="800" height="600"></canvas>
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                    <canvas id="rpgCanvas" width="800" height="600" style="width: 100%; height: 100%; object-fit: cover;"></canvas>
+                </div>
+                
+                <!-- UIオーバーレイ -->
+                <div style="position: absolute; top: 20px; left: 20px; z-index: 10;">
+                    <h3 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0;">はくさん8地域クエストマップ</h3>
                 </div>
                 
                 <!-- ミニマップ -->
-                <div style="flex: 0 0 250px;">
-                    <h4>📍 現在位置</h4>
-                    <canvas id="miniMapCanvas" width="200" height="150"></canvas>
-                    
-                    <div style="margin-top: 15px;">
-                        <h4>🏔️ 地域一覧</h4>
-                        <div id="regionList" style="display: flex; flex-direction: column; gap: 5px;">
-                            <!-- 地域リストは動的に生成 -->
-                        </div>
+                <div style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); border-radius: 10px; padding: 10px; z-index: 10;">
+                    <h4 style="color: white; margin: 0 0 10px 0; font-size: 14px;">現在位置</h4>
+                    <canvas id="miniMapCanvas" width="200" height="150" style="border-radius: 5px;"></canvas>
+                </div>
+                
+                <!-- 地域リスト -->
+                <div style="position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); border-radius: 10px; padding: 15px; z-index: 10; max-width: 250px;">
+                    <h4 style="color: white; margin: 0 0 10px 0; font-size: 14px;">地域一覧</h4>
+                    <div id="regionList" style="display: flex; flex-direction: column; gap: 5px;">
+                        <!-- 地域リストは動的に生成 -->
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>
@@ -321,7 +344,7 @@
         
         // システム初期化
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log('🎮 白山RPGシステム初期化開始...');
+            console.log('はくさんNFCバッジクエスト初期化開始...');
             
             try {
                 // システムの初期化を並列実行
@@ -396,6 +419,14 @@
                 window.arCamera.startCamera();
             } else {
                 console.warn('ARカメラが利用できません');
+            }
+        };
+
+        window.openAvatarCustomizer = function() {
+            if (window.avatarSystem && window.avatarSystem.openCustomizer) {
+                window.avatarSystem.openCustomizer();
+            } else {
+                console.warn('アバターシステムが利用できません');
             }
         };
 

@@ -1,7 +1,7 @@
 {
-  "name": "白山地域探索システム",
-  "short_name": "白山探索",
-  "description": "白山市の地域探索とバッジ収集システム",
+  "name": "はくさんNFCバッジクエスト",
+  "short_name": "はくさんNFC",
+  "description": "白山市旧市町村8地域を巡るNFCバッジクエスト",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#2c5f2d",

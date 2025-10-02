@@ -31,7 +31,7 @@ class ARPhotoSystem {
         arContainer.innerHTML = `
             <div class="ar-interface" style="display: none;">
                 <div class="ar-header">
-                    <h3>📱 ARバッジ写真撮影</h3>
+                    <h3>ARバッジ写真撮影</h3>
                     <button class="close-ar-btn" onclick="arPhotoSystem.closeAR()">✕</button>
                 </div>
                 

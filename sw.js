@@ -50,6 +50,9 @@ const ALL_STATIC_RESOURCES = [
     ...CACHE_STRATEGIES.towns
 ];
 
+// 静的ファイルリスト（後方互換性のため）
+const STATIC_FILES = ALL_STATIC_RESOURCES;
+
 // Netlify適応型キャッシュ時間
 const CACHE_DURATIONS = {
     static: 1000 * 60 * 60 * 24 * 30,  // 30日
@@ -86,7 +89,7 @@ self.addEventListener('install', (event) => {
         });
         
         await Promise.allSettled(cachePromises);
-        console.log('🎯 SW: 静的キャッシュ処理完了');
+        console.log('SW: 静的キャッシュ処理完了');
       }),
       
       // オフラインページを確実にキャッシュ
@@ -112,7 +115,7 @@ self.addEventListener('activate', (event) => {
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== STATIC_CACHE_NAME && 
+            if (cacheName !== STATIC_CACHE && 
                 cacheName !== DYNAMIC_CACHE_NAME &&
                 cacheName.startsWith('hakusan-')) {
               console.log('SW: Deleting old cache:', cacheName);
@@ -144,12 +147,20 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     handleFetch(event.request).catch((error) => {
       console.error('SW: Fetch failed:', error);
-      return new Response('ネットワークエラーが発生しました', {
-        status: 503,
-        statusText: 'Service Unavailable',
-        headers: new Headers({
-          'Content-Type': 'text/plain; charset=utf-8'
-        })
+      
+      // オフラインページを返す
+      return caches.match('/offline.html').then(response => {
+        if (response) {
+          return response;
+        }
+        // フォールバックレスポンス
+        return new Response('ネットワークエラーが発生しました', {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: new Headers({
+            'Content-Type': 'text/plain; charset=utf-8'
+          })
+        });
       });
     })
   );
@@ -176,10 +187,38 @@ async function handleFetch(request) {
 // 静的ファイルかどうかの判定
 function isStaticFile(pathname) {
   const staticExtensions = ['.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.woff', '.woff2'];
-  return staticExtensions.some(ext => pathname.endsWith(ext)) || 
-         STATIC_FILES.includes(pathname) ||
-         pathname === '/' ||
-         pathname.startsWith('/town/');
+  
+  // 拡張子チェック
+  if (staticExtensions.some(ext => pathname.endsWith(ext))) {
+    return true;
+  }
+  
+  // 特定パスチェック
+  if (pathname === '/' || pathname === '/index.html') {
+    return true;
+  }
+  
+  // townフォルダチェック
+  if (pathname.startsWith('/town/')) {
+    return true;
+  }
+  
+  // iconsフォルダチェック
+  if (pathname.startsWith('/icons/')) {
+    return true;
+  }
+  
+  // その他の静的ファイル
+  const staticFiles = [
+    '/demo.html',
+    '/rpg-index.html',
+    '/offline.html',
+    '/白山.png',
+    '/favicon.svg',
+    '/manifest.json'
+  ];
+  
+  return staticFiles.includes(pathname);
 }
 
 // 動的コンテンツかどうかの判定
@@ -202,7 +241,7 @@ async function handleStaticFile(request) {
     const networkResponse = await fetch(request);
     
     if (networkResponse.ok) {
-      const cache = await caches.open(STATIC_CACHE_NAME);
+      const cache = await caches.open(STATIC_CACHE);
       cache.put(request, networkResponse.clone());
     }
     
@@ -377,7 +416,7 @@ async function createOfflinePage() {
     </head>
     <body>
         <div class="offline-container">
-            <div class="offline-icon">🏔️</div>
+            <div class="offline-icon">⛰</div>
             <h1>オフラインモード</h1>
             <p>
                 インターネット接続が利用できません。<br>
@@ -388,10 +427,10 @@ async function createOfflinePage() {
             </button>
             
             <div class="cached-data">
-                <h3>📱 利用可能な機能</h3>
+                <h3>利用可能な機能</h3>
                 <p>
                     • 獲得済みバッジの確認<br>
-                    • ジムマップの表示<br>
+                    • はくさん8地域マップの表示<br>
                     • 基本情報の閲覧
                 </p>
                 <div class="badge-count" id="offlineBadgeCount">
@@ -414,7 +453,7 @@ async function createOfflinePage() {
   `;
   
   try {
-    const cache = await caches.open(STATIC_CACHE_NAME);
+    const cache = await caches.open(STATIC_CACHE);
     await cache.put(OFFLINE_PAGE, new Response(offlineContent, {
       headers: new Headers({
         'Content-Type': 'text/html; charset=utf-8'

@@ -13,6 +13,96 @@ body {
     min-height: 100vh;
 }
 
+/* スタイリッシュアイコン */
+.icon-location, .icon-mountain, .icon-badge, .icon-share, .icon-gallery {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 8px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.icon-location {
+    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+}
+
+.icon-mountain {
+    background: linear-gradient(45deg, #4ECDC4, #44A08D);
+    box-shadow: 0 2px 8px rgba(78, 205, 196, 0.4);
+}
+
+.icon-badge {
+    background: linear-gradient(45deg, #FFD93D, #FF6B6B);
+    box-shadow: 0 2px 8px rgba(255, 217, 61, 0.4);
+}
+
+.icon-share {
+    background: linear-gradient(45deg, #6C5CE7, #A29BFE);
+    box-shadow: 0 2px 8px rgba(108, 92, 231, 0.4);
+}
+
+.icon-gallery {
+    background: linear-gradient(45deg, #FF7675, #FD79A8);
+    box-shadow: 0 2px 8px rgba(255, 118, 117, 0.4);
+}
+
+/* ボタンスタイルの改善 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 /* Header */
 header {
     text-align: center;
@@ -107,6 +197,99 @@ header p {
     justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
+}
+
+/* フルスクリーンマップ用のコントロールパネル */
+.controls-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 400px;
+    z-index: 15;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.controls-panel h3 {
+    color: white;
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.controls-panel p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 5px 0;
+    font-size: 12px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.action-buttons .btn {
+    font-size: 12px;
+    padding: 8px 12px;
+}
+
+/* ゲームステータス */
+.game-status {
+    position: fixed;
+    top: 70px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    z-index: 15;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.status-item span {
+    color: white;
+}
+
+/* UIオーバーレイのレスポンシブ対応 */
+@media (max-width: 768px) {
+    .controls-panel {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        max-width: none;
+        padding: 15px;
+    }
+    
+    .game-status {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 10px;
+    }
+    
+    .action-buttons {
+        justify-content: center;
+    }
+    
+    .action-buttons .btn {
+        flex: 1;
+        min-width: 80px;
+    }
 }
 
 .nav-btn {
@@ -499,10 +682,13 @@ main {
 
 .map-container {
     position: relative;
-    height: 400px;
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    border-radius: 10px;
+    width: 100%;
+    height: 100vh;
+    background: transparent;
+    border-radius: 0;
     overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 .map-town {

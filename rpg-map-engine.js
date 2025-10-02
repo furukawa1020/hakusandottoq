@@ -138,9 +138,20 @@ class HakusanRPGEngine {
     }
     
     resizeCanvas() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        // メインキャンバスを画面サイズに合わせる
+        const container = this.canvas.parentElement;
+        if (container) {
+            this.canvas.width = container.clientWidth || window.innerWidth;
+            this.canvas.height = container.clientHeight || window.innerHeight;
+        } else {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }
         this.ctx.imageSmoothingEnabled = false;
+        
+        // スケール調整
+        this.scale = Math.min(this.canvas.width / 800, this.canvas.height / 600);
+        if (this.scale < 1) this.scale = 1;
     }
     
     setupControls() {

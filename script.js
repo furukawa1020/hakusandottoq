@@ -16,7 +16,7 @@ let isInstallPromptAvailable = false;
 
 // PWA Install Event Listeners
 window.addEventListener('beforeinstallprompt', (e) => {
-    console.log('📱 PWAインストールプロンプト検出');
+    console.log('PWAインストールプロンプト検出');
     e.preventDefault();
     deferredPrompt = e;
     isInstallPromptAvailable = true;
@@ -54,7 +54,7 @@ async function installPWA() {
     try {
         const installBtn = document.getElementById('pwaInstallBtn');
         installBtn.disabled = true;
-        installBtn.textContent = '📱 インストール中...';
+        installBtn.textContent = 'インストール中...';
 
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
@@ -66,7 +66,7 @@ async function installPWA() {
         } else {
             console.log('❌ ユーザーがPWAインストールを拒否');
             installBtn.disabled = false;
-            installBtn.textContent = '📱 アプリとしてインストール';
+            installBtn.textContent = 'アプリとしてインストール';
         }
         
         deferredPrompt = null;

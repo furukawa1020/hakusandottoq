@@ -18,7 +18,7 @@
         <div class="town-hero">
             <div class="town-icon">🏛️</div>
             <div class="stamp-status-display" id="stampStatus">
-                <span id="stampIcon">📍</span>
+                <span id="stampIcon" class="icon-location">●</span>
                 <span id="stampText">スタンプ確認中...</span>
             </div>
         </div>
@@ -43,7 +43,7 @@
                     <!-- region-photos.jsで生成される写真がここに表示 -->
                 </div>
                 <button class="photo-view-btn" onclick="openRegionPhotoViewer('mattou')">
-                    🖼️ 全写真を見る
+                    <span class="icon-gallery">■</span> 全写真を見る
                 </button>
             </section>
 
@@ -55,7 +55,7 @@
                         🐦 Twitterでシェア
                     </button>
                     <button class="share-btn line" onclick="shareTownExperience('mattou', 'line')">
-                        📱 LINEでシェア
+                        <span class="icon-share">◆</span> LINEでシェア
                     </button>
                     <button class="share-btn general" onclick="shareTownExperience('mattou', 'general')">
                         🔗 リンクをコピー
@@ -65,7 +65,7 @@
             </section>
 
             <section class="story-section">
-                <h2>🎯 探索ポイント</h2>
+                <h2>探索ポイント</h2>
                 <ul class="explore-points">
                     <li>🏛️ 白山市役所 - 市の中心機関</li>
                     <li>🎭 松任文化会館 - 文化の発信地</li>
@@ -92,7 +92,7 @@
 
         <div class="navigation">
             <button class="nav-btn back-btn" onclick="goBack()">🏠 トップに戻る</button>
-            <button class="nav-btn next-btn" onclick="suggestNextTown()">🗺️ 次の町を探す</button>
+            <button class="nav-btn next-btn" onclick="suggestNextTown()">マップ 次の町を探す</button>
         </div>
     </main>    <footer>
         <p>&copy; 2025 白山市NFCスタンプラリー「はくさんバッジクエスト」</p>

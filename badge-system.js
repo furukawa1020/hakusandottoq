@@ -3,13 +3,13 @@ class HakusanBadgeSystem {
     constructor() {
         this.regions = {
             tsurugi: { name: '鶴来地区', color: '#FF6B6B', symbol: '鶴' },
-            mikawa: { name: '美川地区', color: '#4ECDC4', symbol: '🌊' },
-            mattou: { name: '松任地区', color: '#45B7D1', symbol: '🏛️' },
-            kawachi: { name: '河内地区', color: '#96CEB4', symbol: '🏞️' },
+            mikawa: { name: '美川地区', color: '#4ECDC4', symbol: '◆' },
+            mattou: { name: '松任地区', color: '#45B7D1', symbol: '◼' },
+            kawachi: { name: '河内地区', color: '#96CEB4', symbol: '▣' },
             shiramine: { name: '白峰地区', color: '#FFEAA7', symbol: '白' },
-            yoshinodani: { name: '吉野谷地区', color: '#DDA0DD', symbol: '🌸' },
-            torigoe: { name: '鳥越地区', color: '#F4A261', symbol: '🏰' },
-            oguchi: { name: '尾口地区', color: '#E76F51', symbol: '🏔️' }
+            yoshinodani: { name: '吉野谷地区', color: '#DDA0DD', symbol: '◎' },
+            torigoe: { name: '鳥越地区', color: '#F4A261', symbol: '◉' },
+            oguchi: { name: '尾口地区', color: '#E76F51', symbol: '▲' }
         };
         
         this.rarityLevels = {
@@ -553,11 +553,11 @@ class HakusanBadgeSystem {
         const rarityData = this.rarityLevels[rarity];
         const stats = this.getCollectionStats();
         
-        const shareText = `白山地域探索システムで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
+        const shareText = `はくさんNFCバッジクエストで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
         
 現在の進捗: ${stats.collectedCount}/${stats.totalPossible} (${Math.round(stats.completionRate)}%)
         
-#白山地域探索システム #白山市 #${regionData.name} #地域探索 #石川県観光`;
+#はくさんNFCバッジクエスト #白山市 #${regionData.name} #地域探索 #石川県観光`;
         
         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.href)}`;
         window.open(twitterUrl, '_blank', 'width=550,height=420');
@@ -571,10 +571,10 @@ class HakusanBadgeSystem {
         const rarityData = this.rarityLevels[rarity];
         const stats = this.getCollectionStats();
         
-        const shareText = `白山地域探索システムで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
+        const shareText = `はくさんNFCバッジクエストで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
         
 現在の進捗: ${stats.collectedCount}/${stats.totalPossible}
-あなたも一緒に白山市を探索しませんか？`;
+あなたも一緒に白山市8地域を探索しませんか？`;
         
         const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareText)}`;
         window.open(lineUrl, '_blank', 'width=550,height=420');
@@ -588,11 +588,11 @@ class HakusanBadgeSystem {
         const rarityData = this.rarityLevels[rarity];
         const stats = this.getCollectionStats();
         
-        const shareText = `白山地域探索システム ${regionData.name}の${rarityData.name}バッジ獲得！${regionData.symbol}
+        const shareText = `はくさんNFCバッジクエスト ${regionData.name}の${rarityData.name}バッジ獲得！${regionData.symbol}
         
 進捗: ${stats.collectedCount}/${stats.totalPossible}
         
-#白山地域探索システム #白山市 #${regionData.name} #地域探索 #石川県 #観光 #バッジコレクション`;
+#はくさんNFCバッジクエスト #白山市 #${regionData.name} #地域探索 #石川県 #観光 #バッジコレクション`;
         
         // Instagram用のテキストをクリップボードにコピー
         navigator.clipboard.writeText(shareText).then(() => {
@@ -611,14 +611,14 @@ class HakusanBadgeSystem {
         const rarityData = this.rarityLevels[rarity];
         const stats = this.getCollectionStats();
         
-        const shareText = `白山地域探索システムで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
+        const shareText = `はくさんNFCバッジクエストで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
         
 現在の進捗: ${stats.collectedCount}/${stats.totalPossible} (${Math.round(stats.completionRate)}%)
         
 白山市の8地域を巡って、すべてのバッジを集めよう！
 ${window.location.href}
         
-#白山地域探索システム #白山市 #地域探索`;
+#はくさんNFCバッジクエスト #白山市 #地域探索`;
         
         if (navigator.share) {
             // Web Share API が利用可能な場合
@@ -677,7 +677,7 @@ ${window.location.href}
         const stats = this.getCollectionStats();
         const completedRegions = this.getCompletedRegions();
         
-        let shareText = `白山地域探索システム 進捗報告！
+        let shareText = `はくさんNFCバッジクエスト 進捗報告！
         
 コンプリート率: ${Math.round(stats.completionRate)}%
 獲得バッジ数: ${stats.collectedCount}/${stats.totalPossible}
@@ -691,7 +691,7 @@ ${window.location.href}
 白山市の8地域を巡る地域探索ゲーム！
 ${window.location.href}
 
-#白山地域探索システム #白山市 #地域探索 #バッジコレクション #石川県観光`;
+#はくさんNFCバッジクエスト #白山市 #地域探索 #バッジコレクション #石川県観光`;
         
         if (navigator.share) {
             navigator.share({
@@ -720,6 +720,75 @@ ${window.location.href}
         });
         return completedRegions;
     }
+
+    // コレクション進捗表示メソッド
+    showCollectionProgress() {
+        const stats = this.getCollectionStats();
+        const collected = this.getCollectedBadges();
+        
+        // プログレス表示用のモーダルを作成
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 10000; display: flex;
+            align-items: center; justify-content: center; animation: fadeIn 0.3s ease;
+        `;
+        
+        const progressHTML = `
+            <div style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 30px; border-radius: 20px; max-width: 90%; max-width: 600px;
+                text-align: center; color: white; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                max-height: 80vh; overflow-y: auto;
+            ">
+                <h2 style="margin: 0 0 20px 0;">バッジコレクション進捗</h2>
+                
+                <div style="margin: 20px 0; font-size: 18px;">
+                    <strong>進捗率: ${Math.round(stats.completionRate)}%</strong><br>
+                    獲得バッジ数: ${stats.total}/${stats.totalPossible}
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.1); border-radius: 10px; padding: 15px; margin: 20px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px;">
+                        ${collected.map(badge => `
+                            <div style="text-align: center;">
+                                <img src="${badge.image}" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 8px;">
+                                <div style="font-size: 12px;">${badge.regionName}</div>
+                                <div style="font-size: 10px; opacity: 0.8;">${badge.rarityName}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <button onclick="window.badgeSystem.shareCollectionProgress()" style="
+                        background: #1DA1F2; color: white; border: none; padding: 12px 24px;
+                        border-radius: 25px; cursor: pointer; font-size: 14px; margin: 0 10px;
+                    ">
+                        進捗をシェア
+                    </button>
+                    <button onclick="window.badgeSystem.exportBadgeData()" style="
+                        background: #28a745; color: white; border: none; padding: 12px 24px;
+                        border-radius: 25px; cursor: pointer; font-size: 14px; margin: 0 10px;
+                    ">
+                        データエクスポート
+                    </button>
+                </div>
+                
+                <button onclick="this.parentElement.parentElement.remove()" style="
+                    background: rgba(255,255,255,0.2); color: white; border: none;
+                    padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 14px;
+                ">
+                    閉じる
+                </button>
+            </div>
+        `;
+        
+        modal.innerHTML = progressHTML;
+        document.body.appendChild(modal);
+        
+        return modal;
+    }
 }
 
 // グローバル初期化
@@ -732,7 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // グローバルエクスポート
 window.HakusanBadges = HakusanBadgeSystem;
 
-console.log('白山バッジシステム読み込み完了');
+console.log('はくさんNFCバッジクエスト バッジシステム読み込み完了');
 
 // デバッグ関数（基本情報のみ）
 window.debugBadges = () => {

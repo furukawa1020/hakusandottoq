@@ -419,7 +419,7 @@ class TownPageIntegration {
         };
         
         const townName = townNames[townId];
-        const shareText = `はくさんNFCバッジクエストで${townName}地区を探索中！🏔️ #はくさんNFCバッジクエスト #白山市 #${townName}`;
+        const shareText = `はくさんNFCバッジクエストで${townName}地区を探索中！ #はくさんNFCバッジクエスト #白山市 #${townName}`;
         const shareUrl = window.location.href;
         
         switch (platform) {
