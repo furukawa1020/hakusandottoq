@@ -1,72 +1,110 @@
-// Service Worker for Hakusan League Gym Badge Rally PWA
-// Version 1.0.0
+// 白山地域探索システム Service Worker - Netlify最適化版
+// Version: 2.1 - Netlify CDN対応
 
-const CACHE_NAME = 'hakusan-league-v1.0.0';
-const STATIC_CACHE_NAME = 'hakusan-static-v1.0.0';
-const DYNAMIC_CACHE_NAME = 'hakusan-dynamic-v1.0.0';
+const CACHE_NAME = 'hakusan-v2.1.0';
+const STATIC_CACHE = 'hakusan-static-v2.1.0';
+const DYNAMIC_CACHE = 'hakusan-dynamic-v2.1.0';
 
-// キャッシュするファイル一覧
-const STATIC_FILES = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/incentive-system.css',
-  '/incentive-system.js',
-  '/marketing-effects.js',
-  '/rpg-map.css',
-  '/rpg-map.js',
-  '/manifest.json',
-  '/白山.png',
-  // タウンファイル
-  '/town/tsurugi.html',
-  '/town/mikawa.html',
-  '/town/mattou.html',
-  '/town/kawachi.html',
-  '/town/shiramine.html',
-  '/town/yoshinodani.html',
-  '/town/torigoe.html',
-  '/town/oguchi.html',
-  '/town/town-script.js',
-  '/town/town-styles.css'
+// Netlify最適化キャッシュ戦略
+const CACHE_STRATEGIES = {
+    static: [
+        '/',
+        '/index.html',
+        '/styles.css',
+        '/rpg-map-engine.js',
+        '/badge-system.js',
+        '/ar-camera.js',
+        '/avatar-system.js',
+        '/region-photos.js',
+        '/manifest.json',
+        '/offline.html',
+        '/白山.png'
+    ],
+    icons: [
+        '/icons/icon-72x72.svg',
+        '/icons/icon-96x96.svg',
+        '/icons/icon-128x128.svg',
+        '/icons/icon-144x144.svg',
+        '/icons/icon-152x152.svg',
+        '/icons/icon-192x192.svg',
+        '/icons/icon-384x384.svg',
+        '/icons/icon-512x512.svg'
+    ],
+    towns: [
+        '/town/shiramine.html',
+        '/town/oguchi.html',
+        '/town/kawachi.html',
+        '/town/torigoe.html',
+        '/town/yoshinodani.html',
+        '/town/tsurugi.html',
+        '/town/mikawa.html',
+        '/town/mattou.html',
+        '/town/town-styles.css',
+        '/town/town-script.js'
+    ]
+};
+
+const ALL_STATIC_RESOURCES = [
+    ...CACHE_STRATEGIES.static,
+    ...CACHE_STRATEGIES.icons,
+    ...CACHE_STRATEGIES.towns
 ];
+
+// Netlify適応型キャッシュ時間
+const CACHE_DURATIONS = {
+    static: 1000 * 60 * 60 * 24 * 30,  // 30日
+    dynamic: 1000 * 60 * 60 * 24 * 7,  // 7日
+    api: 1000 * 60 * 30,               // 30分
+    images: 1000 * 60 * 60 * 24 * 90   // 90日
+};
 
 // オフライン用のフォールバックページ
 const OFFLINE_PAGE = '/offline.html';
 
-// インストール時の処理
+// インストール時の処理 - Netlify最適化
 self.addEventListener('install', (event) => {
-  console.log('SW: Installing...');
+  console.log('🔧 SW: Netlify最適化インストール開始...');
   
   event.waitUntil(
     Promise.all([
-      // 静的ファイルをキャッシュ
-      caches.open(STATIC_CACHE_NAME).then((cache) => {
-        console.log('SW: Caching static files');
-        return cache.addAll(STATIC_FILES.map(url => {
-          // URLの正規化
-          return new Request(url, { cache: 'reload' });
-        })).catch((error) => {
-          console.warn('SW: Failed to cache some static files:', error);
-          // 一部のファイルがキャッシュできなくても続行
-          return Promise.resolve();
+      // 静的リソースをプリロード
+      caches.open(STATIC_CACHE).then(async (cache) => {
+        console.log('📦 SW: 静的リソースをキャッシュ中...');
+        
+        // 段階的キャッシュで失敗耐性を向上
+        const cachePromises = Object.entries(CACHE_STRATEGIES).map(async ([category, urls]) => {
+          try {
+            await cache.addAll(urls.map(url => new Request(url, { 
+              cache: 'reload',
+              mode: 'cors',
+              credentials: 'same-origin'
+            })));
+            console.log(`✅ ${category} キャッシュ完了`);
+          } catch (error) {
+            console.warn(`⚠️ ${category} キャッシュ一部失敗:`, error);
+          }
         });
+        
+        await Promise.allSettled(cachePromises);
+        console.log('🎯 SW: 静的キャッシュ処理完了');
       }),
-      // オフラインページを作成・キャッシュ
-      createOfflinePage()
+      
+      // オフラインページを確実にキャッシュ
+      caches.open(DYNAMIC_CACHE).then((cache) => {
+        return cache.add(OFFLINE_PAGE);
+      })
     ]).then(() => {
-      console.log('SW: Installation complete');
-      // 即座にアクティブ化
+      console.log('🚀 SW: Netlify最適化インストール完了');
       return self.skipWaiting();
     }).catch((error) => {
-      console.error('SW: Installation failed:', error);
+      console.error('❌ SW: インストール失敗:', error);
     })
   );
 });
 
-// アクティベート時の処理
+// アクティベート時の処理 - Netlify最適化
 self.addEventListener('activate', (event) => {
-  console.log('SW: Activating...');
+  console.log('🔄 SW: Netlifyアクティベート開始...');
   
   event.waitUntil(
     Promise.all([

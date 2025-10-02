@@ -1,0 +1,83 @@
+{
+  "name": "hakusan-exploration-system",
+  "version": "2.1.0",
+  "description": "白山地域探索とバッジ収集システム - Netlify最適化版",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Static site - no build required'",
+    "serve": "netlify dev",
+    "deploy": "netlify deploy --prod",
+    "preview": "netlify deploy",
+    "lighthouse": "lighthouse --chrome-flags='--headless' --output=html --output-path=./lighthouse-report.html",
+    "analyze": "bundlesize check",
+    "validate": "html-validate *.html town/*.html",
+    "test:pwa": "pwa-test-tool"
+  },
+  "keywords": [
+    "hakusan",
+    "badge-collection",
+    "rpg-map",
+    "pwa",
+    "exploration",
+    "geolocation",
+    "ar-camera",
+    "netlify"
+  ],
+  "author": "Hakusan Development Team",
+  "license": "MIT",
+  "homepage": "https://hakusan-exploration.netlify.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/furukawa1020/hakusandottoq.git"
+  },
+  "bugs": {
+    "url": "https://github.com/furukawa1020/hakusandottoq/issues"
+  },
+  "devDependencies": {
+    "@netlify/cli": "^17.0.0",
+    "@netlify/plugin-lighthouse": "^6.0.0",
+    "bundlesize": "^0.18.1",
+    "html-validate": "^8.0.0",
+    "lighthouse": "^11.0.0",
+    "pwa-test-tool": "^1.0.0"
+  },
+  "bundlesize": [
+    {
+      "path": "*.js",
+      "maxSize": "100 kB",
+      "compression": "gzip"
+    },
+    {
+      "path": "*.css",
+      "maxSize": "30 kB",
+      "compression": "gzip"
+    }
+  ],
+  "netlify": {
+    "build": {
+      "publish": ".",
+      "command": "echo 'Static site ready for deployment'"
+    },
+    "redirects": [
+      {
+        "from": "/*",
+        "to": "/index.html",
+        "status": 200
+      }
+    ],
+    "headers": [
+      {
+        "for": "/*",
+        "values": {
+          "X-Frame-Options": "DENY",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block"
+        }
+      }
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,75 @@
+# Netlify 設定ファイル
+
+[build]
+  publish = "."
+  command = "echo 'Static site - no build required'"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# リダイレクトとリライト
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["admin"], Country = ["US"]}
+
+# ヘッダー設定
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:;"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# フォーム設定（将来の拡張用）
+[[forms]]
+  name = "feedback"
+  action = "/thank-you"
+
+# 関数設定（将来の拡張用）
+[functions]
+  directory = "netlify/functions"
+
+# エッジ関数設定
+[[edge_functions]]
+  function = "analytics"
+  path = "/api/analytics"
+
+# プラグイン
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+# 開発サーバー設定
+[dev]
+  command = "python -m http.server 8000"
+  port = 8000
+  publish = "."
+  autoLaunch = true
