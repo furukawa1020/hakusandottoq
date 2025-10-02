@@ -77,7 +77,7 @@ class HakusanRPGEngine {
             this.mapImage.onload = () => {
                 this.mapWidth = this.mapImage.width;
                 this.mapHeight = this.mapImage.height;
-                console.log(`📍 白山マップ読み込み完了: ${this.mapWidth}x${this.mapHeight}`);
+                console.log(`白山マップ読み込み完了: ${this.mapWidth}x${this.mapHeight}`);
                 resolve();
             };
             this.mapImage.onerror = () => {
@@ -125,7 +125,7 @@ class HakusanRPGEngine {
         fallbackCtx.stroke();
         
         this.mapImage = fallbackCanvas;
-        console.log('🎨 フォールバックマップを生成');
+        console.log('フォールバックマップを生成');
     }
     
     setupCanvas() {
@@ -349,12 +349,12 @@ class HakusanRPGEngine {
         }
         
         // 通知表示
-        this.showNotification(`🏅 ${point.name}地区を発見！`, `新しいバッジを取得しました`);
+        this.showNotification(`${point.name}地区を発見！`, `新しいバッジを取得しました`);
         
         // 効果音（可能であれば）
         this.playDiscoverySound();
         
-        console.log(`🎉 バッジ発見: ${point.name}`);
+        console.log(`バッジ発見: ${point.name}`);
     }
     
     interact() {
@@ -362,9 +362,9 @@ class HakusanRPGEngine {
         if (nearest && nearest.distance < 50) {
             // 近くのポイントと相互作用
             if (nearest.discovered) {
-                this.showNotification(`📍 ${nearest.name}地区`, '既に発見済みの地域です');
+                this.showNotification(`${nearest.name}地区`, '既に発見済みの地域です');
             } else {
-                this.showNotification(`🔍 ${nearest.name}地区`, 'もう少し近づいてみましょう');
+                this.showNotification(`${nearest.name}地区`, 'もう少し近づいてみましょう');
             }
         }
     }
@@ -734,7 +734,7 @@ window.addEventListener('beforeunload', () => {
     }
 });
 
-console.log('🎮 白山RPGエンジン読み込み完了');
+console.log('白山RPGエンジン読み込み完了');
 
 // グローバル関数（HTMLから呼び出し用）
 window.toggleRegionPhotos = function() {
@@ -865,7 +865,7 @@ if (typeof HakusanRPGEngine !== 'undefined') {
             animation: discoveryPulse 0.5s ease-in-out;
         `;
         notification.innerHTML = `
-            🎉 ${regionName}地区を発見！<br>
+            ${regionName}地区を発見！<br>
             <small>バッジを獲得しました</small>
         `;
         

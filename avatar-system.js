@@ -159,7 +159,7 @@ class HakusanAvatarSystem {
                                 cursor: pointer;
                                 margin: 5px;
                                 font-size: 12px;
-                            ">🔍 発見</button>
+                            ">発見</button>
                             <button id="test-celebrate" style="
                                 background: #FF6B6B;
                                 color: white;
@@ -169,7 +169,7 @@ class HakusanAvatarSystem {
                                 cursor: pointer;
                                 margin: 5px;
                                 font-size: 12px;
-                            ">🎉 祝福</button>
+                            ">祝福</button>
                         </div>
                     </div>
                     
@@ -197,7 +197,7 @@ class HakusanAvatarSystem {
                         </div>
                         
                         <div class="color-section">
-                            <h3 style="margin-bottom: 15px; color: #FFEAA7;">🎨 カラー</h3>
+                            <h3 style="margin-bottom: 15px; color: #FFEAA7;">カラー</h3>
                             <div id="color-options"></div>
                         </div>
                         

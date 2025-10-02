@@ -401,7 +401,7 @@ class HakusanRegionPhotos {
                 break;
             }
         }
-        region.textContent = `📍 ${regionName}`;
+        region.textContent = `地域: ${regionName}`;
         
         if (credit && loadedPhoto.credit) {
             credit.textContent = loadedPhoto.credit;

@@ -132,7 +132,7 @@ class HakusanARCamera {
                     border-radius: 25px;
                     cursor: pointer;
                     font-weight: bold;
-                ">🏅 バッジ表示</button>
+                ">バッジ表示</button>
                 
                 <button id="close-camera" style="
                     padding: 12px 20px;
@@ -545,12 +545,12 @@ class HakusanARCamera {
                 </div>
                 ${photo.badge ? `
                     <div style="font-size: 14px; opacity: 0.8;">
-                        🏅 ${photo.badge.regionName} ${photo.badge.rarityName}
+                        バッジ: ${photo.badge.regionName} ${photo.badge.rarityName}
                     </div>
                 ` : ''}
                 ${photo.location ? `
                     <div style="font-size: 12px; opacity: 0.6; margin-top: 5px;">
-                        📍 ${photo.location.lat}, ${photo.location.lng}
+                        位置: ${photo.location.lat}, ${photo.location.lng}
                     </div>
                 ` : ''}
             </div>
@@ -580,14 +580,14 @@ class HakusanARCamera {
         const button = document.getElementById('badge-toggle');
         if (this.currentBadge) {
             this.currentBadge = null;
-            button.textContent = '🏅 バッジ非表示';
+            button.textContent = 'バッジ非表示';
             button.style.background = 'rgba(128, 128, 128, 0.8)';
         } else if (window.badgeSystem) {
             // 最新のバッジを表示
             const badges = window.badgeSystem.getCollectedBadges();
             if (badges.length > 0) {
                 this.currentBadge = badges[badges.length - 1];
-                button.textContent = '🏅 バッジ表示';
+                button.textContent = 'バッジ表示';
                 button.style.background = 'rgba(255, 107, 107, 0.8)';
             }
         }

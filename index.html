@@ -330,7 +330,7 @@
                 // RPGエンジン初期化
                 if (window.HakusanRPGMap) {
                     window.rpgEngine = new window.HakusanRPGMap();
-                    await window.rpgEngine.init();
+                    // init()はコンストラクタで既に呼ばれているので重複呼び出ししない
                     console.log('✅ RPGエンジン初期化完了');
                 } else {
                     console.error('❌ RPGエンジンが読み込まれていません');
