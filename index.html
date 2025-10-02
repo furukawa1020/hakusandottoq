@@ -8,6 +8,7 @@
     <meta name="theme-color" content="#87CEEB">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="白山.png" as="image" type="image/png">
 </head>
 <body>
     <header>
@@ -361,6 +362,44 @@
             };
             
             updateAvatarDisplay();
+            
+            // RPGエンジンの確実な初期化
+            const initializeRPGEngine = () => {
+                console.log('🔍 RPGエンジン初期化チェック開始');
+                console.log('HakusanRPGEngine:', !!window.HakusanRPGEngine);
+                console.log('rpgEngine:', !!window.rpgEngine);
+                
+                const canvas = document.getElementById('rpgCanvas');
+                console.log('Canvas要素:', !!canvas);
+                if (canvas) {
+                    console.log('Canvas サイズ:', canvas.width, 'x', canvas.height);
+                }
+                
+                if (window.HakusanRPGEngine && !window.rpgEngine) {
+                    try {
+                        if (canvas) {
+                            // 手動初期化関数を使用
+                            if (window.initializeRPGFromMain) {
+                                window.initializeRPGFromMain();
+                            } else {
+                                window.rpgEngine = new window.HakusanRPGEngine();
+                            }
+                            console.log('✅ メインスクリプトからRPGエンジン初期化成功');
+                        } else {
+                            console.error('❌ RPGCanvas要素が見つかりません');
+                        }
+                    } catch (error) {
+                        console.error('❌ RPGエンジン初期化エラー:', error);
+                    }
+                } else if (!window.HakusanRPGEngine) {
+                    console.log('⏳ HakusanRPGEngineモジュール読み込み待ち...');
+                    // モジュール読み込み待ち
+                    setTimeout(initializeRPGEngine, 100);
+                }
+            };
+            
+            // 少し遅らせてRPGエンジンを初期化
+            setTimeout(initializeRPGEngine, 500);
         });
     </script>
 </body>

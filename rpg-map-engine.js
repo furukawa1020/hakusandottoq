@@ -908,7 +908,8 @@ if (typeof HakusanRPGEngine !== 'undefined') {
 // グローバルRPGマップインスタンス作成
 window.HakusanRPGMap = HakusanRPGEngine;
 
-// グローバル初期化
+// グローバル初期化を無効化（メインスクリプトから呼び出し）
+/*
 document.addEventListener('DOMContentLoaded', () => {
     // 複数回試行してCanvas要素を確認
     let attempts = 0;
@@ -941,6 +942,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 10000); // 10秒ごと
 });
+*/
+
+// メインスクリプトから呼び出される初期化関数
+window.initializeRPGFromMain = function() {
+    console.log('🎮 RPGエンジン手動初期化開始');
+    if (!window.rpgEngine) {
+        const canvas = document.getElementById('rpgCanvas');
+        if (canvas) {
+            try {
+                window.rpgEngine = new HakusanRPGEngine();
+                console.log('✅ RPGエンジン手動初期化成功');
+                return true;
+            } catch (error) {
+                console.error('❌ RPGエンジン初期化エラー:', error);
+                return false;
+            }
+        } else {
+            console.error('❌ Canvas要素が見つかりません');
+            return false;
+        }
+    }
+    return true;
+};
 
 window.addEventListener('beforeunload', () => {
     if (window.rpgEngine) {
