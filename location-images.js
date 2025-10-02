@@ -109,25 +109,16 @@ class LocationImageManager {
     }
 
     async fetchUnsplashImages(keywords) {
-        const query = keywords.join(' OR ');
-        const url = `https://source.unsplash.com/featured/?${encodeURIComponent(query)}`;
+        // Unsplash参照を削除 - ローカル画像のみ使用
+        console.log('外部画像API使用停止 - ローカル画像を使用します');
         
-        try {
-            // Unsplash Source API（認証不要）
-            const images = [];
-            for (let i = 0; i < 3; i++) {
-                const imageUrl = `${url}&sig=${Date.now()}-${i}`;
-                images.push({
-                    url: imageUrl,
-                    alt: keywords[0],
-                    source: 'Unsplash'
-                });
+        return [
+            {
+                url: './白山.png',
+                description: '白山ジオパーク',
+                source: 'local'
             }
-            return images;
-        } catch (error) {
-            console.warn('Unsplash API error:', error);
-            return [];
-        }
+        ];
     }
 
     getDefaultImages(locationId) {

@@ -907,3 +907,45 @@ if (typeof HakusanRPGEngine !== 'undefined') {
 
 // グローバルRPGマップインスタンス作成
 window.HakusanRPGMap = HakusanRPGEngine;
+
+// グローバル初期化
+document.addEventListener('DOMContentLoaded', () => {
+    // 複数回試行してCanvas要素を確認
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    function tryInitRPG() {
+        const canvas = document.getElementById('rpgCanvas');
+        if (canvas && !window.rpgEngine) {
+            try {
+                window.rpgEngine = new HakusanRPGEngine();
+                console.log('✅ 白山RPGエンジン初期化成功');
+            } catch (error) {
+                console.error('RPGエンジン初期化エラー:', error);
+            }
+        } else if (!canvas && attempts < maxAttempts) {
+            attempts++;
+            console.warn(`RPGキャンバス要素が見つかりません (試行 ${attempts}/${maxAttempts})`);
+            setTimeout(tryInitRPG, 100);
+        } else if (attempts >= maxAttempts) {
+            console.error('RPGキャンバス要素の初期化に失敗しました');
+        }
+    }
+    
+    tryInitRPG();
+    
+    // 定期的にプログレスを保存
+    setInterval(() => {
+        if (window.rpgEngine) {
+            window.rpgEngine.savePlayerProgress();
+        }
+    }, 10000); // 10秒ごと
+});
+
+window.addEventListener('beforeunload', () => {
+    if (window.rpgEngine) {
+        window.rpgEngine.savePlayerProgress();
+    }
+});
+
+console.log('白山RPGエンジン読み込み完了');

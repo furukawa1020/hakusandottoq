@@ -675,18 +675,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!window.arCamera) {
         window.arCamera = new HakusanARCamera();
         
-        // startCamera エイリアスを修正
+        // startCamera 関数を完全修正
         window.arCamera.startCamera = function() {
             console.log('📷 ARカメラ起動中...');
             return this.open();
         };
         
-        // openARCamera グローバル関数も定義
+        // グローバル関数も定義
         window.openARCamera = function() {
-            if (window.arCamera) {
+            if (window.arCamera && typeof window.arCamera.open === 'function') {
                 return window.arCamera.open();
             } else {
                 console.error('ARカメラシステムが初期化されていません');
+                alert('ARカメラシステムが読み込まれていません。ページを再読み込みしてください。');
             }
         };
     }
