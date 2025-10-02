@@ -553,11 +553,11 @@ class HakusanBadgeSystem {
         const rarityData = this.rarityLevels[rarity];
         const stats = this.getCollectionStats();
         
-        const shareText = `🏆 はくさんNFCバッジクエストで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
+        const shareText = `白山地域探索システムで${regionData.name}の${rarityData.name}バッジを獲得！${regionData.symbol}
         
 現在の進捗: ${stats.collectedCount}/${stats.totalPossible} (${Math.round(stats.completionRate)}%)
         
-#はくさんNFCバッジクエスト #白山市 #${regionData.name} #NFCバッジ #地域探索 #石川県観光`;
+#白山地域探索システム #白山市 #${regionData.name} #地域探索 #石川県観光`;
         
         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.href)}`;
         window.open(twitterUrl, '_blank', 'width=550,height=420');
