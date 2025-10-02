@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>白山市観光バッジコレクター - 完全リニューアル版</title>
+    
+    <!-- PWA設定 -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" href="icons/icon-192x192.svg">
+    <meta name="theme-color" content="#3498db">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="白山市観光バッジ">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.svg">
+    
+    <!-- メタデータ -->
+    <meta name="description" content="白山市の8地区を巡ってバッジを集める観光アプリ。AR写真撮影、統計分析、ピクセルアート作成機能付き。">
+    <meta name="keywords" content="白山市,観光,バッジ,コレクション,AR,写真,統計,ピクセルアート">
+    
+    <!-- OGP設定 -->
+    <meta property="og:title" content="白山市観光バッジコレクター">
+    <meta property="og:description" content="白山市の8地区を巡ってバッジを集める観光アプリ">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="白山.png">
+    
+    <!-- スタイルシート -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* 新デザイン用CSS */
+        .app-header {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .app-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .app-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .feature-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .stats-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stats-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .action-btn.secondary {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+        
+        .action-btn.info {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+        
+        .footer {
+            background: #34495e;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer h3 {
+            margin-bottom: 15px;
+            color: #ecf0f1;
+        }
+        
+        .footer p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .version-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        /* PWAインストールボタン */
+        .pwa-install-section {
+            margin-top: 15px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease;
+        }
+        
+        .pwa-install-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .pwa-install-btn {
+            background: rgba(255,255,255,0.9);
+            color: #3498db;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pwa-install-btn:hover {
+            background: white;
+            transform: scale(1.05);
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 24px;
+            }
+            
+            .app-subtitle {
+                font-size: 14px;
+            }
+            
+            .feature-nav {
+                gap: 8px;
+            }
+            
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="app-header">
+        <h1 class="app-title">🏔️ 白山市観光バッジコレクター</h1>
+        <p class="app-subtitle">8つの地区を巡って特別なバッジを集めよう！</p>
+        
+        <!-- PWAインストールボタン -->
+        <div class="pwa-install-section" id="pwaInstallSection">
+            <button class="pwa-install-btn" id="pwaInstallBtn" onclick="installPWA()">
+                📱 アプリとしてインストール
+            </button>
+        </div>
+        
+        <!-- 機能ナビゲーション -->
+        <nav class="feature-nav">
+            <button class="nav-btn" onclick="openARPhoto()" title="AR写真撮影">
+                📸 AR写真
+            </button>
+            <button class="nav-btn" onclick="openLocationGallery()" title="地域フォトギャラリー">
+                🖼️ ギャラリー
+            </button>
+            <button class="nav-btn" onclick="exportResearchData()" title="研究データエクスポート">
+                📊 統計データ
+            </button>
+            <button class="nav-btn" onclick="window.open('rpg-index.html', '_blank')" title="RPGマップ">
+                🗺️ RPGマップ
+            </button>
+        </nav>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 進捗統計セクション -->
+        <section class="stats-section">
+            <h2 class="stats-title">📈 バッジ取得状況</h2>
+            
+            <!-- プログレスバー -->
+            <div class="progress-container">
+                <div id="progressBar"></div>
+            </div>
+            
+            <!-- 統計表示 -->
+            <div id="collectionStats"></div>
+        </section>
+
+        <!-- バッジ表示セクション -->
+        <section class="stats-section">
+            <h2 class="stats-title">🏅 取得バッジ一覧</h2>
+            <div id="badges" class="badges-container"></div>
+        </section>
+
+        <!-- アクションボタンセクション -->
+        <section class="action-buttons">
+            <button class="action-btn" onclick="openARPhoto()">
+                📸 AR写真を撮影
+            </button>
+            
+            <button class="action-btn" onclick="openLocationGallery()">
+                🖼️ 地域ギャラリー
+            </button>
+            
+            <button class="action-btn info" onclick="exportCollectionData()">
+                💾 データエクスポート
+            </button>
+            
+            <button class="action-btn secondary" onclick="clearAllData()">
+                🗑️ データ削除
+            </button>
+        </section>
+
+        <!-- 地域リンクセクション -->
+        <section class="stats-section">
+            <h2 class="stats-title">🗺️ 地域別ページ</h2>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="navigateToRegion('tsurugi')">
+                    🏛️ 鶴来地区
+                </button>
+                <button class="action-btn" onclick="navigateToRegion('mikawa')">
+                    🌊 美川地区
+                </button>
+                <button class="action-btn" onclick="navigateToRegion('mattou')">
+                    🏙️ 松任地区
+                </button>
+                <button class="action-btn" onclick="navigateToRegion('kawachi')">
+                    🏞️ 河内地区
+                </button>
+                <button class="action-btn" onclick="navigateToRegion('shiramine')">
+                    ⛰️ 白峰地区
+                </button>
+                <button class="action-btn" onclick="navigateToRegion('yoshinodani')">
+                    🌸 吉野谷地区
+                </button>
+                <button class="action-btn" onclick="navigateToRegion('torigoe')">
+                    🏰 鳥越地区
+                </button>
+                <button class="action-btn" onclick="navigateToRegion('oguchi')">
+                    🏔️ 尾口地区
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>白山市観光バッジコレクター</h3>
+            <p>
+                このアプリは白山市の豊かな自然と文化を紹介する観光支援ツールです。<br>
+                NFCタグやQRコードをスキャンしてバッジを集め、AR写真撮影や統計分析機能をお楽しみください。
+            </p>
+            <p>
+                <strong>🎯 主な機能:</strong><br>
+                ✓ 8地区のバッジコレクション ✓ AR写真撮影 ✓ 地域フォトギャラリー<br>
+                ✓ サーバーレス統計分析 ✓ PWAオフライン対応 ✓ データエクスポート
+            </p>
+            <div class="version-info">
+                Version 2.0 - 完全リニューアル版<br>
+                著作権コンプライアンス対応 | 画像ベースバッジシステム | 研究用データ収集
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScriptファイル -->
+    <script src="script-new.js"></script>
+    <script src="rarity-badge-system.js"></script>
+    <script src="serverless-analytics.js"></script>
+    <script src="location-images-new.js"></script>
+    <script src="ar-photo.js"></script>
+    <script src="pixel-avatar.js"></script>
+    <script src="badge-generator.js"></script>
+    <script src="project-tester.js"></script>
+    
+    <!-- サービスワーカー登録 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('✅ Service Worker registered:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('❌ Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

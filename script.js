@@ -81,14 +81,14 @@ async function installPWA() {
 
 // Badge data
 const badges = {
-    tsurugi: 'クレインバッジ',
-    mikawa: 'ラッパバッジ',
-    mattou: 'パインバッジ',
-    kawachi: 'ブリッジバッジ',
-    shiramine: 'ピークバッジ',
-    yoshinodani: 'フォレストバッジ',
-    torigoe: 'キャッスルバッジ',
-    oguchi: 'フォールバッジ'
+    tsurugi: '鶴来バッジ',
+    mikawa: '美川バッジ',
+    mattou: '松任バッジ',
+    kawachi: '河内バッジ',
+    shiramine: '白峰バッジ',
+    yoshinodani: '吉野谷バッジ',
+    torigoe: '鳥越バッジ',
+    oguchi: '尾口バッジ'
 };
 
 // Initialize on page load
@@ -130,21 +130,21 @@ function getStamps() {
     return stamps ? JSON.parse(stamps) : [];
 }
 
-// 確実にバッジアイコンを更新する専用関数
+// バッジアイコンを確実に更新する専用関数
 function forceBadgeIconUpdate() {
     const stamps = getStamps();
     
     console.log('Force updating badge icons...', stamps);
     
-    const gymBadgeIcons = {
-        'tsurugi': '🏹',     // クレインバッジ (弓矢)
-        'mikawa': '🎺',      // ラッパバッジ (ラッパ)
-        'mattou': '🌲',      // パインバッジ (松)
-        'kawachi': '🌉',     // ブリッジバッジ (橋)
-        'shiramine': '⛰️',    // ピークバッジ (山頂)
-        'yoshinodani': '🌳', // フォレストバッジ (森)
-        'torigoe': '🏰',     // キャッスルバッジ (城)
-        'oguchi': '💧'       // フォールバッジ (滝)
+    const gymBadgeImages = {
+        'tsurugi': 'images/badges/tsurugi.png',     // 鶴来バッジ
+        'mikawa': 'images/badges/mikawa.png',       // 美川バッジ
+        'mattou': 'images/badges/mattou.png',       // 松任バッジ
+        'kawachi': 'images/badges/kawachi.png',     // 河内バッジ
+        'shiramine': 'images/badges/shiramine.png', // 白峰バッジ
+        'yoshinodani': 'images/badges/yoshinodani.png', // 吉野谷バッジ
+        'torigoe': 'images/badges/torigoe.png',     // 鳥越バッジ
+        'oguchi': 'images/badges/oguchi.png'        // 尾口バッジ
     };
     
     // 全ての町をチェック
@@ -161,12 +161,12 @@ function forceBadgeIconUpdate() {
         badgeIcons.forEach(badgeIcon => {
             if (stamps.includes(townCode)) {
                 // 取得済みの場合は専用アイコン
-                const newIcon = gymBadgeIcons[townCode] || '🏆';
-                badgeIcon.textContent = newIcon;
-                console.log(`Updated ${townCode} to ${newIcon}`);
+                const imageUrl = gymBadgeImages[townCode] || 'images/badges/default-badge.svg';
+                badgeIcon.innerHTML = `<img src="${imageUrl}" alt="${townCode} badge" style="width: 100%; height: 100%; object-fit: contain;">`;
+                console.log(`Updated ${townCode} to image: ${imageUrl}`);
             } else {
                 // 未取得の場合は？マーク
-                badgeIcon.textContent = '？';
+                badgeIcon.innerHTML = '<span style="font-size: 2rem; color: #bdc3c7;">？</span>';
                 console.log(`Reset ${townCode} to ？`);
             }
         });
@@ -248,24 +248,26 @@ function updateStampDisplay() {
                 stampStatus.classList.add('obtained');
             }
             
-            // バッジアイコンを特定の絵文字に更新
+            // バッジアイコンを地域特徴画像に更新
             if (badgeIcon) {
-                const gymBadgeIcons = {
-                    'tsurugi': '🏹',     // クレインバッジ (弓矢)
-                    'mikawa': '🎺',      // ラッパバッジ (ラッパ)
-                    'mattou': '🌲',      // パインバッジ (松)
-                    'kawachi': '🌉',     // ブリッジバッジ (橋)
-                    'shiramine': '⛰️',    // ピークバッジ (山頂)
-                    'yoshinodani': '🌳', // フォレストバッジ (森)
-                    'torigoe': '🏰',     // キャッスルバッジ (城)
-                    'oguchi': '💧'       // フォールバッジ (滝)
+                const regionBadgeImages = {
+                    'tsurugi': 'images/badges/tsurugi.png',     // 鶴来地域バッジ
+                    'mikawa': 'images/badges/mikawa.png',       // 美川地域バッジ
+                    'mattou': 'images/badges/mattou.png',       // 松任地域バッジ
+                    'kawachi': 'images/badges/kawachi.png',     // 河内地域バッジ
+                    'shiramine': 'images/badges/shiramine.png', // 白峰地域バッジ
+                    'yoshinodani': 'images/badges/yoshinodani.png', // 吉野谷地域バッジ
+                    'torigoe': 'images/badges/torigoe.png',     // 鳥越地域バッジ
+                    'oguchi': 'images/badges/oguchi.png'       // 尾口地域バッジ
                 };
                 
-                const newIcon = gymBadgeIcons[townCode] || '🏆';
-                badgeIcon.textContent = newIcon;
-                badgeIcon.innerHTML = newIcon; // HTMLも設定（万が一のため）
+                // 画像要素を作成または更新
+                const badgeImage = regionBadgeImages[townCode];
+                if (badgeImage) {
+                    badgeIcon.innerHTML = `<img src="${badgeImage}" alt="${towns[townCode]}バッジ" class="badge-img obtained">`;
+                }
                 
-                console.log(`Badge icon updated for ${townCode}: ${newIcon}`);
+                console.log(`Badge image updated for ${townCode}: ${badgeImage}`);
             } else {
                 console.error(`Badge icon element not found for ${townCode}`);
             }
@@ -277,11 +279,10 @@ function updateStampDisplay() {
                 stampStatus.classList.remove('obtained');
             }
             
-            // バッジアイコンを「？」に戻す
+            // バッジアイコンを未取得画像に戻す
             if (badgeIcon) {
-                badgeIcon.textContent = '？';
-                badgeIcon.innerHTML = '？'; // HTMLも設定（万が一のため）
-                console.log(`Badge icon reset for ${townCode}: ？`);
+                badgeIcon.innerHTML = `<img src="images/badges/unknown.png" alt="未取得バッジ" class="badge-img unknown">`;
+                console.log(`Badge icon reset for ${townCode}: unknown`);
             }
         }
     });

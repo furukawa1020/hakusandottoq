@@ -1,0 +1,52 @@
+<!-- 白峰バッジ - レジェンダリー（特別エフェクト付き） -->
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shiramineBadge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#74B9FF"/>
+      <stop offset="50%" style="stop-color:#0984E3"/>
+      <stop offset="100%" style="stop-color:#74B9FF"/>
+    </linearGradient>
+    <filter id="legendaryGlow">
+      <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <radialGradient id="legendaryShine" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.6)"/>
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- レジェンダリー専用の外側グロー -->
+  <circle cx="60" cy="60" r="58" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.8" filter="url(#legendaryGlow)">
+    <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- メインバッジ -->
+  <circle cx="60" cy="60" r="54" fill="url(#shiramineBadge)" stroke="#FFFFFF" stroke-width="6" filter="url(#legendaryGlow)"/>
+  
+  <!-- 特別なハイライト -->
+  <ellipse cx="60" cy="40" rx="30" ry="15" fill="url(#legendaryShine)" opacity="0.7"/>
+  
+  <!-- 文字 -->
+  <text x="60" y="75" text-anchor="middle" fill="white" font-size="36" font-weight="bold" font-family="MS Gothic, monospace" filter="url(#legendaryGlow)">白</text>
+  
+  <!-- レジェンダリー専用のキラキラエフェクト -->
+  <g opacity="0.9">
+    <circle cx="35" cy="35" r="3" fill="white">
+      <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="85" cy="30" r="2" fill="white">
+      <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="40" cy="85" r="2.5" fill="white">
+      <animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80" cy="80" r="2" fill="white">
+      <animate attributeName="opacity" values="0;1;0" dur="2.2s" begin="1.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

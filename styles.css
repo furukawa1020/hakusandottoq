@@ -98,6 +98,71 @@ header p {
     .pwa-install-section {
         margin-top: 1rem;
     }
+}
+
+/* 新機能ナビゲーション */
+.feature-nav {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.nav-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    min-width: 100px;
+}
+
+.nav-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.nav-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .feature-nav {
+        gap: 0.5rem;
+    }
+    
+    .nav-btn {
+        font-size: 0.8rem;
+        padding: 0.6rem 1rem;
+        min-width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .feature-nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .nav-btn {
+        width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pwa-install-section {
+        margin-top: 1rem;
+    }
     
     .pwa-install-btn {
         font-size: 12px;
@@ -286,6 +351,14 @@ main {
     background: #32CD32;
 }
 
+.card-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
 .visit-btn {
     background: #4682B4;
     color: white;
@@ -299,12 +372,60 @@ main {
     letter-spacing: 1px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(70, 130, 180, 0.3);
+    flex: 1;
 }
 
 .visit-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(70, 130, 180, 0.4);
     background: #5F9EA0;
+}
+
+.ar-photo-btn {
+    background: linear-gradient(135deg, #FF6B6B, #FF5252);
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ar-photo-btn:hover {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+    background: linear-gradient(135deg, #FF5252, #FF6B6B);
+}
+
+.ar-photo-btn:active {
+    transform: translateY(0) scale(1);
+}
+
+@media (max-width: 768px) {
+    .card-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .visit-btn {
+        width: 100%;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .ar-photo-btn {
+        align-self: center;
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
 }
 
 /* Complete Section */

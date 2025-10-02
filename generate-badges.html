@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badge Generator</title>
+    <style>
+        .badge {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            border: 6px solid #FFD700;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .badge::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.3) 25%, transparent 25%);
+            transform: rotate(45deg);
+        }
+        
+        /* 地域特性に基づくバッジデザイン */
+        .tsurugi { background: linear-gradient(135deg, #FF6B9D, #C44569); } /* 神社系 - ピンク */
+        .mikawa { background: linear-gradient(135deg, #4834D4, #3742FA); } /* 海岸系 - ブルー */
+        .mattou { background: linear-gradient(135deg, #BADC58, #6C5CE7); } /* 平野系 - グリーン */
+        .kawachi { background: linear-gradient(135deg, #FF7675, #FD79A8); } /* 渓谷系 - オレンジ */
+        .shiramine { background: linear-gradient(135deg, #74B9FF, #0984E3); } /* 雪山系 - 氷ブルー */
+        .yoshinodani { background: linear-gradient(135deg, #55A3FF, #00B894); } /* 花郷系 - 青緑 */
+        .torigoe { background: linear-gradient(135deg, #A29BFE, #6C5CE7); } /* 森林系 - パープル */
+        .oguchi { background: linear-gradient(135deg, #00CEC9, #00B894); } /* 山岳系 - ターコイズ */
+        
+        /* レジェンダリー（白峰）特別エフェクト */
+        .shiramine {
+            animation: legendaryGlow 2s infinite alternate;
+            border-color: #FFFFFF;
+            box-shadow: 0 0 20px rgba(116, 185, 255, 0.8), 0 8px 16px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes legendaryGlow {
+            0% { box-shadow: 0 0 20px rgba(116, 185, 255, 0.8), 0 8px 16px rgba(0,0,0,0.3); }
+            100% { box-shadow: 0 0 40px rgba(116, 185, 255, 1), 0 12px 24px rgba(0,0,0,0.5); }
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .badge-info {
+            text-align: center;
+            font-family: 'MS Gothic', monospace;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; font-family: 'MS Gothic', monospace;">白山市 地域バッジ</h1>
+    
+    <div class="container">
+        <div>
+            <div class="badge-info">鶴来<br>神社系</div>
+            <div class="badge tsurugi">鶴</div>
+        </div>
+        
+        <div>
+            <div class="badge-info">美川<br>海岸系</div>
+            <div class="badge mikawa">美</div>
+        </div>
+        
+        <div>
+            <div class="badge-info">松任<br>平野系</div>
+            <div class="badge mattou">松</div>
+        </div>
+        
+        <div>
+            <div class="badge-info">河内<br>渓谷系</div>
+            <div class="badge kawachi">河</div>
+        </div>
+        
+        <div>
+            <div class="badge-info">白峰<br>雪山系・レジェンダリー</div>
+            <div class="badge shiramine">白</div>
+        </div>
+        
+        <div>
+            <div class="badge-info">吉野谷<br>花郷系</div>
+            <div class="badge yoshinodani">吉</div>
+        </div>
+        
+        <div>
+            <div class="badge-info">鳥越<br>森林系</div>
+            <div class="badge torigoe">鳥</div>
+        </div>
+        
+        <div>
+            <div class="badge-info">尾口<br>山岳系</div>
+            <div class="badge oguchi">尾</div>
+        </div>
+    </div>
+    
+    <script>
+        // 各バッジのSVGを生成する関数
+        function generateBadgeSVG(className, text, size = 120) {
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', size);
+            svg.setAttribute('height', size);
+            svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+            
+            // バッジの背景グラデーション定義
+            const gradients = {
+                tsurugi: 'linear-gradient(135deg, #FF6B9D, #C44569)',
+                mikawa: 'linear-gradient(135deg, #4834D4, #3742FA)',
+                mattou: 'linear-gradient(135deg, #BADC58, #6C5CE7)',
+                kawachi: 'linear-gradient(135deg, #FF7675, #FD79A8)',
+                shiramine: 'linear-gradient(135deg, #74B9FF, #0984E3)',
+                yoshinodani: 'linear-gradient(135deg, #55A3FF, #00B894)',
+                torigoe: 'linear-gradient(135deg, #A29BFE, #6C5CE7)',
+                oguchi: 'linear-gradient(135deg, #00CEC9, #00B894)'
+            };
+            
+            // 背景円
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', size/2);
+            circle.setAttribute('cy', size/2);
+            circle.setAttribute('r', size/2 - 6);
+            circle.setAttribute('fill', 'url(#gradient)');
+            circle.setAttribute('stroke', '#FFD700');
+            circle.setAttribute('stroke-width', '6');
+            
+            // テキスト
+            const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            textElement.setAttribute('x', size/2);
+            textElement.setAttribute('y', size/2 + 12);
+            textElement.setAttribute('text-anchor', 'middle');
+            textElement.setAttribute('fill', 'white');
+            textElement.setAttribute('font-size', '36');
+            textElement.setAttribute('font-weight', 'bold');
+            textElement.setAttribute('font-family', 'MS Gothic, monospace');
+            textElement.textContent = text;
+            
+            svg.appendChild(circle);
+            svg.appendChild(textElement);
+            
+            return svg;
+        }
+        
+        console.log('バッジジェネレーター準備完了');
+    </script>
+</body>
+</html>
