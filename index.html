@@ -3,241 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="白山市旧市町村8地域を巡るNFCバッジクエスト - 地域探索RPGシステム">
-    <meta name="key            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="showBadgeCollection()">
-                    <span class="icon-badge">★</span> バッジ一覧
-                </button>
-                <button class="btn btn-secondary" onclick="openARCamera()">
-                    <span class="icon-gallery">▣</span> AR写真
-                </button>
-                <button class="btn btn-secondary" onclick="openAvatarCustomizer()">
-                    <span class="icon-location">●</span> アバター
-                </button>
-                <button class="btn btn-secondary" onclick="shareBadgeProgress()">
-                    <span class="icon-share">◆</span> SNS共有
-                </button>
-                <button class="btn btn-secondary" onclick="showRegionPhotos()">
-                    <span class="icon-gallery">▣</span> 地域写真
-                </button>
-            </div>="はくさんNFCバッジクエスト,白山市,旧市町村,8地域,地域探索,バッジ収集,RPG,NFC">
-    <meta name="author" content="Hakusan Development Team">
-    <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#87CEEB">
-    
-    <!-- Netlify最適化 -->
-    <meta name="netlify-deploy" content="production">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="format-detection" content="telephone=no">
-    
-    <!-- PWAメタデータ -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="はくさんNFC">
-    
-    <!-- プリロード最適化 -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://images.unsplash.com">
-    <link rel="dns-prefetch" href="//api.netlify.app">
-    
-    <!-- リソースヒント -->
-    <link rel="prefetch" href="/town/shiramine.html">
-    <link rel="preload" href="/白山.png" as="image">
-    <link rel="modulepreload" href="/rpg-map-engine.js">
-    
     <title>はくさんNFCバッジクエスト</title>
+    <meta name="description" content="白山市旧市町村8地域を巡るNFCバッジクエスト">
+    <meta name="theme-color" content="#87CEEB">
     <link rel="manifest" href="manifest.json">
-    
-    <style>
-        /* RPGマップ専用スタイル */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'MS Gothic', monospace;
-            background: linear-gradient(135deg, #2c5f2d 0%, #97bc62 50%, #659b41 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-        
-        .header {
-            background: rgba(44, 95, 45, 0.95);
-            padding: 20px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        .header p {
-            margin: 10px 0 0 0;
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-        
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            gap: 20px;
-        }
-        
-        .game-status {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-        
-        .controls-panel {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .map-container {
-            position: relative;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            min-height: 600px;
-        }
-        
-        #rpgCanvas {
-            border: 3px solid #2c5f2d;
-            border-radius: 10px;
-            background: #f0f8f0;
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            height: auto;
-        }
-        
-        #miniMapCanvas {
-            border: 2px solid #97bc62;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.8);
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(45deg, #2c5f2d, #97bc62);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(45deg, #659b41, #8fbc8f);
-            color: white;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        }
-        
-        .notification {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(44, 95, 45, 0.95);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            z-index: 1000;
-            opacity: 0;
-            transition: all 0.3s ease;
-            text-align: center;
-            max-width: 400px;
-        }
-        
-        .notification.show {
-            opacity: 1;
-        }
-        
-        .notification h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.3em;
-        }
-        
-        .notification p {
-            margin: 0;
-            font-size: 1em;
-        }
-        
-        @media (max-width: 768px) {
-            .main-container {
-                padding: 10px;
-            }
-            
-            .game-status {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .action-buttons {
-                justify-content: center;
-            }
-            
-            .btn {
-                flex: 1;
-                min-width: 120px;
-                justify-content: center;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- ヘッダー -->
-    <header class="header">
+    <header>
         <h1>はくさんNFCバッジクエスト</h1>
-        <p>8つの地域を巡り、白山の魅力を発見しよう！</p>
+        <p>白山市旧市町村8地域を巡る地域探索システム</p>
     </header>
 
-    <!-- メインコンテンツ -->
     <div class="main-container">
-        <!-- ゲーム状況 -->
         <div class="game-status">
             <div class="status-item">
                 <span class="icon-badge">★</span>
@@ -253,156 +31,110 @@
             </div>
         </div>
 
-        <!-- コントロールパネル -->
         <div class="controls-panel">
             <h3>操作方法</h3>
             <p><strong>PC:</strong> WASD または矢印キー、スペースキーで調査</p>
             <p><strong>モバイル:</strong> スワイプで移動、タップで移動先指定</p>
+            <p><strong>マップ:</strong> 地域発見時に自動的に地域ページへの案内が表示されます</p>
             
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="showBadgeCollection()">
-                    <span>📋</span> バッジ一覧
+                    <span class="icon-badge">★</span> バッジ一覧
                 </button>
                 <button class="btn btn-secondary" onclick="openARCamera()">
-                    <span>📷</span> AR写真
+                    <span class="icon-gallery">▣</span> AR写真
+                </button>
+                <button class="btn btn-secondary" onclick="openAvatarCustomizer()">
+                    <span class="icon-location">●</span> アバター
                 </button>
                 <button class="btn btn-secondary" onclick="shareBadgeProgress()">
                     <span class="icon-share">◆</span> SNS共有
                 </button>
                 <button class="btn btn-secondary" onclick="showRegionPhotos()">
-                    <span class="icon-gallery">■</span> 地域写真
+                    <span class="icon-gallery">▣</span> 地域写真
+                </button>
+                <button class="btn btn-secondary" onclick="runSystemTest()" style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4);">
+                    <span class="icon-badge">▶</span> システム診断
                 </button>
             </div>
         </div>
 
-        <!-- RPGマップエリア -->
         <div class="map-container">
             <div style="position: relative; width: 100%; height: 100%;">
-                <!-- メインマップ -->
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                    <canvas id="rpgCanvas" width="800" height="600" style="width: 100%; height: 100%; object-fit: cover;"></canvas>
-                </div>
+                <canvas id="rpgCanvas" width="800" height="600" style="width: 100%; height: 100%; object-fit: cover;"></canvas>
                 
-                <!-- UIオーバーレイ -->
                 <div style="position: absolute; top: 20px; left: 20px; z-index: 10;">
                     <h3 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0;">はくさん8地域クエストマップ</h3>
                 </div>
                 
-                <!-- ミニマップ -->
                 <div style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); border-radius: 10px; padding: 10px; z-index: 10;">
                     <h4 style="color: white; margin: 0 0 10px 0; font-size: 14px;">現在位置</h4>
                     <canvas id="miniMapCanvas" width="200" height="150" style="border-radius: 5px;"></canvas>
                 </div>
                 
-                <!-- 地域リスト -->
                 <div style="position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); border-radius: 10px; padding: 15px; z-index: 10; max-width: 250px;">
                     <h4 style="color: white; margin: 0 0 10px 0; font-size: 14px;">地域一覧</h4>
-                    <div id="regionList" style="display: flex; flex-direction: column; gap: 5px;">
-                        <!-- 地域リストは動的に生成 -->
-                    </div>
+                    <div id="regionList" style="display: flex; flex-direction: column; gap: 5px;"></div>
                 </div>
-                    </div>
-                </div>
+            </div>
+        </div>
+
+        <div class="region-links">
+            <h3>地域詳細ページ</h3>
+            <div class="region-grid">
+                <a href="town/shiramine.html" class="region-card">
+                    <div class="region-name">白峰</div>
+                    <p>白山の恵みが息づく山間地域</p>
+                </a>
+                <a href="town/oguchi.html" class="region-card">
+                    <div class="region-name">尾口</div>
+                    <p>温泉と歴史が調和する観光地</p>
+                </a>
+                <a href="town/kawachi.html" class="region-card">
+                    <div class="region-name">河内</div>
+                    <p>清流と自然に恵まれた田園地帯</p>
+                </a>
+                <a href="town/yoshinodani.html" class="region-card">
+                    <div class="region-name">吉野谷</div>
+                    <p>文化と伝統が残る歴史ある里</p>
+                </a>
+                <a href="town/torigoe.html" class="region-card">
+                    <div class="region-name">鳥越</div>
+                    <p>一向一揆の舞台となった歴史の地</p>
+                </a>
+                <a href="town/tsurugi.html" class="region-card">
+                    <div class="region-name">剱</div>
+                    <p>剱岳の麓に広がる豊かな自然</p>
+                </a>
+                <a href="town/mikawa.html" class="region-card">
+                    <div class="region-name">美川</div>
+                    <p>日本海に面した港町の風情</p>
+                </a>
+                <a href="town/mattou.html" class="region-card">
+                    <div class="region-name">松任</div>
+                    <p>白山市の中心地として発展</p>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- 通知システム -->
-    <div id="notification" class="notification">
-        <h3 id="notificationTitle"></h3>
-        <p id="notificationText"></p>
-    </div>
-
-    <!-- コアシステムスクリプト - Netlify最適化 -->
     <script type="module" src="rpg-map-engine.js" defer></script>
     <script type="module" src="badge-system.js" defer></script>
     <script type="module" src="ar-camera.js" defer></script>
     <script type="module" src="avatar-system.js" defer></script>
     <script type="module" src="region-photos.js" defer></script>
-    
-    <!-- システム初期化 -->
-    <script type="module" defer>
-        // Netlifyパフォーマンス最適化
+    <script type="module" src="system-tester.js" defer></script>
+
+    <script>
+        // Service Worker登録
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', async () => {
-                try {
-                    const registration = await navigator.serviceWorker.register('/sw.js', {
-                        scope: '/',
-                        updateViaCache: 'none'
-                    });
-                    console.log('🚀 SW: Netlify最適化登録成功');
-                    
-                    // 更新チェック
-                    registration.addEventListener('updatefound', () => {
-                        console.log('🔄 SW: 更新を発見');
-                    });
-                } catch (error) {
-                    console.error('❌ SW: 登録失敗:', error);
-                }
-            });
-        }
-        
-        // システム初期化
-        document.addEventListener('DOMContentLoaded', async function() {
-            console.log('はくさんNFCバッジクエスト初期化開始...');
-            
-            try {
-                // システムの初期化を並列実行
-                await new Promise(resolve => setTimeout(resolve, 500)); // 読み込み待機
-                
-                // RPGエンジン初期化
-                if (window.HakusanRPGMap) {
-                    window.rpgEngine = new window.HakusanRPGMap();
-                    // init()はコンストラクタで既に呼ばれているので重複呼び出ししない
-                    console.log('✅ RPGエンジン初期化完了');
-                } else {
-                    console.error('❌ RPGエンジンが読み込まれていません');
-                }
-                
-                // その他システム確認
-                if (window.badgeSystem) {
-                    console.log('✅ バッジシステム利用可能');
-                } else {
-                    console.warn('⚠️ バッジシステム未読み込み');
-                }
-                
-                if (window.arCamera) {
-                    console.log('✅ ARカメラ利用可能');
-                } else {
-                    console.warn('⚠️ ARカメラ未読み込み');
-                }
-                
-                if (window.hakusanPhotos) {
-                    console.log('✅ 地域写真システム利用可能');
-                } else {
-                    console.warn('⚠️ 地域写真システム未読み込み');
-                }
-                
-                console.log('✅ 全システム初期化完了!');
-                
-                // アナリティクス初期化
-                initializeNetlifyAnalytics();
-                
-            } catch (error) {
-                console.error('❌ システム初期化エラー:', error);
-            }
-        });
-        
-        // Netlifyアナリティクス初期化
-        function initializeNetlifyAnalytics() {
-            // ページビューを記録
-            fetch('/api/analytics', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    event: 'page_view',
-                    page: window.location.pathname,
-                    timestamp: new Date().toISOString(),
-                    user_agent: navigator.userAgent,
-                    screen_resolution: `${screen.width}x${screen.height}`,
-                    language: navigator.language
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('SW: Service Worker registered:', registration);
                 })
-            }).catch(err => console.log('Analytics:', err.message));
+                .catch(error => {
+                    console.log('SW: Service Worker registration failed:', error);
+                });
         }
 
         // グローバル関数
@@ -423,10 +155,24 @@
         };
 
         window.openAvatarCustomizer = function() {
+            // アバターシステムの初期化を確認
+            if (!window.avatarSystem) {
+                console.log('アバターシステムを初期化中...');
+                window.avatarSystem = new HakusanAvatarSystem();
+            }
+            
             if (window.avatarSystem && window.avatarSystem.openCustomizer) {
                 window.avatarSystem.openCustomizer();
+            } else if (window.PixelAvatarSystem) {
+                // フォールバック：ピクセルアバターシステムを使用
+                console.log('ピクセルアバターエディターを起動...');
+                if (!window.pixelAvatar) {
+                    window.pixelAvatar = new PixelAvatarSystem();
+                }
+                window.pixelAvatar.showEditor();
             } else {
-                console.warn('アバターシステムが利用できません');
+                // 簡易アバター選択ダイアログ
+                showSimpleAvatarSelector();
             }
         };
 
@@ -445,6 +191,173 @@
                 console.warn('地域写真システムが利用できません');
             }
         };
+
+        // 簡易アバター選択ダイアログ
+        function showSimpleAvatarSelector() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #87CEEB 0%, #9ACD32 100%);
+                    border-radius: 20px;
+                    padding: 30px;
+                    max-width: 500px;
+                    width: 90%;
+                    text-align: center;
+                    color: white;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                ">
+                    <h2 style="margin: 0 0 20px 0;">● アバター設定</h2>
+                    <p style="margin-bottom: 30px;">アバターシステムを読み込み中です...</p>
+                    
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="selectAvatar('explorer')" style="
+                            background: rgba(255,255,255,0.2);
+                            border: 2px solid white;
+                            color: white;
+                            padding: 15px 20px;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            font-weight: bold;
+                        ">▲ 探険家</button>
+                        
+                        <button onclick="selectAvatar('casual')" style="
+                            background: rgba(255,255,255,0.2);
+                            border: 2px solid white;
+                            color: white;
+                            padding: 15px 20px;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            font-weight: bold;
+                        ">■ カジュアル</button>
+                        
+                        <button onclick="selectAvatar('outdoor')" style="
+                            background: rgba(255,255,255,0.2);
+                            border: 2px solid white;
+                            color: white;
+                            padding: 15px 20px;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            font-weight: bold;
+                        ">◆ アウトドア</button>
+                    </div>
+                    
+                    <button onclick="closeAvatarModal()" style="
+                        background: rgba(0,0,0,0.3);
+                        border: 2px solid white;
+                        color: white;
+                        padding: 10px 30px;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        margin-top: 30px;
+                        font-weight: bold;
+                    ">閉じる</button>
+                </div>
+            `;
+            
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            };
+            
+            // グローバル関数を定義
+            window.selectAvatar = function(type) {
+                localStorage.setItem('selectedAvatar', type);
+                console.log(`アバタータイプ "${type}" を選択しました`);
+                
+                // アバター変更の通知
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(154, 205, 50, 0.95);
+                    color: white;
+                    padding: 20px 30px;
+                    border-radius: 15px;
+                    z-index: 10000;
+                    font-weight: bold;
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                `;
+                notification.textContent = `アバターが ${type} に変更されました！`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 2000);
+                
+                document.body.removeChild(modal);
+            };
+            
+            window.closeAvatarModal = function() {
+                document.body.removeChild(modal);
+            };
+            
+            document.body.appendChild(modal);
+        }
+
+        // 初期化
+        // 初期化処理
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('はくさんNFCバッジクエスト初期化開始...');
+            
+            // アバターシステムの非同期初期化
+            setTimeout(() => {
+                try {
+                    if (window.HakusanAvatarSystem && !window.avatarSystem) {
+                        window.avatarSystem = new HakusanAvatarSystem();
+                        console.log('アバターシステム初期化完了');
+                    }
+                } catch (error) {
+                    console.log('アバターシステム初期化をスキップ:', error.message);
+                }
+            }, 1000);
+            
+            // バッジ数更新
+            const updateBadgeCount = () => {
+                const savedBadges = localStorage.getItem('hakusanBadges');
+                const badgeCount = savedBadges ? JSON.parse(savedBadges).length : 0;
+                document.getElementById('badgeCount').textContent = badgeCount;
+            };
+            
+            updateBadgeCount();
+            setInterval(updateBadgeCount, 5000);
+            
+            // 選択されたアバタータイプの表示更新
+            const updateAvatarDisplay = () => {
+                const selectedAvatar = localStorage.getItem('selectedAvatar') || 'casual';
+                const avatarButton = document.querySelector('button[onclick="openAvatarCustomizer()"]');
+                if (avatarButton) {
+                    const avatarIcons = {
+                        'explorer': '▲',
+                        'casual': '■', 
+                        'outdoor': '◆'
+                    };
+                    const icon = avatarButton.querySelector('.icon-location');
+                    if (icon) {
+                        icon.textContent = avatarIcons[selectedAvatar] || '●';
+                    }
+                }
+            };
+            
+            updateAvatarDisplay();
+        });
     </script>
 </body>
 </html>

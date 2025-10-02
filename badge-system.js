@@ -434,6 +434,106 @@ class HakusanBadgeSystem {
     onRegionDiscovered(regionId) {
         // RPGエンジンから地域発見時に呼ばれる
         this.collectBadge(regionId, 'common');
+        
+        // 地域ページへのアクセス案内
+        setTimeout(() => {
+            this.promptRegionPageVisit(regionId);
+        }, 3000);
+    }
+    
+    // 地域ページ訪問案内
+    promptRegionPageVisit(regionId) {
+        const regionData = this.regions[regionId];
+        if (!regionData) return;
+        
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9500;
+        `;
+        
+        modal.innerHTML = `
+            <div style="
+                background: linear-gradient(135deg, ${regionData.color}, #FFFFFF);
+                border-radius: 20px;
+                padding: 30px;
+                max-width: 500px;
+                width: 90%;
+                text-align: center;
+                color: white;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            ">
+                <div style="font-size: 4em; margin-bottom: 20px;">${regionData.symbol}</div>
+                <h2 style="margin: 0 0 15px 0;">${regionData.name}を発見！</h2>
+                <p style="margin-bottom: 25px; font-size: 1.1em;">
+                    この地域の詳細情報や観光スポットを<br>
+                    専用ページで確認しませんか？
+                </p>
+                
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button onclick="visitRegionPage('${regionId}')" style="
+                        background: rgba(255,255,255,0.9);
+                        color: ${regionData.color};
+                        border: none;
+                        padding: 15px 25px;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        font-weight: bold;
+                        font-size: 1.1em;
+                    ">地域ページを見る</button>
+                    
+                    <button onclick="closeRegionModal()" style="
+                        background: rgba(0,0,0,0.3);
+                        color: white;
+                        border: 2px solid white;
+                        padding: 15px 25px;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        font-weight: bold;
+                    ">後で見る</button>
+                </div>
+            </div>
+        `;
+        
+        modal.onclick = (e) => {
+            if (e.target === modal) {
+                document.body.removeChild(modal);
+            }
+        };
+        
+        // グローバル関数を定義
+        window.visitRegionPage = function(regionId) {
+            const townPages = {
+                'tsurugi': 'town/tsurugi.html',
+                'mikawa': 'town/mikawa.html', 
+                'mattou': 'town/mattou.html',
+                'kawachi': 'town/kawachi.html',
+                'shiramine': 'town/shiramine.html',
+                'yoshinodani': 'town/yoshinodani.html',
+                'torigoe': 'town/torigoe.html',
+                'oguchi': 'town/oguchi.html'
+            };
+            
+            if (townPages[regionId]) {
+                window.location.href = townPages[regionId];
+            }
+            
+            document.body.removeChild(modal);
+        };
+        
+        window.closeRegionModal = function() {
+            document.body.removeChild(modal);
+        };
+        
+        document.body.appendChild(modal);
     }
     
     // デバッグ用

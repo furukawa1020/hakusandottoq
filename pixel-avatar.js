@@ -729,13 +729,12 @@ function openAvatarEditor() {
     window.pixelAvatarSystem.openEditor();
 }
 
-// 初期化
-document.addEventListener('DOMContentLoaded', () => {
-    window.pixelAvatarSystem = new PixelAvatarSystem();
-    
-    // ミニアバターにクリックイベントを追加
-    const miniCanvas = document.getElementById('mini-avatar-canvas');
-    if (miniCanvas) {
-        miniCanvas.addEventListener('click', openAvatarEditor);
-    }
-});
+// グローバルエクスポート
+window.PixelAvatarSystem = PixelAvatarSystem;
+
+// 即座に利用可能にする
+if (typeof window !== 'undefined') {
+    window.pixelAvatarSystemReady = true;
+}
+
+console.log('🎨 ピクセルアバターシステム読み込み完了');

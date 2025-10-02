@@ -755,25 +755,8 @@ window.toggleRegionPhotos = function() {
     }
 };
 
-window.openAvatarCustomizer = function() {
-    const customizer = document.getElementById('avatarCustomizer');
-    if (customizer) {
-        customizer.classList.add('show');
-    }
-};
-
-window.closeAvatarCustomizer = function() {
-    const customizer = document.getElementById('avatarCustomizer');
-    if (customizer) {
-        customizer.classList.remove('show');
-    }
-};
-
-window.saveAvatar = function() {
-    // アバター設定を保存
-    console.log('アバターを保存しました');
-    closeAvatarCustomizer();
-};
+// RPGマップエンジンのアバター連携関数（重複削除済み）
+// アバター操作は index.html で管理
 
 window.exportAdventureData = function() {
     if (window.rpgEngine) {

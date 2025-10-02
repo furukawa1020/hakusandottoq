@@ -925,14 +925,12 @@ class HakusanAvatarSystem {
     }
 }
 
-// グローバル初期化
-document.addEventListener('DOMContentLoaded', () => {
-    if (!window.avatarSystem) {
-        window.avatarSystem = new HakusanAvatarSystem();
-    }
-});
+// グローバル初期化とエクスポート
+window.HakusanAvatarSystem = HakusanAvatarSystem;
 
-// エクスポート
-window.HakusanAvatar = HakusanAvatarSystem;
+// 即座に利用可能にする
+if (typeof window !== 'undefined') {
+    window.avatarSystemReady = true;
+}
 
-console.log('👤 アバターシステム読み込み完了');
+console.log('👤 アバターシステム読み込み完了 - HakusanAvatarSystem利用可能');
