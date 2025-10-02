@@ -66,13 +66,13 @@ const OFFLINE_PAGE = '/offline.html';
 
 // インストール時の処理 - Netlify最適化
 self.addEventListener('install', (event) => {
-  console.log('🔧 SW: Netlify最適化インストール開始...');
+  console.log('SW: Netlify最適化インストール開始...');
   
   event.waitUntil(
     Promise.all([
       // 静的リソースをプリロード
       caches.open(STATIC_CACHE).then(async (cache) => {
-        console.log('📦 SW: 静的リソースをキャッシュ中...');
+        console.log('SW: 静的リソースをキャッシュ中...');
         
         // 段階的キャッシュで失敗耐性を向上
         const cachePromises = Object.entries(CACHE_STRATEGIES).map(async ([category, urls]) => {
@@ -82,7 +82,7 @@ self.addEventListener('install', (event) => {
               mode: 'cors',
               credentials: 'same-origin'
             })));
-            console.log(`✅ ${category} キャッシュ完了`);
+            console.log(`${category} キャッシュ完了`);
           } catch (error) {
             console.warn(`⚠️ ${category} キャッシュ一部失敗:`, error);
           }
@@ -97,7 +97,7 @@ self.addEventListener('install', (event) => {
         return cache.add(OFFLINE_PAGE);
       })
     ]).then(() => {
-      console.log('🚀 SW: Netlify最適化インストール完了');
+      console.log('SW: Netlify最適化インストール完了');
       return self.skipWaiting();
     }).catch((error) => {
       console.error('❌ SW: インストール失敗:', error);
@@ -107,27 +107,37 @@ self.addEventListener('install', (event) => {
 
 // アクティベート時の処理 - Netlify最適化
 self.addEventListener('activate', (event) => {
-  console.log('🔄 SW: Netlifyアクティベート開始...');
+  console.log('SW: Netlifyアクティベート開始...');
   
   event.waitUntil(
     Promise.all([
-      // 古いキャッシュを削除
+      // 古いキャッシュを削除（安全に）
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== STATIC_CACHE && 
-                cacheName !== DYNAMIC_CACHE_NAME &&
-                cacheName.startsWith('hakusan-')) {
-              console.log('SW: Deleting old cache:', cacheName);
-              return caches.delete(cacheName);
+            try {
+              if (cacheName !== STATIC_CACHE && 
+                  cacheName !== DYNAMIC_CACHE &&
+                  cacheName.startsWith('hakusan-')) {
+                console.log('SW: Deleting old cache:', cacheName);
+                return caches.delete(cacheName);
+              }
+            } catch (error) {
+              console.warn('SW: Cache deletion failed:', cacheName, error);
             }
-          })
+          }).filter(Boolean) // undefined要素を除去
         );
+      }).catch(error => {
+        console.warn('SW: Cache cleanup failed:', error);
       }),
       // すべてのクライアントを制御下に
-      self.clients.claim()
+      self.clients.claim().catch(error => {
+        console.warn('SW: Client claim failed:', error);
+      })
     ]).then(() => {
       console.log('SW: Activation complete');
+    }).catch(error => {
+      console.error('SW: Activation failed:', error);
     })
   );
 });
@@ -146,22 +156,9 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     handleFetch(event.request).catch((error) => {
-      console.error('SW: Fetch failed:', error);
-      
-      // オフラインページを返す
-      return caches.match('/offline.html').then(response => {
-        if (response) {
-          return response;
-        }
-        // フォールバックレスポンス
-        return new Response('ネットワークエラーが発生しました', {
-          status: 503,
-          statusText: 'Service Unavailable',
-          headers: new Headers({
-            'Content-Type': 'text/plain; charset=utf-8'
-          })
-        });
-      });
+      console.error('SW: Fetch failed for:', event.request.url, error);
+      // 緊急時のフォールバック
+      return getOfflineFallback(event.request);
     })
   );
 });
@@ -259,7 +256,7 @@ async function handleDynamicContent(request) {
     const networkResponse = await fetch(request);
     
     if (networkResponse.ok) {
-      const cache = await caches.open(DYNAMIC_CACHE_NAME);
+      const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, networkResponse.clone());
     }
     
@@ -288,7 +285,7 @@ async function handleDefault(request) {
     const networkResponse = await fetch(request);
     
     if (networkResponse.ok) {
-      const cache = await caches.open(DYNAMIC_CACHE_NAME);
+      const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, networkResponse.clone());
     }
     
@@ -423,7 +420,7 @@ async function createOfflinePage() {
                 キャッシュされたデータを使用して、一部の機能をご利用いただけます。
             </p>
             <button class="retry-btn" onclick="window.location.reload()">
-                🔄 再試行
+                再試行
             </button>
             
             <div class="cached-data">
