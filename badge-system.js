@@ -218,7 +218,7 @@ class HakusanBadgeSystem {
                 window.analyticsSystem.recordBadgeCollection(regionId, rarity);
             }
             
-            console.log(`バッジ取得: ${this.regions[regionId].name} (${this.rarityLevels[rarity].name})`);
+            console.log(`🏷️ NFCバッジ取得: ${this.regions[regionId].name} (${this.rarityLevels[rarity].name})`);
             return true;
         }
         
@@ -430,15 +430,21 @@ class HakusanBadgeSystem {
         return false;
     }
     
-    // RPGエンジンとの連携
+    // RPGエンジンとの連携（NFC専用）
     onRegionDiscovered(regionId) {
-        // RPGエンジンから地域発見時に呼ばれる
-        this.collectBadge(regionId, 'common');
+        // RPGエンジンからは地域ページ案内のみ - バッジ取得はNFC専用
+        console.log(`地域発見: ${this.regions[regionId]?.name} - NFCタグでバッジを取得してください`);
         
-        // 地域ページへのアクセス案内
+        // 地域ページへのアクセス案内のみ
         setTimeout(() => {
             this.promptRegionPageVisit(regionId);
-        }, 3000);
+        }, 2000);
+    }
+    
+    // NFCタグ専用バッジ取得
+    collectBadgeFromNFC(regionId, rarity = 'common') {
+        console.log(`🏷️ NFCタグ検出: ${regionId}`);
+        return this.collectBadge(regionId, rarity);
     }
     
     // 地域ページ訪問案内

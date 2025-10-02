@@ -1,9 +1,9 @@
 // 白山地域探索システム Service Worker - Netlify最適化版
-// Version: 2.1 - Netlify CDN対応
+// Version: 2.4 - Netlify CDN対応・キャッシュ更新
 
-const CACHE_NAME = 'hakusan-v2.1.0';
-const STATIC_CACHE = 'hakusan-static-v2.1.0';
-const DYNAMIC_CACHE = 'hakusan-dynamic-v2.1.0';
+const CACHE_NAME = 'hakusan-v2.4.0';
+const STATIC_CACHE = 'hakusan-static-v2.4.0';
+const DYNAMIC_CACHE = 'hakusan-dynamic-v2.4.0';
 
 // Netlify最適化キャッシュ戦略
 const CACHE_STRATEGIES = {

@@ -674,9 +674,20 @@ class HakusanARCamera {
 document.addEventListener('DOMContentLoaded', () => {
     if (!window.arCamera) {
         window.arCamera = new HakusanARCamera();
-        // startCamera エイリアスを追加
+        
+        // startCamera エイリアスを修正
         window.arCamera.startCamera = function() {
-            this.open();
+            console.log('📷 ARカメラ起動中...');
+            return this.open();
+        };
+        
+        // openARCamera グローバル関数も定義
+        window.openARCamera = function() {
+            if (window.arCamera) {
+                return window.arCamera.open();
+            } else {
+                console.error('ARカメラシステムが初期化されていません');
+            }
         };
     }
 });

@@ -147,10 +147,14 @@
         };
 
         window.openARCamera = function() {
-            if (window.arCamera) {
-                window.arCamera.startCamera();
+            console.log('🎥 ARカメラボタン押下');
+            if (window.arCamera && typeof window.arCamera.open === 'function') {
+                return window.arCamera.open();
+            } else if (window.arCamera && typeof window.arCamera.startCamera === 'function') {
+                return window.arCamera.startCamera();
             } else {
-                console.warn('ARカメラが利用できません');
+                console.warn('ARカメラが利用できません', window.arCamera);
+                alert('ARカメラシステムが読み込まれていません。ページを再読み込みしてください。');
             }
         };
 

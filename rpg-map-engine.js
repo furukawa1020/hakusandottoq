@@ -1,10 +1,23 @@
 // 白山ピクセルマップRPGエンジン
 class HakusanRPGEngine {
     constructor() {
+        // Canvas要素の存在確認
         this.canvas = document.getElementById('rpgCanvas');
+        if (!this.canvas) {
+            throw new Error('RPGCanvas要素が見つかりません');
+        }
+        
         this.ctx = this.canvas.getContext('2d');
+        
+        // MiniMapCanvasの確認（オプション）
         this.miniMapCanvas = document.getElementById('miniMapCanvas');
-        this.miniMapCtx = this.miniMapCanvas.getContext('2d');
+        this.miniMapCtx = null;
+        
+        if (this.miniMapCanvas) {
+            this.miniMapCtx = this.miniMapCanvas.getContext('2d');
+        } else {
+            console.warn('MiniMapCanvas要素が見つかりません - スキップします');
+        }
         
         // マップ設定
         this.mapImage = null;
@@ -134,7 +147,11 @@ class HakusanRPGEngine {
         
         // ピクセル表現を維持
         this.ctx.imageSmoothingEnabled = false;
-        this.miniMapCtx.imageSmoothingEnabled = false;
+        
+        // MiniMapが存在する場合のみ設定
+        if (this.miniMapCtx) {
+            this.miniMapCtx.imageSmoothingEnabled = false;
+        }
     }
     
     resizeCanvas() {
@@ -555,6 +572,11 @@ class HakusanRPGEngine {
     }
     
     renderMiniMap() {
+        // MiniMapが存在しない場合はスキップ
+        if (!this.miniMapCtx) {
+            return;
+        }
+        
         this.miniMapCtx.clearRect(0, 0, 146, 146);
         
         // ミニマップ背景
