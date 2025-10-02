@@ -265,7 +265,7 @@ class ServerlessAnalyticsSystem {
         // 収集パターン分析
         this.analyzeCollectionPattern();
 
-        console.log('📊 Badge collection tracked:', collectionEvent);
+        console.log('Badge collection tracked:', collectionEvent);
     }
 
     analyzeCollectionPattern() {
@@ -657,7 +657,7 @@ class ServerlessAnalyticsSystem {
 === 白山市観光アプリ 研究データレポート ===
 生成日時: ${new Date().toLocaleString('ja-JP')}
 
-📊 基本統計:
+基本統計:
 - 総セッション数: ${data.sessions.length}
 - 総ユーザー数: ${data.summary?.totalUsers?.length || 0}
 - 総バッジ取得数: ${data.summary?.totalBadges || 0}
@@ -682,7 +682,7 @@ ${Object.entries(metrics.geographicDistribution || {}).map(([region, count]) =>
 - ピーク時間: ${metrics.temporalPatterns?.peakHour || 'N/A'}時
 - 最も活発な日: ${metrics.temporalPatterns?.peakDay || 'N/A'}
 
-🏅 収集行動パターン:
+収集行動パターン:
 ${Object.entries(metrics.collectionBehavior?.patterns || {}).map(([pattern, count]) => 
     `- ${pattern}: ${count}回`
 ).join('\n')}

@@ -674,10 +674,14 @@ class HakusanARCamera {
 document.addEventListener('DOMContentLoaded', () => {
     if (!window.arCamera) {
         window.arCamera = new HakusanARCamera();
+        // startCamera エイリアスを追加
+        window.arCamera.startCamera = function() {
+            this.showARPhotoInterface();
+        };
     }
 });
 
 // グローバルエクスポート
 window.HakusanAR = HakusanARCamera;
 
-console.log('📷 ARカメラシステム読み込み完了');
+console.log('ARカメラシステム読み込み完了');

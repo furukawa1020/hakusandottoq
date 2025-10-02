@@ -68,7 +68,7 @@ class HakusanRPGEngine {
         this.loadPlayerProgress();
         this.gameLoop();
         
-        console.log('🗺️ 白山RPGマップエンジン初期化完了');
+        console.log('白山RPGマップエンジン初期化完了');
     }
     
     async loadMapImage() {
@@ -81,7 +81,7 @@ class HakusanRPGEngine {
                 resolve();
             };
             this.mapImage.onerror = () => {
-                console.error('❌ 白山.pngの読み込みに失敗');
+                console.error('白山.pngの読み込みに失敗');
                 this.createFallbackMap();
                 resolve();
             };
@@ -670,7 +670,7 @@ class HakusanRPGEngine {
                 
                 console.log('💾 プレイヤー進行状況を復元');
             } catch (e) {
-                console.error('❌ 進行状況の復元に失敗:', e);
+                console.error('進行状況の復元に失敗:', e);
             }
         }
     }

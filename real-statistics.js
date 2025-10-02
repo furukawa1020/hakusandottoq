@@ -1,6 +1,10 @@
-// 実統計システム（モックデータ削除）
+// 実統計システム（アクセス制限付き）
 class RealStatisticsSystem {
     constructor() {
+        // 統計ページ以外では詳細統計を無効化
+        this.isStatsPage = window.location.pathname.includes('stats.html') || 
+                          window.location.search.includes('stats=true');
+        
         this.startTime = Date.now();
         this.sessionData = {
             sessionStart: this.startTime,
@@ -226,7 +230,7 @@ class RealStatisticsSystem {
         notification.className = 'achievement-notification';
         notification.innerHTML = `
             <div class="achievement-content">
-                <div class="achievement-icon">🏆</div>
+                <div class="achievement-icon">トロフィー</div>
                 <div class="achievement-text">
                     <h4>実績解除！</h4>
                     <p><strong>${achievement.name}</strong></p>
@@ -288,13 +292,13 @@ class RealStatisticsSystem {
         return `
             <div class="real-stats-display">
                 <div class="stats-header">
-                    <h3>📊 リアル統計データ</h3>
+                    <h3>リアル統計データ</h3>
                     <p class="stats-note">※実際の利用データに基づく統計です</p>
                 </div>
                 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon">🎯</div>
+                        <div class="stat-icon">ターゲット</div>
                         <div class="stat-content">
                             <h4>総セッション数</h4>
                             <p class="stat-value">${stats.totalSessions}回</p>
@@ -302,7 +306,7 @@ class RealStatisticsSystem {
                     </div>
                     
                     <div class="stat-card">
-                        <div class="stat-icon">🏅</div>
+                        <div class="stat-icon">バッジ</div>
                         <div class="stat-content">
                             <h4>取得バッジ数</h4>
                             <p class="stat-value">${stats.totalBadges}個</p>
@@ -326,7 +330,7 @@ class RealStatisticsSystem {
                     </div>
                     
                     <div class="stat-card">
-                        <div class="stat-icon">🏆</div>
+                        <div class="stat-icon">トロフィー</div>
                         <div class="stat-content">
                             <h4>解除実績数</h4>
                             <p class="stat-value">${Object.keys(stats.achievementsUnlocked).length}個</p>
@@ -353,7 +357,7 @@ class RealStatisticsSystem {
                 </div>
                 
                 <div class="location-breakdown">
-                    <h4>📍 地域別訪問統計</h4>
+                    <h4>地域別訪問統計</h4>
                     <div class="location-stats">
                         ${Object.entries(stats.locationVisits).map(([location, count]) => `
                             <div class="location-stat">
@@ -365,7 +369,7 @@ class RealStatisticsSystem {
                 </div>
                 
                 <div class="achievements-list">
-                    <h4>🏆 解除済み実績</h4>
+                    <h4>解除済み実績</h4>
                     <div class="achievements">
                         ${Object.values(stats.achievementsUnlocked).map(achievement => `
                             <div class="achievement-item">
@@ -405,6 +409,19 @@ class RealStatisticsSystem {
         } else {
             return `${seconds}秒`;
         }
+    }
+
+    getAllStats() {
+        return {
+            totalVisits: this.totalStats.totalSessions || 0,
+            totalBadges: this.totalStats.badgeCollections || 0,
+            activeDays: Object.keys(this.totalStats.dailyStats || {}).length,
+            averageSessionTime: this.totalStats.totalTimeSpent || 0,
+            regionVisits: this.totalStats.locationVisits || {},
+            rarityDistribution: this.totalStats.rarityStats || {},
+            photosTaken: this.totalStats.photosTaken || 0,
+            featuresUsed: Array.from(this.totalStats.featuresUsed || [])
+        };
     }
 
     exportStats() {
@@ -659,6 +676,15 @@ function trackFeatureUsage(feature) {
 }
 
 function showRealStats() {
+    // 統計ページでのみ利用可能
+    const isStatsPage = window.location.pathname.includes('stats.html') || 
+                        window.location.search.includes('stats=true');
+    
+    if (!isStatsPage) {
+        console.log('詳細統計データは stats.html でのみ利用可能です');
+        return false;
+    }
+    
     if (!window.realStatsSystem) {
         window.realStatsSystem = new RealStatisticsSystem();
     }
@@ -673,7 +699,7 @@ function showRealStats() {
             ${statsHTML}
             <div class="stats-actions">
                 <button onclick="window.realStatsSystem.exportStats()" class="export-stats-btn">
-                    📊 データエクスポート
+                    データエクスポート
                 </button>
                 <button onclick="window.realStatsSystem.resetStats()" class="reset-stats-btn">
                     🗑️ データリセット

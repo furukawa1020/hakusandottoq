@@ -379,13 +379,13 @@
                     screen_resolution: `${screen.width}x${screen.height}`,
                     language: navigator.language
                 })
-            }).catch(err => console.log('📊 Analytics:', err.message));
+            }).catch(err => console.log('Analytics:', err.message));
         }
 
         // グローバル関数
         window.showBadgeCollection = function() {
-            if (window.badgeSystem) {
-                window.badgeSystem.showBadgeModal();
+            if (window.badgeSystem && window.badgeSystem.showCollectionProgress) {
+                window.badgeSystem.showCollectionProgress();
             } else {
                 console.warn('バッジシステムが利用できません');
             }
@@ -400,8 +400,8 @@
         };
 
         window.shareBadgeProgress = function() {
-            if (window.badgeSystem) {
-                window.badgeSystem.showSocialShareModal();
+            if (window.badgeSystem && window.badgeSystem.shareCollectionProgress) {
+                window.badgeSystem.shareCollectionProgress();
             } else {
                 console.warn('バッジシステムが利用できません');
             }

@@ -1,12 +1,12 @@
-// 白山市バッジシステム（画像ベース・商用権フリー）
+// 白山市            mattou: { name: '松任地区', color: '#45B7D1', symbol: '松' },            kawachi: { name: '河内地区', color: '#96CEB4', symbol: '河' },               oguchi: { name: '尾口地区', color: '#E76F51', symbol: '尾' }      mattou: { name: '松任地区', color: '#45B7D1', symbol: '松' },            kawachi: { name: '河内地区', color: '#96CEB4', symbol: '河' },ジシス            oguchi: { name: '尾口地区', color: '#E76F51', symbol: '尾' }ム（画像ベース・商用権フリー）
 class HakusanBadgeSystem {
     constructor() {
         this.regions = {
-            tsurugi: { name: '鶴来地区', color: '#FF6B6B', symbol: '⛩️' },
+            tsurugi: { name: '鶴来地区', color: '#FF6B6B', symbol: '鶴' },
             mikawa: { name: '美川地区', color: '#4ECDC4', symbol: '🌊' },
             mattou: { name: '松任地区', color: '#45B7D1', symbol: '🏛️' },
             kawachi: { name: '河内地区', color: '#96CEB4', symbol: '🏞️' },
-            shiramine: { name: '白峰地区', color: '#FFEAA7', symbol: '⛰️' },
+            shiramine: { name: '白峰地区', color: '#FFEAA7', symbol: '白' },
             yoshinodani: { name: '吉野谷地区', color: '#DDA0DD', symbol: '🌸' },
             torigoe: { name: '鳥越地区', color: '#F4A261', symbol: '🏰' },
             oguchi: { name: '尾口地区', color: '#E76F51', symbol: '🏔️' }
@@ -424,7 +424,7 @@ class HakusanBadgeSystem {
         if (confirm('すべてのバッジデータを削除しますか？この操作は取り消せません。')) {
             this.collectedBadges = [];
             this.saveBadges();
-            console.log('🗑️ バッジデータを削除しました');
+            console.log('バッジデータを削除しました');
             return true;
         }
         return false;
@@ -734,12 +734,18 @@ window.HakusanBadges = HakusanBadgeSystem;
 
 console.log('白山バッジシステム読み込み完了');
 
-// デバッグ関数
+// デバッグ関数（基本情報のみ）
 window.debugBadges = () => {
     console.log('バッジシステム情報:');
     console.log('取得済み:', window.badgeSystem.getCollectedBadges());
-    console.log('統計:', window.badgeSystem.getCollectionStats());
-    console.log('URL一覧:', window.badgeSystem.generateUniqueURLs());
+    const stats = window.badgeSystem.getCollectionStats();
+    console.log('基本統計:', {
+        total: stats.total,
+        totalPossible: stats.totalPossible,
+        completion: Math.round(stats.completionRate) + '%',
+        regions: stats.regions,
+        rarityLevels: stats.rarityLevels
+    });
 };
 
 // 進捗シェア用グローバル関数
@@ -748,3 +754,20 @@ window.shareBadgeProgress = () => {
         window.badgeSystem.shareCollectionProgress();
     }
 };
+
+// UIアクセス用のエイリアス関数を追加
+if (typeof window !== 'undefined') {
+    // showBadgeModal エイリアス
+    window.showBadgeModalAlias = function() {
+        if (window.badgeSystem) {
+            window.badgeSystem.showCollectionProgress();
+        }
+    };
+    
+    // showSocialShareModal エイリアス  
+    window.showSocialShareModalAlias = function() {
+        if (window.badgeSystem) {
+            window.badgeSystem.shareCollectionProgress();
+        }
+    };
+}

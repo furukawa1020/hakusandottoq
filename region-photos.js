@@ -642,3 +642,46 @@ class HakusanRegionPhotos {
 
 // グローバルインスタンス作成
 window.hakusanPhotos = new HakusanRegionPhotos();
+
+// showPhotoGallery エイリアスを追加
+window.hakusanPhotos.showPhotoGallery = function() {
+    // フォトギャラリーを表示する処理
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+    
+    modal.innerHTML = `
+        <div style="
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+        ">
+            <h3>地域写真ギャラリー</h3>
+            <p>白山地域の美しい風景をお楽しみください。</p>
+            <button onclick="this.parentElement.parentElement.remove()" style="
+                background: #e74c3c;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 15px;
+            ">閉じる</button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+};
