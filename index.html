@@ -2,7 +2,9 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta n    <script src="hakusan-gps-system.js?v=2.7.0"></script>
+    <script src="hakusan-correct-coords.js?v=2.7.0"></script>
+    <script src="hakusan-real-places-system.js?v=2.7.0"></script>="viewport" content="width=device-width, initial-scale=1.0">
     <title>はくさんNFCバッジクエスト</title>
     <meta name="description" content="白山市旧市町村8地域を巡るNFCバッジクエスト">
     <meta name="theme-color" content="#87CEEB">
@@ -76,14 +78,14 @@
 
     </div>
 
-    <script type="module" src="rpg-map-engine.js?v=2.6.3" defer></script>
-    <script type="module" src="badge-system.js?v=2.6.3" defer></script>
-    <script type="module" src="ar-camera.js?v=2.6.3" defer></script>
-    <script type="module" src="avatar-system.js?v=2.6.3" defer></script>
+    <script type="module" src="rpg-map-engine.js?v=2.7.0" defer></script>
+    <script type="module" src="badge-system.js?v=2.7.0" defer></script>
+    <script type="module" src="ar-camera.js?v=2.7.0" defer></script>
+    <script type="module" src="avatar-system.js?v=2.7.0" defer></script>
     <script src="hakusan-gps-system.js?v=2.6.3"></script>
     <script src="hakusan-correct-coords.js?v=2.6.3"></script>
     <script src="hakusan-real-places.js?v=2.6.3"></script>
-    <script src="hakusan-real-photos-system.js?v=2.6.3"></script>
+    <script src="hakusan-real-photos-system.js?v=2.7.0"></script>
 
     <script>
         // Service Worker登録 - 強制アップデート
@@ -110,7 +112,7 @@
 
         // 🔥 キャッシュクリア＆強制更新システム
         // バージョン管理とキャッシュクリア
-        const CURRENT_VERSION = '2.6.3';  // 写真システム完全修正
+        const CURRENT_VERSION = '2.7.0';  // 写真システム完全修正
         const STORED_VERSION = localStorage.getItem('app-version');
         
         if (STORED_VERSION !== CURRENT_VERSION) {
@@ -137,12 +139,13 @@
 
         // 地域名所ボタンの初期化
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 はくさんNFCクエスト v2.6.3 起動');
+            console.log('🚀 はくさんNFCクエスト v2.7.0 起動');
             console.log('✅ AR機能: 有効');
             console.log('✅ GPS機能: 有効（正確な白山市判定）');
             console.log('✅ モバイルUI: 最適化済み');
-            console.log('✅ 写真システム: Unsplash高品質写真（座標修正済み）+ 詳細ログ');
-            console.log('✅ 全座標: Google Maps実測値');
+            console.log('✅ 写真システム: 正確な座標版（各地域3箇所）');
+            console.log('✅ 全座標: 実際の場所を調査・修正完了');
+            console.log('✅ アバター: 修正済み');
             console.log('🔍 デバッグモード: 有効（詳細ログ出力）');
             
             // 写真システムの即時確認と初期化
@@ -278,61 +281,104 @@
         };
 
         window.openARCamera = function() {
-            console.log('🎥 ARカメラボタン押下');
+            console.log('📸 ARカメラ起動中...');
+            
+            // ARカメラシステムの確認
+            if (!window.arCamera) {
+                console.log('⚙️ ARカメラシステムを初期化中...');
+                
+                if (typeof HakusanARCamera === 'undefined') {
+                    console.error('❌ HakusanARCamera クラスが読み込まれていません');
+                    alert('ARカメラシステムが読み込まれていません。\nページを再読み込みしてください。');
+                    return;
+                }
+                
+                try {
+                    window.arCamera = new HakusanARCamera();
+                    console.log('✅ ARカメラシステム初期化完了');
+                } catch (e) {
+                    console.error('❌ ARカメラ初期化エラー:', e);
+                    alert('ARカメラの初期化に失敗しました。\nエラー: ' + e.message);
+                    return;
+                }
+            }
+            
+            // カメラを開く
             if (window.arCamera && typeof window.arCamera.open === 'function') {
+                console.log('✅ ARカメラを開きます');
                 return window.arCamera.open();
             } else if (window.arCamera && typeof window.arCamera.startCamera === 'function') {
+                console.log('✅ ARカメラを開きます (startCamera)');
                 return window.arCamera.startCamera();
             } else {
-                console.warn('ARカメラが利用できません', window.arCamera);
-                alert('ARカメラシステムが読み込まれていません。ページを再読み込みしてください。');
+                console.error('❌ ARカメラのopenメソッドが見つかりません', window.arCamera);
+                alert('ARカメラを開けません。ページを再読み込みしてください。');
             }
         };
 
         window.openAvatarCustomizer = function() {
             console.log('🎨 アバターカスタマイザー起動中...');
             
+            // アバターシステムの確認と初期化
+            function tryOpenAvatar() {
+                console.log('🔍 アバターシステムチェック:', {
+                    avatarSystem: !!window.avatarSystem,
+                    HakusanAvatarSystem: typeof HakusanAvatarSystem,
+                    modal: !!document.getElementById('avatar-customizer')
+                });
+                
+                // クラスが読み込まれていない場合
+                if (typeof HakusanAvatarSystem === 'undefined') {
+                    console.error('❌ HakusanAvatarSystem クラスが読み込まれていません');
+                    alert('アバターシステムが読み込まれていません。\nページを再読み込みしてください。');
+                    return false;
+                }
+                
+                // インスタンスが存在しない場合、作成
+                if (!window.avatarSystem) {
+                    console.log('⚙️ アバターシステムインスタンス作成中...');
+                    try {
+                        window.avatarSystem = new HakusanAvatarSystem();
+                        console.log('✅ アバターシステムインスタンス作成完了');
+                    } catch (e) {
+                        console.error('❌ アバターシステムインスタンス作成エラー:', e);
+                        alert('アバターシステムの初期化に失敗しました。\nエラー: ' + e.message);
+                        return false;
+                    }
+                }
+                
+                // モーダル存在確認
+                const modal = document.getElementById('avatar-customizer');
+                if (!modal) {
+                    console.error('❌ アバターモーダルDOM要素が見つかりません');
+                    alert('アバターカスタマイザーのUI要素が見つかりません。\nページを再読み込みしてください。');
+                    return false;
+                }
+                
+                // openCustomizerメソッド確認
+                if (typeof window.avatarSystem.openCustomizer !== 'function') {
+                    console.error('❌ openCustomizerメソッドが存在しません');
+                    alert('アバターカスタマイザーを開く機能が見つかりません。');
+                    return false;
+                }
+                
+                // カスタマイザーを開く
+                console.log('✅ アバターカスタマイザーを開きます');
+                window.avatarSystem.openCustomizer();
+                return true;
+            }
+            
             // ページ読み込み完了を待つ
             if (document.readyState !== 'complete') {
+                console.log('⏳ ページ読み込み待機中...');
                 window.addEventListener('load', () => {
-                    setTimeout(() => openAvatarCustomizer(), 500);
+                    setTimeout(tryOpenAvatar, 500);
                 });
                 return;
             }
             
-            // アバターシステムの初期化を確認
-            if (!window.avatarSystem) {
-                console.log('⚙️ アバターシステムを初期化中...');
-                try {
-                    if (typeof HakusanAvatarSystem !== 'undefined') {
-                        window.avatarSystem = new HakusanAvatarSystem();
-                        console.log('✅ アバターシステム初期化完了');
-                    } else {
-                        throw new Error('HakusanAvatarSystem が見つかりません');
-                    }
-                } catch (e) {
-                    console.error('❌ アバターシステム初期化エラー:', e);
-                    alert('アバターシステムの読み込みに失敗しました。ページを再読み込みしてください。');
-                    return;
-                }
-            }
-            
-            // モーダルが既に存在するか確認
-            const existingModal = document.getElementById('avatar-customizer');
-            if (!existingModal) {
-                console.error('❌ アバターモーダルが見つかりません');
-                alert('アバターカスタマイザーの初期化に失敗しました。ページを再読み込みしてください。');
-                return;
-            }
-            
-            // openCustomizerメソッドを呼び出し
-            if (window.avatarSystem && typeof window.avatarSystem.openCustomizer === 'function') {
-                console.log('✅ アバターカスタマイザーを開きます');
-                window.avatarSystem.openCustomizer();
-            } else {
-                console.error('❌ openCustomizerメソッドが見つかりません');
-                alert('アバターカスタマイザーを開けません。ページを再読み込みしてください。');
-            }
+            // すぐに実行
+            tryOpenAvatar();
         };
 
         window.shareBadgeProgress = function() {

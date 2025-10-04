@@ -1,9 +1,9 @@
 // 白山地域探索システム Service Worker
-// Version: 2.6.3 - 写真システムログ強化版
+// Version: 2.7.0 - 正確な座標版
 
-const CACHE_NAME = 'hakusan-v2.6.3';
-const STATIC_CACHE = 'hakusan-static-v2.6.3';
-const DYNAMIC_CACHE = 'hakusan-dynamic-v2.6.3';
+const CACHE_NAME = 'hakusan-v2.7.0';
+const STATIC_CACHE = 'hakusan-static-v2.7.0';
+const DYNAMIC_CACHE = 'hakusan-dynamic-v2.7.0';
 
 // Netlify最適化キャッシュ戦略
 const CACHE_STRATEGIES = {
