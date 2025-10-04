@@ -51,11 +51,8 @@
                 <button class="btn btn-secondary" onclick="shareBadgeProgress()">
                     <span class="icon-share">◆</span> SNS共有
                 </button>
-                <button class="btn btn-secondary" onclick="showRegionPhotos()">
-                    <span class="icon-gallery">▣</span> 地域写真
-                </button>
-                <button class="btn btn-secondary" onclick="runSystemTest()" style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4);">
-                    <span class="icon-badge">▶</span> システム診断
+                <button class="btn btn-secondary" id="regionPlacesBtn">
+                    <span class="icon-gallery">▣</span> 地域の名所
                 </button>
             </div>
         </div>
@@ -68,9 +65,9 @@
                     <h3 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0;">はくさん8地域クエストマップ</h3>
                 </div>
                 
-                <div style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); border-radius: 10px; padding: 10px; z-index: 10;">
-                    <h4 style="color: white; margin: 0 0 10px 0; font-size: 14px;">現在位置</h4>
-                    <canvas id="miniMapCanvas" width="200" height="150" style="border-radius: 5px;"></canvas>
+                <div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); border-radius: 8px; padding: 5px; z-index: 10;" id="miniMapContainer">
+                    <h4 style="color: white; margin: 0 0 5px 0; font-size: 11px;">現在位置</h4>
+                    <canvas id="miniMapCanvas" width="120" height="90" style="border-radius: 5px;"></canvas>
                 </div>
                 
                 <div style="position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); border-radius: 10px; padding: 15px; z-index: 10; max-width: 250px;">
@@ -123,8 +120,7 @@
     <script type="module" src="badge-system.js" defer></script>
     <script type="module" src="ar-camera.js" defer></script>
     <script type="module" src="avatar-system.js" defer></script>
-    <script type="module" src="region-photos.js" defer></script>
-    <script type="module" src="system-tester.js" defer></script>
+    <script src="hakusan-real-places.js"></script>
 
     <script>
         // Service Worker登録
@@ -136,6 +132,82 @@
                 .catch(error => {
                     console.log('SW: Service Worker registration failed:', error);
                 });
+        }
+
+        // 地域名所ボタンの初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            const regionPlacesBtn = document.getElementById('regionPlacesBtn');
+            if (regionPlacesBtn) {
+                regionPlacesBtn.addEventListener('click', () => {
+                    // 現在の地域を取得
+                    const currentRegion = getCurrentRegionId();
+                    if (currentRegion && window.hakusanPlaces) {
+                        window.hakusanPlaces.showRegionPlaces(currentRegion);
+                    } else {
+                        // 地域選択モーダルを表示
+                        showRegionSelector();
+                    }
+                });
+            }
+        });
+
+        // 現在の地域IDを取得
+        function getCurrentRegionId() {
+            if (window.badgeSystem && window.badgeSystem.currentRegion) {
+                return window.badgeSystem.currentRegion;
+            }
+            return null;
+        }
+
+        // 地域選択モーダル
+        function showRegionSelector() {
+            const regions = [
+                { id: 'shiramine', name: '白峰' },
+                { id: 'oguchi', name: '尾口' },
+                { id: 'yoshinodani', name: '吉野谷' },
+                { id: 'torigoe', name: '鳥越' },
+                { id: 'kawachi', name: '河内' },
+                { id: 'tsurugi', name: '鶴来' },
+                { id: 'mattou', name: '松任' },
+                { id: 'mikawa', name: '美川' }
+            ];
+
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8); z-index: 9999; display: flex;
+                align-items: center; justify-content: center; padding: 20px;
+            `;
+
+            const buttonsHtml = regions.map(r => `
+                <button onclick="window.hakusanPlaces.showRegionPlaces('${r.id}'); this.parentElement.parentElement.parentElement.remove();" style="
+                    background: linear-gradient(135deg, #87CEEB, #9ACD32);
+                    color: white; border: none; padding: 15px; margin: 8px;
+                    border-radius: 12px; font-size: 16px; font-weight: bold;
+                    cursor: pointer; width: calc(50% - 20px); box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    📍 ${r.name}
+                </button>
+            `).join('');
+
+            modal.innerHTML = `
+                <div style="
+                    max-width: 500px; width: 100%; background: white;
+                    border-radius: 20px; padding: 30px; text-align: center;
+                ">
+                    <h2 style="color: #2c3e50; margin-bottom: 20px;">地域を選択してください</h2>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                        ${buttonsHtml}
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        background: #95a5a6; color: white; border: none;
+                        padding: 12px 30px; margin-top: 20px; border-radius: 25px;
+                        font-size: 14px; cursor: pointer;
+                    ">閉じる</button>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
         }
 
         // グローバル関数

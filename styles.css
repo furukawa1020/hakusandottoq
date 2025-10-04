@@ -272,7 +272,18 @@ header p {
         left: 10px;
         right: 10px;
         max-width: none;
-        padding: 15px;
+        padding: 12px;
+        font-size: 12px;
+    }
+    
+    .controls-panel h3 {
+        font-size: 14px;
+        margin: 0 0 8px 0;
+    }
+    
+    .controls-panel p {
+        font-size: 11px;
+        margin: 3px 0;
     }
     
     .game-status {
@@ -280,15 +291,65 @@ header p {
         left: 10px;
         right: 10px;
         padding: 10px;
+        font-size: 12px;
+    }
+    
+    .status-item {
+        font-size: 12px;
+        margin: 3px 0;
     }
     
     .action-buttons {
         justify-content: center;
+        gap: 6px;
     }
     
     .action-buttons .btn {
-        flex: 1;
-        min-width: 80px;
+        flex: 1 1 calc(50% - 6px);
+        min-width: 0;
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+    
+    /* ミニマップをさらに小さく */
+    #miniMapContainer {
+        top: 70px !important;
+        right: 5px !important;
+        padding: 3px !important;
+    }
+    
+    #miniMapContainer h4 {
+        font-size: 9px !important;
+        margin: 0 0 3px 0 !important;
+    }
+    
+    #miniMapCanvas {
+        width: 90px !important;
+        height: 68px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls-panel {
+        padding: 10px;
+    }
+    
+    .controls-panel h3 {
+        font-size: 13px;
+    }
+    
+    .action-buttons .btn {
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+    
+    .game-status {
+        padding: 8px;
+        font-size: 11px;
+    }
+    
+    .status-item {
+        font-size: 11px;
     }
 }
 

@@ -276,41 +276,50 @@ class HakusanARCamera {
     }
     
     drawBadgeOverlay() {
+        if (!this.currentBadge) return;
+        
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
+        const size = 120;
         
-        // バッジ画像をオーバーレイ
-        if (this.currentBadge && this.currentBadge.image) {
-            const img = new Image();
-            img.onload = () => {
-                const size = 120;
-                this.ctx.save();
-                
-                // 透明度設定
-                this.ctx.globalAlpha = 0.8;
-                
-                // バッジ背景
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-                this.ctx.fillRect(centerX - size/2 - 10, centerY - size/2 - 10, size + 20, size + 20);
-                
-                // バッジ画像
-                this.ctx.drawImage(img, centerX - size/2, centerY - size/2, size, size);
-                
-                // バッジ情報テキスト
-                this.ctx.fillStyle = 'white';
-                this.ctx.font = 'bold 16px sans-serif';
-                this.ctx.textAlign = 'center';
-                this.ctx.strokeStyle = 'black';
-                this.ctx.lineWidth = 3;
-                
-                const text = `${this.currentBadge.regionName} ${this.currentBadge.rarityName}`;
-                this.ctx.strokeText(text, centerX, centerY + size/2 + 25);
-                this.ctx.fillText(text, centerX, centerY + size/2 + 25);
-                
-                this.ctx.restore();
-            };
-            img.src = this.currentBadge.image;
-        }
+        // バッジ背景（グラデーション）
+        const gradient = this.ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size);
+        gradient.addColorStop(0, 'rgba(135, 206, 235, 0.8)');
+        gradient.addColorStop(1, 'rgba(154, 205, 50, 0.8)');
+        
+        this.ctx.save();
+        
+        // 背景円
+        this.ctx.beginPath();
+        this.ctx.arc(centerX, centerY, size/2 + 15, 0, Math.PI * 2);
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        this.ctx.fill();
+        
+        // バッジ円（ジオパークカラー）
+        this.ctx.beginPath();
+        this.ctx.arc(centerX, centerY, size/2, 0, Math.PI * 2);
+        this.ctx.fillStyle = gradient;
+        this.ctx.fill();
+        this.ctx.strokeStyle = '#fff';
+        this.ctx.lineWidth = 4;
+        this.ctx.stroke();
+        
+        // バッジ絵文字
+        this.ctx.font = 'bold 50px sans-serif';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillStyle = '#fff';
+        this.ctx.fillText(this.currentBadge.emoji || '★', centerX, centerY);
+        
+        // バッジ名
+        this.ctx.font = 'bold 16px sans-serif';
+        this.ctx.fillStyle = '#fff';
+        this.ctx.strokeStyle = '#000';
+        this.ctx.lineWidth = 3;
+        this.ctx.strokeText(this.currentBadge.name || 'バッジ', centerX, centerY + size/2 + 30);
+        this.ctx.fillText(this.currentBadge.name || 'バッジ', centerX, centerY + size/2 + 30);
+        
+        this.ctx.restore();
     }
     
     drawLocationOverlay() {

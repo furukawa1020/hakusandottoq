@@ -928,9 +928,17 @@ class HakusanAvatarSystem {
 // グローバル初期化とエクスポート
 window.HakusanAvatarSystem = HakusanAvatarSystem;
 
+// DOMContentLoaded時に自動初期化
+document.addEventListener('DOMContentLoaded', () => {
+    if (!window.avatarSystem) {
+        console.log('🎨 アバターシステムを自動初期化...');
+        window.avatarSystem = new HakusanAvatarSystem();
+    }
+});
+
 // 即座に利用可能にする
 if (typeof window !== 'undefined') {
     window.avatarSystemReady = true;
 }
 
-console.log('アバターシステム読み込み完了 - HakusanAvatarSystem利用可能');
+console.log('👤 アバターシステム読み込み完了 - HakusanAvatarSystem利用可能');
