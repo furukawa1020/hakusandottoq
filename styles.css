@@ -268,64 +268,123 @@ header p {
 /* UIオーバーレイのレスポンシブ対応 */
 @media (max-width: 768px) {
     .controls-panel {
-        bottom: 10px;
-        left: 10px;
-        right: 10px;
+        bottom: 2px;
+        left: 2px;
+        right: 2px;
         max-width: none;
-        padding: 12px;
-        font-size: 12px;
+        padding: 6px;
+        font-size: 10px;
+        border-radius: 10px;
     }
     
     .controls-panel h3 {
-        font-size: 14px;
-        margin: 0 0 8px 0;
+        font-size: 10px;
+        margin: 0 0 3px 0;
+        display: none; /* 「操作方法」タイトルを非表示 */
     }
     
     .controls-panel p {
-        font-size: 11px;
-        margin: 3px 0;
+        font-size: 8px;
+        margin: 1px 0;
+        display: none; /* 操作説明テキストを非表示 */
     }
     
     .game-status {
-        top: 10px;
-        left: 10px;
-        right: 10px;
-        padding: 10px;
-        font-size: 12px;
+        top: 2px;
+        left: 2px;
+        right: auto;
+        padding: 4px 8px;
+        font-size: 9px;
+        max-width: 45%;
+        border-radius: 8px;
     }
     
     .status-item {
-        font-size: 12px;
-        margin: 3px 0;
+        font-size: 9px;
+        margin: 1px 0;
+        gap: 4px;
+    }
+    
+    .status-item .icon-location,
+    .status-item .icon-mountain,
+    .status-item .icon-badge {
+        width: 14px;
+        height: 14px;
+        font-size: 10px;
+        margin-right: 4px;
     }
     
     .action-buttons {
         justify-content: center;
-        gap: 6px;
+        gap: 3px;
+        margin-top: 3px;
+        flex-wrap: wrap;
     }
     
     .action-buttons .btn {
-        flex: 1 1 calc(50% - 6px);
+        flex: 1 1 calc(50% - 3px);
         min-width: 0;
-        font-size: 11px;
-        padding: 8px 10px;
+        font-size: 8px;
+        padding: 5px 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border-radius: 12px;
     }
     
-    /* ミニマップをさらに小さく */
+    .action-buttons .btn .icon-badge,
+    .action-buttons .btn .icon-gallery,
+    .action-buttons .btn .icon-location {
+        width: 12px;
+        height: 12px;
+        font-size: 9px;
+        margin-right: 2px;
+    }
+    
+    /* ミニマップを極小化 - スマホ専用 */
     #miniMapContainer {
-        top: 70px !important;
-        right: 5px !important;
-        padding: 3px !important;
+        top: 2px !important;
+        right: 2px !important;
+        padding: 2px !important;
+        background: rgba(0,0,0,0.6) !important;
+        border-radius: 4px !important;
     }
     
     #miniMapContainer h4 {
-        font-size: 9px !important;
-        margin: 0 0 3px 0 !important;
+        font-size: 7px !important;
+        margin: 0 0 1px 0 !important;
     }
     
     #miniMapCanvas {
-        width: 90px !important;
-        height: 68px !important;
+        width: 60px !important;
+        height: 45px !important;
+        display: block !important;
+    }
+    
+    /* 地域リストパネルを極小化 */
+    div[style*="bottom: 20px"][style*="right: 20px"] {
+        bottom: 2px !important;
+        right: 2px !important;
+        padding: 6px !important;
+        border-radius: 8px !important;
+        max-width: 100px !important;
+        font-size: 8px !important;
+    }
+    
+    div[style*="bottom: 20px"][style*="right: 20px"] h4 {
+        font-size: 9px !important;
+        margin: 0 0 4px 0 !important;
+    }
+    
+    #regionList {
+        gap: 2px !important;
+        font-size: 7px !important;
+    }
+    
+    /* マップコンテナの高さ調整 */
+    .map-container {
+        height: calc(100vh - 200px) !important;
+        min-height: 400px !important;
     }
 }
 

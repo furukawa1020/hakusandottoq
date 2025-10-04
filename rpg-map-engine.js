@@ -49,14 +49,14 @@ class HakusanRPGEngine {
         
         // バッジポイント（白山市の正確な地理位置に基づく）
         this.badgePoints = {
-            mikawa: { x: 120, y: 450, name: '美川', discovered: false },      // 海岸部・日本海側
-            mattou: { x: 180, y: 420, name: '松任', discovered: false },      // 市中心部・平野部
-            tsurugi: { x: 280, y: 350, name: '鶴来', discovered: false },     // 東部・手取川沿い
-            kawachi: { x: 350, y: 280, name: '河内', discovered: false },     // 東南部・山間入口
-            torigoe: { x: 380, y: 200, name: '鳥越', discovered: false },     // 東北部・鳥越城跡
-            yoshinodani: { x: 420, y: 180, name: '吉野谷', discovered: false }, // 東部山間・中宮温泉
-            oguchi: { x: 460, y: 120, name: '尾口', discovered: false },      // 最東部・一里野温泉
-            shiramine: { x: 500, y: 80, name: '白峰', discovered: false }     // 最奥部・白山登山口
+            mikawa: { x: 160, y: 520, name: '美川', discovered: false },      // 海岸部・日本海側（西端）
+            mattou: { x: 220, y: 480, name: '松任', discovered: false },      // 市中心部・平野部
+            tsurugi: { x: 280, y: 400, name: '鶴来', discovered: false },     // 東部・手取川沿い
+            kawachi: { x: 340, y: 340, name: '河内', discovered: false },     // 東南部・山間入口
+            torigoe: { x: 360, y: 280, name: '鳥越', discovered: false },     // 東北部・鳥越城跡
+            yoshinodani: { x: 400, y: 220, name: '吉野谷', discovered: false }, // 東部山間・中宮温泉
+            oguchi: { x: 440, y: 160, name: '尾口', discovered: false },      // 最東部・一里野温泉
+            shiramine: { x: 480, y: 100, name: '白峰', discovered: false }     // 最奥部・白山登山口
         };
         
         // 入力管理

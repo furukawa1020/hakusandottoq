@@ -34,9 +34,8 @@
 
         <div class="controls-panel">
             <h3>操作方法</h3>
-            <p><strong>PC:</strong> WASD または矢印キー、スペースキーで調査</p>
-            <p><strong>モバイル:</strong> スワイプで移動、タップで移動先指定</p>
-            <p><strong>マップ:</strong> 地域発見時に自動的に地域ページへの案内が表示されます</p>
+            <p><strong>PC:</strong> WASD または矢印キー</p>
+            <p><strong>スマホ:</strong> スワイプで移動</p>
             
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="showBadgeCollection()">
@@ -47,9 +46,6 @@
                 </button>
                 <button class="btn btn-secondary" onclick="openAvatarCustomizer()">
                     <span class="icon-location">●</span> アバター
-                </button>
-                <button class="btn btn-secondary" onclick="shareBadgeProgress()">
-                    <span class="icon-share">◆</span> SNS共有
                 </button>
                 <button class="btn btn-secondary" id="regionPlacesBtn">
                     <span class="icon-gallery">▣</span> 地域の名所
@@ -65,9 +61,9 @@
                     <h3 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0;">はくさん8地域クエストマップ</h3>
                 </div>
                 
-                <div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); border-radius: 8px; padding: 5px; z-index: 10;" id="miniMapContainer">
-                    <h4 style="color: white; margin: 0 0 5px 0; font-size: 11px;">現在位置</h4>
-                    <canvas id="miniMapCanvas" width="120" height="90" style="border-radius: 5px;"></canvas>
+                <div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); border-radius: 6px; padding: 4px; z-index: 10;" id="miniMapContainer">
+                    <h4 style="color: white; margin: 0 0 3px 0; font-size: 9px;">現在位置</h4>
+                    <canvas id="miniMapCanvas" width="60" height="45" style="border-radius: 4px;"></canvas>
                 </div>
                 
                 <div style="position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); border-radius: 10px; padding: 15px; z-index: 10; max-width: 250px;">
@@ -77,43 +73,7 @@
             </div>
         </div>
 
-        <div class="region-links">
-            <h3>地域詳細ページ</h3>
-            <div class="region-grid">
-                <a href="town/shiramine.html" class="region-card">
-                    <div class="region-name">白峰</div>
-                    <p>白山の恵みが息づく山間地域</p>
-                </a>
-                <a href="town/oguchi.html" class="region-card">
-                    <div class="region-name">尾口</div>
-                    <p>温泉と歴史が調和する観光地</p>
-                </a>
-                <a href="town/kawachi.html" class="region-card">
-                    <div class="region-name">河内</div>
-                    <p>清流と自然に恵まれた田園地帯</p>
-                </a>
-                <a href="town/yoshinodani.html" class="region-card">
-                    <div class="region-name">吉野谷</div>
-                    <p>文化と伝統が残る歴史ある里</p>
-                </a>
-                <a href="town/torigoe.html" class="region-card">
-                    <div class="region-name">鳥越</div>
-                    <p>一向一揆の舞台となった歴史の地</p>
-                </a>
-                <a href="town/tsurugi.html" class="region-card">
-                    <div class="region-name">剱</div>
-                    <p>剱岳の麓に広がる豊かな自然</p>
-                </a>
-                <a href="town/mikawa.html" class="region-card">
-                    <div class="region-name">美川</div>
-                    <p>日本海に面した港町の風情</p>
-                </a>
-                <a href="town/mattou.html" class="region-card">
-                    <div class="region-name">松任</div>
-                    <p>白山市の中心地として発展</p>
-                </a>
-            </div>
-        </div>
+
     </div>
 
     <script type="module" src="rpg-map-engine.js" defer></script>
@@ -121,6 +81,7 @@
     <script type="module" src="ar-camera.js" defer></script>
     <script type="module" src="avatar-system.js" defer></script>
     <script src="hakusan-real-places.js"></script>
+    <script src="hakusan-real-photos-system.js"></script>
 
     <script>
         // Service Worker登録
@@ -139,75 +100,103 @@
             const regionPlacesBtn = document.getElementById('regionPlacesBtn');
             if (regionPlacesBtn) {
                 regionPlacesBtn.addEventListener('click', () => {
-                    // 現在の地域を取得
-                    const currentRegion = getCurrentRegionId();
-                    if (currentRegion && window.hakusanPlaces) {
-                        window.hakusanPlaces.showRegionPlaces(currentRegion);
-                    } else {
-                        // 地域選択モーダルを表示
-                        showRegionSelector();
-                    }
+                    // 写真付き地域選択モーダルを表示
+                    showRegionSelectorWithPhotos();
                 });
             }
         });
 
-        // 現在の地域IDを取得
-        function getCurrentRegionId() {
-            if (window.badgeSystem && window.badgeSystem.currentRegion) {
-                return window.badgeSystem.currentRegion;
-            }
-            return null;
-        }
-
-        // 地域選択モーダル
-        function showRegionSelector() {
+        // 写真付き地域選択モーダル
+        function showRegionSelectorWithPhotos() {
             const regions = [
-                { id: 'shiramine', name: '白峰' },
-                { id: 'oguchi', name: '尾口' },
-                { id: 'yoshinodani', name: '吉野谷' },
-                { id: 'torigoe', name: '鳥越' },
-                { id: 'kawachi', name: '河内' },
-                { id: 'tsurugi', name: '鶴来' },
-                { id: 'mattou', name: '松任' },
-                { id: 'mikawa', name: '美川' }
+                { id: 'shiramine', name: '白峰', emoji: '⛰️', desc: '重伝建地区と恐竜化石' },
+                { id: 'oguchi', name: '尾口', emoji: '🏔️', desc: 'ホワイトロードとスキー場' },
+                { id: 'yoshinodani', name: '吉野谷', emoji: '♨️', desc: '中宮温泉と白山自然' },
+                { id: 'torigoe', name: '鳥越', emoji: '🏯', desc: '一向一揆の歴史' },
+                { id: 'kawachi', name: '河内', emoji: '🌊', desc: '手取峡谷の美しさ' },
+                { id: 'tsurugi', name: '鶴来', emoji: '⛩️', desc: '白山比咩神社' },
+                { id: 'mattou', name: '松任', emoji: '🚂', desc: 'トレインパーク白山' },
+                { id: 'mikawa', name: '美川', emoji: '🌊', desc: '日本海の漁港と海岸' }
             ];
 
             const modal = document.createElement('div');
             modal.style.cssText = `
                 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(0,0,0,0.8); z-index: 9999; display: flex;
+                background: rgba(0,0,0,0.9); z-index: 9999; display: flex;
                 align-items: center; justify-content: center; padding: 20px;
+                overflow-y: auto;
             `;
 
             const buttonsHtml = regions.map(r => `
-                <button onclick="window.hakusanPlaces.showRegionPlaces('${r.id}'); this.parentElement.parentElement.parentElement.remove();" style="
+                <div onclick="showRegionContent('${r.id}'); this.parentElement.parentElement.parentElement.remove();" style="
                     background: linear-gradient(135deg, #87CEEB, #9ACD32);
-                    color: white; border: none; padding: 15px; margin: 8px;
-                    border-radius: 12px; font-size: 16px; font-weight: bold;
-                    cursor: pointer; width: calc(50% - 20px); box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    color: white; border: none; padding: 20px; margin: 10px;
+                    border-radius: 15px; cursor: pointer;
+                    width: calc(50% - 20px); box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                    transition: all 0.3s;
                 " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                    📍 ${r.name}
-                </button>
+                    <div style="font-size: 36px; margin-bottom: 10px;">${r.emoji}</div>
+                    <div style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">${r.name}</div>
+                    <div style="font-size: 13px; opacity: 0.9;">${r.desc}</div>
+                </div>
             `).join('');
 
             modal.innerHTML = `
                 <div style="
-                    max-width: 500px; width: 100%; background: white;
-                    border-radius: 20px; padding: 30px; text-align: center;
+                    max-width: 700px; width: 100%; background: white;
+                    border-radius: 25px; padding: 40px; text-align: center;
                 ">
-                    <h2 style="color: #2c3e50; margin-bottom: 20px;">地域を選択してください</h2>
+                    <h2 style="color: #2c3e50; margin-bottom: 15px; font-size: 26px;">
+                        📍 白山市8地域を選択
+                    </h2>
+                    <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 14px;">
+                        各地域の名所写真とGoogle Maps座標を見ることができます
+                    </p>
                     <div style="display: flex; flex-wrap: wrap; justify-content: center;">
                         ${buttonsHtml}
                     </div>
                     <button onclick="this.parentElement.parentElement.remove()" style="
                         background: #95a5a6; color: white; border: none;
-                        padding: 12px 30px; margin-top: 20px; border-radius: 25px;
-                        font-size: 14px; cursor: pointer;
-                    ">閉じる</button>
+                        padding: 15px 40px; margin-top: 25px; border-radius: 30px;
+                        font-size: 16px; cursor: pointer; transition: all 0.3s;
+                    " onmouseover="this.style.background='#7f8c8d'" onmouseout="this.style.background='#95a5a6'">
+                        閉じる
+                    </button>
                 </div>
             `;
 
             document.body.appendChild(modal);
+        }
+
+        // 地域コンテンツを表示（写真 + 名所リスト）
+        function showRegionContent(regionId) {
+            console.log('🖼️ 地域コンテンツ表示:', regionId);
+            
+            // 写真システムの確認
+            if (typeof window.hakusanRealPhotos !== 'undefined' && window.hakusanRealPhotos) {
+                console.log('✅ 写真システム起動');
+                window.hakusanRealPhotos.showRegionPhotos(regionId);
+            } else if (typeof window.HakusanRealPhotos !== 'undefined') {
+                console.log('⚙️ 写真システム初期化中...');
+                window.hakusanRealPhotos = new window.HakusanRealPhotos();
+                window.hakusanRealPhotos.showRegionPhotos(regionId);
+            } else {
+                console.error('❌ 写真システムが読み込まれていません');
+                alert('写真システムが利用できません。ページを再読み込みしてください。');
+                return;
+            }
+            
+            // 0.5秒後に名所リストも表示
+            setTimeout(() => {
+                if (typeof window.hakusanPlaces !== 'undefined' && window.hakusanPlaces) {
+                    console.log('✅ 名所システム起動');
+                    window.hakusanPlaces.showRegionPlaces(regionId);
+                } else if (typeof window.HakusanRealPlaces !== 'undefined') {
+                    console.log('⚙️ 名所システム初期化中...');
+                    window.hakusanPlaces = new window.HakusanRealPlaces();
+                    window.hakusanPlaces.showRegionPlaces(regionId);
+                }
+            }, 500);
         }
 
         // グローバル関数
@@ -232,24 +221,48 @@
         };
 
         window.openAvatarCustomizer = function() {
-            // アバターシステムの初期化を確認
-            if (!window.avatarSystem) {
-                console.log('アバターシステムを初期化中...');
-                window.avatarSystem = new HakusanAvatarSystem();
+            console.log('🎨 アバターカスタマイザー起動中...');
+            
+            // ページ読み込み完了を待つ
+            if (document.readyState !== 'complete') {
+                window.addEventListener('load', () => {
+                    setTimeout(() => openAvatarCustomizer(), 500);
+                });
+                return;
             }
             
-            if (window.avatarSystem && window.avatarSystem.openCustomizer) {
-                window.avatarSystem.openCustomizer();
-            } else if (window.PixelAvatarSystem) {
-                // フォールバック：ピクセルアバターシステムを使用
-                console.log('ピクセルアバターエディターを起動...');
-                if (!window.pixelAvatar) {
-                    window.pixelAvatar = new PixelAvatarSystem();
+            // アバターシステムの初期化を確認
+            if (!window.avatarSystem) {
+                console.log('⚙️ アバターシステムを初期化中...');
+                try {
+                    if (typeof HakusanAvatarSystem !== 'undefined') {
+                        window.avatarSystem = new HakusanAvatarSystem();
+                        console.log('✅ アバターシステム初期化完了');
+                    } else {
+                        throw new Error('HakusanAvatarSystem が見つかりません');
+                    }
+                } catch (e) {
+                    console.error('❌ アバターシステム初期化エラー:', e);
+                    alert('アバターシステムの読み込みに失敗しました。ページを再読み込みしてください。');
+                    return;
                 }
-                window.pixelAvatar.showEditor();
+            }
+            
+            // モーダルが既に存在するか確認
+            const existingModal = document.getElementById('avatar-customizer');
+            if (!existingModal) {
+                console.error('❌ アバターモーダルが見つかりません');
+                alert('アバターカスタマイザーの初期化に失敗しました。ページを再読み込みしてください。');
+                return;
+            }
+            
+            // openCustomizerメソッドを呼び出し
+            if (window.avatarSystem && typeof window.avatarSystem.openCustomizer === 'function') {
+                console.log('✅ アバターカスタマイザーを開きます');
+                window.avatarSystem.openCustomizer();
             } else {
-                // 簡易アバター選択ダイアログ
-                showSimpleAvatarSelector();
+                console.error('❌ openCustomizerメソッドが見つかりません');
+                alert('アバターカスタマイザーを開けません。ページを再読み込みしてください。');
             }
         };
 

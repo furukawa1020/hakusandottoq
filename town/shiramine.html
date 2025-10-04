@@ -3,144 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>白峰 - はくさんバッジクエスト</title>
-    <link rel="stylesheet" href="../styles.css">
+    <title>白峰地区 - はくさんNFCバッジクエスト</title>
     <link rel="stylesheet" href="town-styles.css">
-    <link rel="stylesheet" href="../incentive-system.css">
 </head>
 <body>
     <header>
-        <h1>白峰（しらみね）</h1>
-        <p>白山の懐に抱かれた山村</p>
+        <h1>⛰️ 白峰地区</h1>
+        <p>白山の恵みが息づく山間地域</p>
     </header>
 
-    <main>
-        <div class="town-hero">
-            <div class="town-icon">⛰️</div>
-            <div class="stamp-status-display" id="stampStatus">
-                <span id="stampIcon" class="icon-location">●</span>
-                <span id="stampText">スタンプ確認中...</span>
-            </div>
+    <section class="intro">
+        <p>標高500mに位置する白峰地区は、白山信仰の歴史と伝統が色濃く残る山間の集落です。茅葺き屋根の家屋が残る重伝建地区として知られ、白山麓の文化を今に伝えています。</p>
+    </section>
+
+    <section class="landmarks">
+        <h2>📍 主な名所・観光地</h2>
+        
+        <div class="landmark-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=36.2445,136.5897', '_blank')">
+            <h3>白峰重要伝統的建造物群保存地区</h3>
+            <p class="category">🏛️ 歴史・文化</p>
+            <p>茅葺き屋根の伝統的な家屋が残る重伝建地区。江戸時代の街並みを今に伝える貴重な景観が保存されています。</p>
+            <button class="maps-btn">🗺️ Google Mapsで開く</button>
         </div>
 
-        <div class="story-content">
-            <section class="story-section">
-                <h2>⛰️ 白山の聖なる村</h2>
-                <p>
-                    白峰は白山の懐に抱かれた美しい山村です。
-                    白山登山の拠点として古くから親しまれ、
-                    神聖な山への入り口として重要な役割を果たしています。
-                </p>
-                <p>
-                    標高が高く、美しい山々に囲まれた白峰は、
-                    四季を通じて壮大な自然の美しさを楽しむことができます。
-                </p>
-            </section>
-
-            <section class="story-section">
-                <h2>伝統の山里文化</h2>
-                <p>
-                    白峰には古い民家が残り、山里の伝統的な暮らしを
-                    垣間見ることができます。
-                    白峰の人々は厳しい自然環境の中で、
-                    助け合いながら生活してきました。
-                </p>
-                <p>
-                    特に、白峰の郷土料理や民芸品は、
-                    山里の知恵と技術が込められた貴重な文化遺産です。
-                </p>
-            </section>
-
-            <section class="story-section">
-                <h2>探索ポイント</h2>
-                <ul class="explore-points">
-                    <li>⛰️ 白山登山道 - 聖なる山への道</li>
-                    <li>🏘️ 白峰の古民家 - 山里の伝統建築</li>
-                    <li>🍲 山里料理 - 地域の味覚</li>
-                    <li>🌨️ 雪景色 - 冬の美しい風景</li>
-                </ul>
-            </section>
-
-            <section class="story-section">
-                <h2>📚 物語の続き</h2>
-                <div class="story-text">
-                    <p>
-                        白峰の名前は、白山の美しい峰々から来ています。
-                        昔、この地に住む人々は白山を「白き峰」と呼び、
-                        その神聖な美しさを敬っていました。
-                    </p>
-                    <p>
-                        冬になると白峰は深い雪に覆われ、
-                        まるで白い神秘的な世界に変わります。
-                        この美しい雪景色は、多くの人々の心を
-                        清らかにしてくれます。
-                    </p>
-                </div>
-            </section>
+        <div class="landmark-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=36.2478,136.5914', '_blank')">
+            <h3>白山恐竜パーク白峰</h3>
+            <p class="category">🦕 観光施設</p>
+            <p>恐竜化石の展示と体験ができる施設。白山麓で発掘された恐竜時代の化石を見学できます。</p>
+            <button class="maps-btn">🗺️ Google Mapsで開く</button>
         </div>
 
-        <div class="navigation">
-            <button class="nav-btn back-btn" onclick="goBack()">🏠 トップに戻る</button>
-            <button class="nav-btn next-btn" onclick="suggestNextTown()">🗺️ 次の町を探す</button>
+        <div class="landmark-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=36.2456,136.5889', '_blank')">
+            <h3>白峰温泉総湯</h3>
+            <p class="category">♨️ 温泉</p>
+            <p>白峰地区の公衆浴場。白山の伏流水を使った温泉で、登山客や観光客に親しまれています。</p>
+            <button class="maps-btn">🗺️ Google Mapsで開く</button>
         </div>
-    </main>    <footer>
-        <p>&copy; 2025 白山市NFCスタンプラリー「はくさんバッジクエスト」</p>
+
+        <div class="landmark-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=36.2512,136.6023', '_blank')">
+            <h3>桑島化石壁</h3>
+            <p class="category">🌏 自然・地質</p>
+            <p>恐竜時代の化石が発見された岩壁。白山ユネスコ世界ジオパークの重要なジオサイトです。</p>
+            <button class="maps-btn">🗺️ Google Mapsで開く</button>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2>🎯 地区の特徴</h2>
+        <ul>
+            <li>🏔️ 白山信仰の歴史が息づく山間集落</li>
+            <li>🏘️ 国選定重要伝統的建造物群保存地区</li>
+            <li>🦕 恐竜化石発掘で有名な地質学の宝庫</li>
+            <li>♨️ 白山麓の温泉文化</li>
+        </ul>
+    </section>
+
+    <footer>
+        <a href="../index.html" class="back-btn">🔙 マップに戻る</a>
     </footer>
-
-    <script src="../script.js"></script>
-    <script src="town-script.js"></script>
-    <script src="../script.js"></script>
-    <!-- 統合システム -->
-    <script src="../region-photos.js"></script>
-    <script src="../badge-system.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            displayRegionPhotos('shiramine');
-            checkBadgeStatus('shiramine');
-        });
-        
-        function displayRegionPhotos(regionId) {
-            if (window.hakusanPhotos) {
-                const success = window.hakusanPhotos.createPhotoGallery(regionId, `${regionId}Photos`);
-                if (!success) {
-                    const photos = window.hakusanPhotos.getRegionPhotos(regionId);
-                    const container = document.getElementById(`${regionId}Photos`);
-                    if (container && photos && photos.length > 0) {
-                        container.innerHTML = `<div class="photo-grid">${photos.map(photo => `<div class="photo-item" onclick="openPhotoDetail('${photo.id}')"><img src="${photo.url || photo.fallback}" alt="${photo.name}" /><div class="photo-caption"><strong>${photo.name}</strong><br><small>${photo.description}</small></div></div>`).join('')}</div>`;
-                    }
-                }
-            }
-        }
-        
-        function openRegionPhotoViewer(regionId) {
-            if (window.hakusanPhotos) {
-                const photos = window.hakusanPhotos.getRegionPhotos(regionId);
-                if (photos && photos.length > 0) { window.hakusanPhotos.openPhotoViewer(photos[0].id); }
-            }
-        }
-        
-        function openPhotoDetail(photoId) { if (window.hakusanPhotos) { window.hakusanPhotos.openPhotoViewer(photoId); } }
-        
-        function shareTownExperience(townId, platform) {
-            const townNames = {'mattou': '松任','mikawa': '美川','tsurugi': '鶴来','kawachi': '河内','shiramine': '白峰','yoshinodani': '吉野谷','torigoe': '鳥越','oguchi': '尾口'};
-            const townName = townNames[townId];
-            const shareText = `はくさんNFCバッジクエストで${townName}地区を探索中！🏄️ #はくさんNFCバッジクエスト #白山市 #${townName}`;
-            const shareUrl = window.location.href;
-            switch (platform) {
-                case 'twitter': window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank'); break;
-                case 'line': window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`, '_blank'); break;
-                case 'general': if (navigator.share) { navigator.share({title: `${townName} - はくさんNFCバッジクエスト`, text: shareText, url: shareUrl}); } else { navigator.clipboard.writeText(`${shareText} ${shareUrl}`); alert('共有テキストをクリップボードにコピーしました！'); } break;
-            }
-        }
-        
-        function checkBadgeStatus(regionId) {
-            if (window.hakusanBadges) {
-                const badges = window.hakusanBadges.getUserBadges();
-                const regionBadge = badges.find(b => b.region === regionId);
-                const statusElement = document.getElementById('stampStatus');
-                if (statusElement) { statusElement.innerHTML = regionBadge ? `<span id="stampIcon">🏅</span><span id="stampText">コンプリート！</span>` : `<span id="stampIcon">📍</span><span id="stampText">未取得</span>`; }
-            }
-        }
-    </script>
 </body>
 </html>

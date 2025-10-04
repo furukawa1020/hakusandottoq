@@ -1,68 +1,133 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>松任 - はくさんバッジクエスト</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="town-styles.css">
-    <link rel="stylesheet" href="../incentive-system.css">
-</head>
-<body>
-    <header>
-        <h1>松任（まっとう）</h1>
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="ja"><html lang="ja">
+
+<head><head>
+
+    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>松任地区 - はくさんNFCバッジクエスト</title>    <title>松任 - はくさんバッジクエスト</title>
+
+    <link rel="stylesheet" href="town-styles.css">    <link rel="stylesheet" href="../styles.css">
+
+</head>    <link rel="stylesheet" href="town-styles.css">
+
+<body>    <link rel="stylesheet" href="../incentive-system.css">
+
+    <header></head>
+
+        <h1>🚂 松任地区</h1><body>
+
+        <p>白山市の中心地</p>    <header>
+
+    </header>        <h1>松任（まっとう）</h1>
+
         <p>白山市の中心地</p>
-    </header>
 
-    <main>
+    <section class="intro">    </header>
+
+        <p>松任地区は白山市の中心地として、行政・商業・交通の要所です。トレインパーク白山など新しい観光施設も充実しています。</p>
+
+    </section>    <main>
+
         <div class="town-hero">
-            <div class="town-icon">🏛️</div>
-            <div class="stamp-status-display" id="stampStatus">
-                <span id="stampIcon" class="icon-location">●</span>
-                <span id="stampText">スタンプ確認中...</span>
-            </div>
-        </div>
 
-        <div class="story-content">
-            <section class="story-section">
+    <section class="landmarks">            <div class="town-icon">🏛️</div>
+
+        <h2>📍 主な名所・観光地</h2>            <div class="stamp-status-display" id="stampStatus">
+
+                        <span id="stampIcon" class="icon-location">●</span>
+
+        <div class="landmark-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=36.5145,136.5678', '_blank')">                <span id="stampText">スタンプ確認中...</span>
+
+            <h3>松任駅</h3>            </div>
+
+            <p class="category">🚂 交通</p>        </div>
+
+            <p>JR北陸本線の主要駅。白山市の玄関口として多くの人が利用します。</p>
+
+            <button class="maps-btn">🗺️ Google Mapsで開く</button>        <div class="story-content">
+
+        </div>            <section class="story-section">
+
                 <h2>🏛️ 白山市の中心</h2>
-                <p>
-                    松任は白山市の中心地として、行政・経済・文化の拠点となっています。
-                    現在の白山市役所があり、多くの人々が行き交う活気ある町です。
-                </p>
-                <p>
-                    交通の要衝としても重要な役割を果たし、
-                    周辺の町々を結ぶハブとして機能しています。
-                </p>
-            </section>
 
-            <section class="photo-gallery-section">
-                <h2>📷 松任の風景</h2>
-                <p>商用利用フリーの美しい風景写真をご覧ください。</p>
+        <div class="landmark-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=36.5156,136.5689', '_blank')">                <p>
+
+            <h3>白山市役所</h3>                    松任は白山市の中心地として、行政・経済・文化の拠点となっています。
+
+            <p class="category">🏢 公共施設</p>                    現在の白山市役所があり、多くの人々が行き交う活気ある町です。
+
+            <p>白山市の行政の中心。市民サービスの拠点です。</p>                </p>
+
+            <button class="maps-btn">🗺️ Google Mapsで開く</button>                <p>
+
+        </div>                    交通の要衝としても重要な役割を果たし、
+
+                    周辺の町々を結ぶハブとして機能しています。
+
+        <div class="landmark-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=36.5123,136.5701', '_blank')">                </p>
+
+            <h3>松任城址</h3>            </section>
+
+            <p class="category">🏯 歴史</p>
+
+            <p>中世の城跡。現在は公園として整備されています。</p>            <section class="photo-gallery-section">
+
+            <button class="maps-btn">🗺️ Google Mapsで開く</button>                <h2>📷 松任の風景</h2>
+
+        </div>                <p>商用利用フリーの美しい風景写真をご覧ください。</p>
+
                 <div class="region-photos" id="mattouPhotos">
-                    <!-- region-photos.jsで生成される写真がここに表示 -->
-                </div>
-                <button class="photo-view-btn" onclick="openRegionPhotoViewer('mattou')">
-                    <span class="icon-gallery">■</span> 全写真を見る
-                </button>
-            </section>
+
+        <div class="landmark-card" onclick="window.open('https://www.google.com/maps/search/?api=1&query=36.5145,136.5678', '_blank')">                    <!-- region-photos.jsで生成される写真がここに表示 -->
+
+            <h3>トレインパーク白山</h3>                </div>
+
+            <p class="category">🚂 観光施設</p>                <button class="photo-view-btn" onclick="openRegionPhotoViewer('mattou')">
+
+            <p>鉄道の歴史を学べる体験型施設。家族で楽しめる人気スポットです。</p>                    <span class="icon-gallery">■</span> 全写真を見る
+
+            <button class="maps-btn">🗺️ Google Mapsで開く</button>                </button>
+
+        </div>            </section>
+
+    </section>
 
             <section class="share-section">
-                <h2>🎆 シェアしよう！</h2>
-                <p>松任での体験を友達や家族とシェアしませんか？</p>
-                <div class="share-buttons">
-                    <button class="share-btn twitter" onclick="shareTownExperience('mattou', 'twitter')">
-                        🐦 Twitterでシェア
-                    </button>
-                    <button class="share-btn line" onclick="shareTownExperience('mattou', 'line')">
-                        <span class="icon-share">◆</span> LINEでシェア
-                    </button>
+
+    <section class="features">                <h2>🎆 シェアしよう！</h2>
+
+        <h2>🎯 地区の特徴</h2>                <p>松任での体験を友達や家族とシェアしませんか？</p>
+
+        <ul>                <div class="share-buttons">
+
+            <li>🚂 JR北陸本線の主要駅</li>                    <button class="share-btn twitter" onclick="shareTownExperience('mattou', 'twitter')">
+
+            <li>🏢 白山市の行政中心地</li>                        🐦 Twitterでシェア
+
+            <li>🛍️ 商業施設が充実</li>                    </button>
+
+            <li>🚂 トレインパーク白山</li>                    <button class="share-btn line" onclick="shareTownExperience('mattou', 'line')">
+
+        </ul>                        <span class="icon-share">◆</span> LINEでシェア
+
+    </section>                    </button>
+
                     <button class="share-btn general" onclick="shareTownExperience('mattou', 'general')">
-                        🔗 リンクをコピー
-                    </button>
-                </div>
-            </section>
-            </section>
+
+    <footer>                        🔗 リンクをコピー
+
+        <a href="../index.html" class="back-btn">🔙 マップに戻る</a>                    </button>
+
+    </footer>                </div>
+
+</body>            </section>
+
+</html>            </section>
+
 
             <section class="story-section">
                 <h2>探索ポイント</h2>

@@ -669,14 +669,27 @@ class HakusanAvatarSystem {
     }
     
     openCustomizer() {
+        console.log('🎨 アバターカスタマイザーを開く');
         this.checkUnlocks();
         this.updateCustomizerUI();
-        document.getElementById('avatar-customizer').style.display = 'flex';
+        const modal = document.getElementById('avatar-customizer');
+        if (modal) {
+            modal.style.display = 'flex';
+            console.log('✅ アバターモーダル表示');
+        } else {
+            console.error('❌ アバターモーダルが見つかりません');
+        }
         
         // アニメーション開始
         this.animationInterval = setInterval(() => {
             this.updateAnimation();
         }, 50);
+    }
+    
+    // open()メソッドをopenCustomizer()のエイリアスとして定義
+    open() {
+        console.log('📞 open()呼び出し → openCustomizer()');
+        return this.openCustomizer();
     }
     
     closeCustomizer() {

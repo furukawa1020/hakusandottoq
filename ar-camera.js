@@ -126,13 +126,13 @@ class HakusanARCamera {
                 
                 <button id="badge-toggle" style="
                     padding: 12px 20px;
-                    background: rgba(255, 107, 107, 0.8);
+                    background: rgba(76, 205, 196, 0.8);
                     color: white;
                     border: none;
                     border-radius: 25px;
                     cursor: pointer;
                     font-weight: bold;
-                ">バッジ表示</button>
+                ">バッジ表示中</button>
                 
                 <button id="close-camera" style="
                     padding: 12px 20px;
@@ -198,8 +198,26 @@ class HakusanARCamera {
     }
     
     async open(badgeData = null) {
+        console.log('🎥 ARカメラ起動開始');
         try {
+            // バッジデータが指定されていない場合、デフォルトバッジを使用
+            if (!badgeData) {
+                const savedBadges = JSON.parse(localStorage.getItem('hakusanBadges') || '[]');
+                const lastBadge = savedBadges[savedBadges.length - 1];
+                
+                badgeData = lastBadge || {
+                    name: '白山市',
+                    emoji: '🏔️',
+                    regionId: 'hakusan',
+                    timestamp: new Date().toISOString()
+                };
+                console.log('📛 デフォルトバッジ使用:', badgeData);
+            }
+            
+            // 必ずバッジを設定
             this.currentBadge = badgeData;
+            console.log('✅ バッジ設定完了:', this.currentBadge);
+            console.log('🎯 バッジオーバーレイ: 有効');
             
             // カメラストリーム開始
             this.stream = await navigator.mediaDevices.getUserMedia({
@@ -253,14 +271,18 @@ class HakusanARCamera {
     }
     
     startOverlayRendering() {
+        console.log('🎨 オーバーレイレンダリング開始');
         const render = () => {
             if (!this.isActive) return;
             
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             
-            // ARバッジオーバーレイ
+            // ARバッジオーバーレイ（常に表示）
             if (this.currentBadge) {
                 this.drawBadgeOverlay();
+            } else {
+                // currentBadgeがnullの場合でもログ出力
+                console.warn('⚠️ レンダリング中: currentBadge未設定');
             }
             
             // GPS情報オーバーレイ
@@ -276,7 +298,10 @@ class HakusanARCamera {
     }
     
     drawBadgeOverlay() {
-        if (!this.currentBadge) return;
+        if (!this.currentBadge) {
+            console.warn('⚠️ currentBadgeが未設定');
+            return;
+        }
         
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
@@ -585,21 +610,31 @@ class HakusanARCamera {
     }
     
     toggleBadgeOverlay() {
-        // バッジ表示の切り替え（現在は常に表示）
+        // バッジ表示は常にON（非表示にしない）
         const button = document.getElementById('badge-toggle');
+        
+        // currentBadgeが既にある場合は何もしない
         if (this.currentBadge) {
-            this.currentBadge = null;
-            button.textContent = 'バッジ非表示';
-            button.style.background = 'rgba(128, 128, 128, 0.8)';
-        } else if (window.badgeSystem) {
-            // 最新のバッジを表示
-            const badges = window.badgeSystem.getCollectedBadges();
-            if (badges.length > 0) {
-                this.currentBadge = badges[badges.length - 1];
-                button.textContent = 'バッジ表示';
-                button.style.background = 'rgba(255, 107, 107, 0.8)';
-            }
+            button.textContent = 'バッジ表示中';
+            button.style.background = 'rgba(76, 205, 196, 0.8)';
+            console.log('✅ バッジ表示中:', this.currentBadge);
+            return;
         }
+        
+        // バッジがない場合は最新のバッジを取得
+        const savedBadges = JSON.parse(localStorage.getItem('hakusanBadges') || '[]');
+        const lastBadge = savedBadges[savedBadges.length - 1];
+        
+        this.currentBadge = lastBadge || {
+            name: '白山市',
+            emoji: '🏔️',
+            regionId: 'hakusan',
+            timestamp: new Date().toISOString()
+        };
+        
+        button.textContent = 'バッジ表示中';
+        button.style.background = 'rgba(76, 205, 196, 0.8)';
+        console.log('✅ バッジ設定完了:', this.currentBadge);
     }
     
     watchPosition() {
