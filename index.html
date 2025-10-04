@@ -2,15 +2,14 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta n    <script src="hakusan-gps-system.js?v=2.7.0"></script>
-    <script src="hakusan-correct-coords.js?v=2.7.0"></script>
-    <script src="hakusan-real-places-system.js?v=2.7.0"></script>="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>はくさんNFCバッジクエスト</title>
     <meta name="description" content="白山市旧市町村8地域を巡るNFCバッジクエスト">
     <meta name="theme-color" content="#87CEEB">
-    <link rel="manifest" href="manifest.json?v=2.6.3">
-    <link rel="stylesheet" href="styles.css?v=2.6.3">
-    <link rel="preload" href="白山.png?v=2.6.2" as="image" type="image/png">
+    <link rel="manifest" href="manifest.json?v=2.7.0">
+    <link rel="stylesheet" href="styles.css?v=2.7.0">
+    <link rel="icon" href="favicon.svg?v=2.7.0">
+    <link rel="preload" href="白山.png?v=2.7.0" as="image" type="image/png">
 </head>
 <body>
     <header>
@@ -78,13 +77,16 @@
 
     </div>
 
+    <!-- メインスクリプト (モジュール) -->
     <script type="module" src="rpg-map-engine.js?v=2.7.0" defer></script>
     <script type="module" src="badge-system.js?v=2.7.0" defer></script>
     <script type="module" src="ar-camera.js?v=2.7.0" defer></script>
     <script type="module" src="avatar-system.js?v=2.7.0" defer></script>
-    <script src="hakusan-gps-system.js?v=2.6.3"></script>
-    <script src="hakusan-correct-coords.js?v=2.6.3"></script>
-    <script src="hakusan-real-places.js?v=2.6.3"></script>
+    
+    <!-- 補助スクリプト (通常) -->
+    <script src="hakusan-gps-system.js?v=2.7.0"></script>
+    <script src="hakusan-correct-coords.js?v=2.7.0"></script>
+    <script src="hakusan-real-places.js?v=2.7.0"></script>
     <script src="hakusan-real-photos-system.js?v=2.7.0"></script>
 
     <script>

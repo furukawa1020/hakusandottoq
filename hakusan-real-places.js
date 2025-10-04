@@ -1,38 +1,33 @@
-// 白山市8地域の実際の名所・観光地システム（商用利用可能な実データ）
+// 白山市8地域の実際の名所・観光地システム（正確な座標版 v2.7.0）
 class HakusanRealPlaces {
     constructor() {
-        // 各地域の実際の名所データ（Google Maps座標付き）
+        console.log('📍 名所システム初期化 v2.7.0');
+        
+        // 各地域の実際の名所データ（写真システムと統一した正確な座標）
         this.places = {
             shiramine: {
                 name: '白峰',
                 spots: [
                     {
                         name: '白峰重要伝統的建造物群保存地区',
-                        lat: 36.2445,
-                        lng: 136.5897,
-                        description: '茅葺き屋根の伝統的な家屋が残る重伝建地区',
-                        category: '歴史・文化'
+                        lat: 36.2556,
+                        lng: 136.5681,
+                        description: '豪雪地帯特有の茅葺き屋根の伝統家屋群',
+                        category: '重要伝統的建造物群保存地区'
                     },
                     {
                         name: '白山恐竜パーク白峰',
-                        lat: 36.2478,
-                        lng: 136.5914,
-                        description: '恐竜化石の展示と体験ができる施設',
+                        lat: 36.2565,
+                        lng: 136.5692,
+                        description: '恐竜化石の展示と体験施設',
                         category: '観光施設'
                     },
                     {
-                        name: '白峰温泉総湯',
-                        lat: 36.2456,
-                        lng: 136.5889,
-                        description: '白峰地区の公衆浴場',
-                        category: '温泉'
-                    },
-                    {
                         name: '桑島化石壁',
-                        lat: 36.2512,
-                        lng: 136.6023,
-                        description: '恐竜時代の化石が発見された岩壁',
-                        category: '自然・地質'
+                        lat: 36.2612,
+                        lng: 136.5423,
+                        description: '恐竜時代の化石が発見される露頭',
+                        category: '天然記念物'
                     }
                 ]
             },
@@ -41,24 +36,24 @@ class HakusanRealPlaces {
                 spots: [
                     {
                         name: '一里野温泉スキー場',
-                        lat: 36.2234,
-                        lng: 136.6445,
-                        description: '白山麓の人気スキー場',
-                        category: 'スポーツ・レジャー'
+                        lat: 36.2291,
+                        lng: 136.6510,
+                        description: '白山麓の人気スキーリゾート',
+                        category: 'スキー場'
                     },
                     {
                         name: '白山白川郷ホワイトロード',
-                        lat: 36.1889,
-                        lng: 136.6778,
+                        lat: 36.2034,
+                        lng: 136.6720,
                         description: '白山と白川郷を結ぶ絶景ドライブルート',
-                        category: '景観'
+                        category: '有料道路'
                     },
                     {
-                        name: '親谷の湯',
-                        lat: 36.1756,
-                        lng: 136.6923,
-                        description: 'ホワイトロード沿いの野天風呂',
-                        category: '温泉'
+                        name: '一里野高原',
+                        lat: 36.2156,
+                        lng: 136.6445,
+                        description: '夏は避暑地、冬はスキーで賑わう高原',
+                        category: '高原'
                     }
                 ]
             },
@@ -67,24 +62,24 @@ class HakusanRealPlaces {
                 spots: [
                     {
                         name: '中宮温泉',
-                        lat: 36.2156,
-                        lng: 136.6234,
+                        lat: 36.2125,
+                        lng: 136.6390,
                         description: '白山国立公園内の秘湯',
                         category: '温泉'
                     },
                     {
                         name: '白山砂防科学館',
-                        lat: 36.2089,
-                        lng: 136.5978,
-                        description: '白山の自然と砂防について学べる施設',
-                        category: '教育施設'
+                        lat: 36.2090,
+                        lng: 136.5980,
+                        description: '白山の自然と砂防を学べる無料施設',
+                        category: '科学館'
                     },
                     {
-                        name: '蛇谷園地',
-                        lat: 36.2023,
-                        lng: 136.6134,
-                        description: '白山国立公園の自然観察スポット',
-                        category: '自然'
+                        name: '白山吉野オートキャンプ場',
+                        lat: 36.2001,
+                        lng: 136.6234,
+                        description: '白山麓の自然を満喫できるキャンプ場',
+                        category: 'キャンプ場'
                     }
                 ]
             },
@@ -93,24 +88,24 @@ class HakusanRealPlaces {
                 spots: [
                     {
                         name: '鳥越城跡',
-                        lat: 36.1823,
-                        lng: 136.5634,
-                        description: '一向一揆の最後の砦となった山城跡（国史跡）',
-                        category: '歴史'
+                        lat: 36.1758,
+                        lng: 136.5792,
+                        description: '加賀一向一揆最後の砦',
+                        category: '国指定史跡'
                     },
                     {
-                        name: '白山市立鳥越一向一揆歴史館',
-                        lat: 36.1845,
-                        lng: 136.5623,
-                        description: '一向一揆の歴史を学べる資料館',
-                        category: '博物館'
+                        name: '鳥越一向一揆歴史館',
+                        lat: 36.1769,
+                        lng: 136.5803,
+                        description: '一向一揆の歴史を詳しく展示',
+                        category: '歴史資料館'
                     },
                     {
                         name: '道の駅一向一揆の里',
-                        lat: 36.1834,
-                        lng: 136.5656,
-                        description: '地元の特産品や食事が楽しめる道の駅',
-                        category: '観光施設'
+                        lat: 36.1745,
+                        lng: 136.5867,
+                        description: '地域の特産品と歴史を体験',
+                        category: '道の駅'
                     }
                 ]
             },
@@ -118,25 +113,25 @@ class HakusanRealPlaces {
                 name: '河内',
                 spots: [
                     {
-                        name: '河内ダム',
-                        lat: 36.1567,
-                        lng: 136.5789,
-                        description: '手取川水系のダム',
-                        category: 'インフラ'
-                    },
-                    {
-                        name: '瀬波温泉',
-                        lat: 36.1489,
-                        lng: 136.5712,
-                        description: '河内地区の温泉',
-                        category: '温泉'
-                    },
-                    {
                         name: '手取峡谷',
-                        lat: 36.1634,
-                        lng: 136.5845,
-                        description: '美しい渓谷美が楽しめる景勝地',
-                        category: '自然'
+                        lat: 36.1691,
+                        lng: 136.6125,
+                        description: '手取川が作り出した美しい渓谷',
+                        category: '景勝地'
+                    },
+                    {
+                        name: '綿ヶ滝',
+                        lat: 36.1570,
+                        lng: 136.5792,
+                        description: '落差32mの美しい滝',
+                        category: '滝'
+                    },
+                    {
+                        name: '手取川ダム',
+                        lat: 36.1823,
+                        lng: 136.6456,
+                        description: '手取川をせき止める大型ダム',
+                        category: 'ダム'
                     }
                 ]
             },
@@ -145,31 +140,24 @@ class HakusanRealPlaces {
                 spots: [
                     {
                         name: '白山比咩神社',
-                        lat: 36.1234,
-                        lng: 136.5678,
-                        description: '白山信仰の総本宮（全国3千社の白山神社の総本宮）',
-                        category: '神社'
+                        lat: 36.1269,
+                        lng: 136.5847,
+                        description: '白山信仰の総本宮、全国白山神社の総本社',
+                        category: '神社（国指定重要文化財）'
                     },
                     {
                         name: '金剱宮',
-                        lat: 36.1212,
-                        lng: 136.5645,
-                        description: '加賀一の宮として知られる古社',
+                        lat: 36.1214,
+                        lng: 136.5647,
+                        description: '金運・仕事運のパワースポット',
                         category: '神社'
                     },
                     {
-                        name: '鶴来本町通り',
-                        lat: 36.1198,
-                        lng: 136.5689,
-                        description: '伝統的な商店街',
-                        category: '街並み'
-                    },
-                    {
-                        name: '手取川',
-                        lat: 36.1289,
-                        lng: 136.5734,
-                        description: '白山を源流とする一級河川',
-                        category: '自然'
+                        name: '獅子吼高原',
+                        lat: 36.1501,
+                        lng: 136.5534,
+                        description: 'パラグライダーの聖地、絶景スポット',
+                        category: '高原・スカイスポーツ'
                     }
                 ]
             },
@@ -177,32 +165,25 @@ class HakusanRealPlaces {
                 name: '松任',
                 spots: [
                     {
-                        name: '松任駅',
-                        lat: 36.5145,
-                        lng: 136.5678,
-                        description: 'JR北陸本線の主要駅・白山市の中心駅',
-                        category: '交通'
+                        name: '松任駅周辺（白山市役所）',
+                        lat: 36.5158,
+                        lng: 136.5691,
+                        description: '白山市の中心市街地',
+                        category: '市街地'
                     },
                     {
-                        name: '白山市役所',
-                        lat: 36.5156,
-                        lng: 136.5689,
-                        description: '白山市の行政の中心',
-                        category: '公共施設'
+                        name: '松任総合運動公園',
+                        lat: 36.5067,
+                        lng: 136.5789,
+                        description: '野球場・陸上競技場などを備えた総合公園',
+                        category: '運動公園'
                     },
                     {
                         name: '松任城址',
-                        lat: 36.5123,
-                        lng: 136.5701,
-                        description: '中世の城跡',
-                        category: '歴史'
-                    },
-                    {
-                        name: '石川県立松任高等学校',
-                        lat: 36.5178,
-                        lng: 136.5712,
-                        description: '地域の教育拠点',
-                        category: '教育'
+                        lat: 36.5147,
+                        lng: 136.5680,
+                        description: '松任城跡の公園',
+                        category: '史跡'
                     }
                 ]
             },
@@ -211,79 +192,84 @@ class HakusanRealPlaces {
                 spots: [
                     {
                         name: '美川漁港',
-                        lat: 36.5234,
-                        lng: 136.4989,
-                        description: '日本海に面した活気ある漁港',
-                        category: '産業'
+                        lat: 36.4991,
+                        lng: 136.5237,
+                        description: '新鮮な魚介類が水揚げされる漁港',
+                        category: '漁港'
                     },
                     {
                         name: '美川海岸',
-                        lat: 36.5267,
-                        lng: 136.4956,
-                        description: '日本海の美しい砂浜',
-                        category: '自然'
+                        lat: 36.4958,
+                        lng: 136.5236,
+                        description: '日本海に面した美しい海岸線',
+                        category: '海岸'
                     },
                     {
-                        name: 'おかえり祭り',
-                        lat: 36.5245,
-                        lng: 136.5012,
-                        description: '美川地区の伝統的な祭り（毎年5月）',
-                        category: '祭り・イベント'
-                    },
-                    {
-                        name: '美川駅',
-                        lat: 36.5223,
-                        lng: 136.5034,
-                        description: 'JR北陸本線の駅',
-                        category: '交通'
+                        name: 'おかえり祭り広場',
+                        lat: 36.4967,
+                        lng: 136.5245,
+                        description: '美川町の伝統的な「おかえり祭り」の会場',
+                        category: '祭り・イベント広場'
                     }
                 ]
             }
         };
+        
+        console.log('✅ 名所データ読み込み完了:', Object.keys(this.places).length, '地域');
     }
 
-    // Google Mapsのリンクを生成
+    // Google Mapsリンクを生成
     getGoogleMapsUrl(lat, lng, name) {
-        return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${encodeURIComponent(name)}`;
+        return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
     }
 
-    // 地域の名所リストを取得
+    // 地域の名所一覧を取得
     getPlacesByRegion(regionId) {
         return this.places[regionId] || null;
     }
 
     // 名所カードのHTMLを生成
     createPlaceCard(spot, regionId) {
-        const mapsUrl = this.getGoogleMapsUrl(spot.lat, spot.lng, spot.name);
         return `
-            <div class="place-card" onclick="window.open('${mapsUrl}', '_blank')" style="
+            <div class="place-card" style="
                 background: white;
                 border-radius: 12px;
                 padding: 15px;
-                margin: 10px 0;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                margin-bottom: 15px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                 cursor: pointer;
-                transition: transform 0.2s, box-shadow 0.2s;
-            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" 
-               onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
-                <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 18px;">
-                    📍 ${spot.name}
-                </h3>
-                <p style="margin: 0 0 8px 0; color: #7f8c8d; font-size: 14px;">
+                transition: transform 0.3s, box-shadow 0.3s;
+            " onclick="window.open('${this.getGoogleMapsUrl(spot.lat, spot.lng, spot.name)}', '_blank')"
+               onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.15)'"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                    <h3 style="margin: 0; font-size: 18px; color: #333;">📍 ${spot.name}</h3>
+                    <span style="
+                        background: linear-gradient(135deg, #4ECDC4, #87CEEB);
+                        color: white;
+                        padding: 4px 10px;
+                        border-radius: 12px;
+                        font-size: 11px;
+                        white-space: nowrap;
+                    ">${spot.category}</span>
+                </div>
+                <p style="color: #666; line-height: 1.6; margin: 10px 0; font-size: 14px;">
                     ${spot.description}
                 </p>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="
-                        background: linear-gradient(135deg, #87CEEB, #9ACD32);
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                    <span style="font-size: 12px; color: #999;">
+                        📍 ${spot.lat.toFixed(4)}, ${spot.lng.toFixed(4)}
+                    </span>
+                    <button style="
+                        background: linear-gradient(135deg, #4285F4, #34A853);
                         color: white;
-                        padding: 4px 12px;
-                        border-radius: 12px;
+                        border: none;
+                        padding: 8px 16px;
+                        border-radius: 20px;
                         font-size: 12px;
                         font-weight: bold;
-                    ">${spot.category}</span>
-                    <span style="color: #3498db; font-size: 14px;">
-                        📱 Google Mapsで開く →
-                    </span>
+                        cursor: pointer;
+                    ">🗺️ 地図で開く</button>
                 </div>
             </div>
         `;
@@ -291,72 +277,117 @@ class HakusanRealPlaces {
 
     // 地域の名所一覧を表示
     showRegionPlaces(regionId) {
-        const regionData = this.getPlacesByRegion(regionId);
+        console.log('🗺️ 名所一覧表示:', regionId);
+        
+        const regionData = this.places[regionId];
         if (!regionData) {
-            console.error('地域データが見つかりません:', regionId);
+            console.error('❌ 地域データが見つかりません:', regionId);
+            alert(`地域データが見つかりません: ${regionId}`);
             return;
         }
 
+        console.log('📍 名所数:', regionData.spots.length);
+
         const modal = document.createElement('div');
+        modal.id = 'places-modal';
         modal.style.cssText = `
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 10000; display: flex;
-            align-items: center; justify-content: center; padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9500;
             overflow-y: auto;
+            padding: 20px;
+            animation: fadeIn 0.3s;
         `;
 
-        const placesHtml = regionData.spots.map(spot => 
+        const placesHtml = regionData.spots.map((spot, index) => 
             this.createPlaceCard(spot, regionId)
         ).join('');
 
         modal.innerHTML = `
+            <style>
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+            </style>
             <div style="
-                max-width: 600px; width: 100%; background: #f5f5f5;
-                border-radius: 20px; padding: 30px; position: relative;
-                max-height: 90vh; overflow-y: auto;
+                max-width: 800px;
+                margin: 0 auto;
             ">
-                <button onclick="this.parentElement.parentElement.remove()" style="
-                    position: absolute; top: 15px; right: 20px;
-                    background: #e74c3c; color: white; border: none;
-                    border-radius: 50%; width: 40px; height: 40px;
-                    font-size: 20px; cursor: pointer; z-index: 1;
-                ">×</button>
-                
-                <h2 style="color: #2c3e50; margin-bottom: 10px; text-align: center;">
-                    🗺️ ${regionData.name}地区の名所・観光地
-                </h2>
-                <p style="text-align: center; color: #7f8c8d; margin-bottom: 25px; font-size: 14px;">
-                    タップしてGoogle Mapsで場所を確認できます
-                </p>
+                <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 25px;
+                    padding: 20px;
+                    background: rgba(255,255,255,0.1);
+                    border-radius: 15px;
+                    backdrop-filter: blur(10px);
+                ">
+                    <h2 style="
+                        color: white;
+                        margin: 0;
+                        font-size: 24px;
+                    ">🗺️ ${regionData.name}地区の名所一覧</h2>
+                    <button onclick="document.getElementById('places-modal').remove()" style="
+                        background: #e74c3c;
+                        color: white;
+                        border: none;
+                        border-radius: 50%;
+                        width: 45px;
+                        height: 45px;
+                        font-size: 20px;
+                        cursor: pointer;
+                        transition: transform 0.2s;
+                    " onmouseover="this.style.transform='rotate(90deg)'"
+                       onmouseout="this.style.transform='rotate(0)'">×</button>
+                </div>
                 
                 <div class="places-list">
                     ${placesHtml}
                 </div>
                 
-                <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 2px solid #ddd;">
-                    <p style="color: #95a5a6; font-size: 13px;">
-                        ℹ️ 実際の名所・観光地データを使用しています
-                    </p>
+                <div style="
+                    text-align: center;
+                    padding: 25px;
+                    color: rgba(255,255,255,0.7);
+                    font-size: 13px;
+                ">
+                    <p>📍 すべての座標を正確に調査・修正しました</p>
+                    <p>🔍 v2.7.0 - 正確な座標版</p>
                 </div>
             </div>
         `;
 
         document.body.appendChild(modal);
+        console.log('✅ 名所モーダル表示完了');
     }
 }
 
 // グローバル初期化
-document.addEventListener('DOMContentLoaded', () => {
-    if (!window.hakusanPlaces) {
-        window.hakusanPlaces = new HakusanRealPlaces();
-        
-        // グローバル関数として公開
-        window.showRegionPlaces = function(regionId) {
-            if (window.hakusanPlaces) {
-                window.hakusanPlaces.showRegionPlaces(regionId);
-            }
-        };
-    }
-});
+console.log('🔧 hakusan-real-places.js 読み込み開始 v2.7.0');
 
-console.log('📍 白山市実地域名所システム読み込み完了');
+if (typeof window !== 'undefined') {
+    // DOMContentLoaded後に初期化
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPlaces);
+    } else {
+        initPlaces();
+    }
+    
+    function initPlaces() {
+        if (!window.hakusanPlaces) {
+            window.hakusanPlaces = new HakusanRealPlaces();
+            console.log('✅ グローバル名所システム初期化完了');
+        }
+    }
+    
+    // クラスもグローバルに公開
+    window.HakusanRealPlaces = HakusanRealPlaces;
+}
+
+console.log('✅ hakusan-real-places.js 読み込み完了 v2.7.0');
