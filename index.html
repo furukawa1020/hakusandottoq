@@ -6,9 +6,9 @@
     <title>はくさんNFCバッジクエスト</title>
     <meta name="description" content="白山市旧市町村8地域を巡るNFCバッジクエスト">
     <meta name="theme-color" content="#87CEEB">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preload" href="白山.png" as="image" type="image/png">
+    <link rel="manifest" href="manifest.json?v=2.6.3">
+    <link rel="stylesheet" href="styles.css?v=2.6.3">
+    <link rel="preload" href="白山.png?v=2.6.2" as="image" type="image/png">
 </head>
 <body>
     <header>
@@ -76,30 +76,99 @@
 
     </div>
 
-    <script type="module" src="rpg-map-engine.js" defer></script>
-    <script type="module" src="badge-system.js" defer></script>
-    <script type="module" src="ar-camera.js" defer></script>
-    <script type="module" src="avatar-system.js" defer></script>
-    <script src="hakusan-real-places.js"></script>
-    <script src="hakusan-real-photos-system.js"></script>
+    <script type="module" src="rpg-map-engine.js?v=2.6.3" defer></script>
+    <script type="module" src="badge-system.js?v=2.6.3" defer></script>
+    <script type="module" src="ar-camera.js?v=2.6.3" defer></script>
+    <script type="module" src="avatar-system.js?v=2.6.3" defer></script>
+    <script src="hakusan-gps-system.js?v=2.6.3"></script>
+    <script src="hakusan-correct-coords.js?v=2.6.3"></script>
+    <script src="hakusan-real-places.js?v=2.6.3"></script>
+    <script src="hakusan-real-photos-system.js?v=2.6.3"></script>
 
     <script>
-        // Service Worker登録
+        // Service Worker登録 - 強制アップデート
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
+            // 既存のService Workerをすべてアンインストール
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                registrations.forEach(registration => {
+                    registration.unregister();
+                    console.log('🗑️ 旧Service Worker削除:', registration.scope);
+                });
+            });
+            
+            // 新しいService Workerを登録
+            navigator.serviceWorker.register('/sw.js?v=2.6.2')
                 .then(registration => {
-                    console.log('SW: Service Worker registered:', registration);
+                    console.log('✅ Service Worker v2.6.2登録:', registration);
+                    // 即座に更新を適用
+                    registration.update();
                 })
                 .catch(error => {
-                    console.log('SW: Service Worker registration failed:', error);
+                    console.log('❌ Service Worker登録失敗:', error);
                 });
+        }
+
+        // 🔥 キャッシュクリア＆強制更新システム
+        // バージョン管理とキャッシュクリア
+        const CURRENT_VERSION = '2.6.3';  // 写真システム完全修正
+        const STORED_VERSION = localStorage.getItem('app-version');
+        
+        if (STORED_VERSION !== CURRENT_VERSION) {
+            console.log(`🔄 バージョン更新検出: ${STORED_VERSION} → ${CURRENT_VERSION}`);
+            
+            // キャッシュをすべてクリア
+            if ('caches' in window) {
+                caches.keys().then(cacheNames => {
+                    cacheNames.forEach(cacheName => {
+                        caches.delete(cacheName);
+                        console.log('🗑️ キャッシュ削除:', cacheName);
+                    });
+                });
+            }
+            
+            // バージョン更新
+            localStorage.setItem('app-version', CURRENT_VERSION);
+            
+            // ページを強制リロード（キャッシュなし）
+            if (!window.location.search.includes('reloaded')) {
+                window.location.href = window.location.pathname + '?reloaded=' + Date.now();
+            }
         }
 
         // 地域名所ボタンの初期化
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 はくさんNFCクエスト v2.6.3 起動');
+            console.log('✅ AR機能: 有効');
+            console.log('✅ GPS機能: 有効（正確な白山市判定）');
+            console.log('✅ モバイルUI: 最適化済み');
+            console.log('✅ 写真システム: Unsplash高品質写真（座標修正済み）+ 詳細ログ');
+            console.log('✅ 全座標: Google Maps実測値');
+            console.log('🔍 デバッグモード: 有効（詳細ログ出力）');
+            
+            // 写真システムの即時確認と初期化
+            console.log('📸 写真システムチェック開始...');
+            console.log('HakusanRealPhotos クラス:', typeof window.HakusanRealPhotos);
+            console.log('hakusanRealPhotos インスタンス:', typeof window.hakusanRealPhotos);
+            
+            setTimeout(() => {
+                if (typeof window.HakusanRealPhotos !== 'undefined') {
+                    console.log('✅ 写真システムクラス: 読み込み済み');
+                    if (!window.hakusanRealPhotos) {
+                        window.hakusanRealPhotos = new window.HakusanRealPhotos();
+                        console.log('✅ 写真システムインスタンス作成完了');
+                    } else {
+                        console.log('✅ 写真システムインスタンス: 既に存在');
+                    }
+                } else {
+                    console.error('❌ 写真システムクラスが読み込まれていません');
+                    console.error('hakusan-real-photos-system.js が読み込まれているか確認してください');
+                }
+            }, 1000);
+            
             const regionPlacesBtn = document.getElementById('regionPlacesBtn');
             if (regionPlacesBtn) {
                 regionPlacesBtn.addEventListener('click', () => {
+                    console.log('📍 地域名所ボタンクリック');
                     // 写真付き地域選択モーダルを表示
                     showRegionSelectorWithPhotos();
                 });

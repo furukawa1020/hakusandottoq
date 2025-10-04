@@ -1,9 +1,9 @@
-// 白山地域探索システム Service Worker - Netlify最適化版
-// Version: 2.5 - Netlify CDN対応・Unsplash削除完了
+// 白山地域探索システム Service Worker
+// Version: 2.6.3 - 写真システムログ強化版
 
-const CACHE_NAME = 'hakusan-v2.5.0';
-const STATIC_CACHE = 'hakusan-static-v2.5.0';
-const DYNAMIC_CACHE = 'hakusan-dynamic-v2.5.0';
+const CACHE_NAME = 'hakusan-v2.6.3';
+const STATIC_CACHE = 'hakusan-static-v2.6.3';
+const DYNAMIC_CACHE = 'hakusan-dynamic-v2.6.3';
 
 // Netlify最適化キャッシュ戦略
 const CACHE_STRATEGIES = {

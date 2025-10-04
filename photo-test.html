@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>写真表示テスト</title>
+</head>
+<body>
+    <h1>石川県観光連盟 写真URLテスト</h1>
+    <div id="test-results"></div>
+    
+    <script>
+        const testUrls = [
+            'https://www.hot-ishikawa.jp/lsc/upfile/spot/0000/5321/5321_1_l.jpg',
+            'https://www.hot-ishikawa.jp/lsc/upfile/spot/0000/5396/5396_1_l.jpg',
+            'https://www.hot-ishikawa.jp/lsc/upfile/spot/0000/6273/6273_1_l.jpg',
+        ];
+        
+        const resultsDiv = document.getElementById('test-results');
+        
+        testUrls.forEach(url => {
+            const img = new Image();
+            img.onload = () => {
+                resultsDiv.innerHTML += `<p style="color: green;">✅ 成功: ${url}</p><img src="${url}" style="width: 200px;"><br>`;
+            };
+            img.onerror = () => {
+                resultsDiv.innerHTML += `<p style="color: red;">❌ 失敗: ${url}</p>`;
+            };
+            img.src = url;
+        });
+    </script>
+</body>
+</html>

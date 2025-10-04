@@ -1,6 +1,7 @@
 {
   "name": "はくさんNFCバッジクエスト",
   "short_name": "はくさんNFC",
+  "version": "2.6.0",
   "description": "白山市旧市町村8地域を巡るNFCバッジクエスト",
   "start_url": "/",
   "display": "standalone",
