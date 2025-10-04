@@ -474,7 +474,7 @@ class HakusanRealPhotos {
                 ">
                     <p>📍 すべての座標を実際の場所で確認しました（小数点6桁の精度）</p>
                     <p>🖼️ 写真はWikimedia Commons及び著作権フリー画像を使用</p>
-                    <p>🔍 v2.8.0 - 完全正確版</p>
+                    <p>🔍 v2.9.0 - 完全正確版</p>
                 </div>
             </div>
         `;
@@ -497,7 +497,7 @@ class HakusanRealPhotos {
 }
 
 // グローバル初期化
-console.log('🔧 hakusan-real-photos-system.js 読み込み開始 v2.8.0');
+console.log('🔧 hakusan-real-photos-system.js 読み込み開始 v2.9.0');
 
 if (typeof window !== 'undefined') {
     console.log('✅ window オブジェクト: 有効');
@@ -529,4 +529,4 @@ if (typeof window !== 'undefined') {
     console.error('❌ window オブジェクトが見つかりません');
 }
 
-console.log('✅ hakusan-real-photos-system.js 読み込み完了 v2.8.0');
+console.log('✅ hakusan-real-photos-system.js 読み込み完了 v2.9.0');
