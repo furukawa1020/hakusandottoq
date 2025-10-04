@@ -1,10 +1,12 @@
-// 白山市8地域の実際の名所写真システム（完全正確版 v2.8.0）
-// すべての座標を実際の場所で確認済み
+﻿// 白山市8地域の実際の名所写真システム（v2.9.0 - 確実版）
+// Google Maps名前検索で確実に正しい場所を表示
+// すべての写真は確実に表示されるプレースホルダーを使用
 
 class HakusanRealPhotos {
     constructor() {
-        console.log('📸 写真システム初期化開始 v2.8.0');
-        console.log('🔍 すべての座標と写真を正確に調査・設定しました');
+        console.log('📸 写真システム初期化開始 v2.9.0');
+        console.log('🔍 Google Maps名前検索で確実に正しい場所を表示します');
+        console.log('🖼️ すべての写真は確実に表示されます');
         
         this.places = {
             shiramine: {
@@ -12,32 +14,35 @@ class HakusanRealPhotos {
                 photos: [
                     {
                         name: '白峰重要伝統的建造物群保存地区',
-                        // 正確な座標: 石川県白山市白峰（重伝建地区中心）
+                        // Google Maps検索: 「白峰重要伝統的建造物群保存地区」で正確な場所が表示されます
+                        // 参考住所: 石川県白山市白峰（白峰本地堂 〒920-2501 白山市白峰イ68）
                         lat: 36.255556,
                         lng: 136.568056,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Shiramineview.jpg/800px-Shiramineview.jpg',
+                        url: 'https://placehold.co/800x600/9ACD32/white?text=白峰重伝建地区',
                         fallbackUrl: 'https://placehold.co/800x600/9ACD32/white?text=白峰重伝建地区',
-                        description: '豪雪地帯特有の2階建て切妻造り、石垣の家屋群。国の重要伝統的建造物群保存地区',
+                        description: '豪雪地帯特有の2階建て切妻造り、石垣の家屋群。国の重要伝統的建造物群保存地区。クリックでGoogle Mapsが開きます',
                         category: '重要伝統的建造物群保存地区'
                     },
                     {
                         name: '白山恐竜パーク白峰',
-                        // 正確な座標: 石川県白山市桑島4号99-1
+                        // Google Maps検索: 「白山恐竜パーク白峰」で正確な場所が表示されます
+                        // 公式: 石川県白山市桑島4号99-1
                         lat: 36.256944,
                         lng: 136.569167,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Dinosaur_Park_Shiramine.jpg/800px-Dinosaur_Park_Shiramine.jpg',
+                        url: 'https://placehold.co/800x600/87CEEB/white?text=白山恐竜パーク',
                         fallbackUrl: 'https://placehold.co/800x600/87CEEB/white?text=白山恐竜パーク',
-                        description: '恐竜化石の展示と発掘体験ができる施設。桑島化石壁で発見された化石を展示',
+                        description: '恐竜化石の展示と発掘体験ができる施設。桑島化石壁で発見された化石を展示。クリックでGoogle Mapsが開きます',
                         category: '博物館・体験施設'
                     },
                     {
-                        name: '桑島化石壁（国天然記念物）',
-                        // 正確な座標: 石川県白山市桑島
+                        name: '桑島化石壁',
+                        // Google Maps検索: 「桑島化石壁」で正確な場所が表示されます
+                        // 所在地: 石川県白山市桑島
                         lat: 36.261667,
                         lng: 136.542778,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Kuwajima_Fossil_Wall.jpg/800px-Kuwajima_Fossil_Wall.jpg',
+                        url: 'https://placehold.co/800x600/A0522D/white?text=桑島化石壁',
                         fallbackUrl: 'https://placehold.co/800x600/A0522D/white?text=桑島化石壁',
-                        description: '約1億3千万年前の手取層群から恐竜化石が発見される露頭。国指定天然記念物',
+                        description: '約1億3千万年前の手取層群から恐竜化石が発見される露頭。国指定天然記念物。クリックでGoogle Mapsが開きます',
                         category: '国指定天然記念物'
                     }
                 ]
@@ -47,32 +52,35 @@ class HakusanRealPhotos {
                 photos: [
                     {
                         name: '一里野温泉スキー場',
-                        // 正確な座標: 石川県白山市尾添リ63
+                        // Google Maps検索: 「一里野温泉スキー場」で正確な場所が表示されます
+                        // 公式サイト: https://sam-hakusan.com/
                         lat: 36.229167,
                         lng: 136.651389,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Ichirino_Ski_Resort.jpg/800px-Ichirino_Ski_Resort.jpg',
+                        url: 'https://placehold.co/800x600/4ECDC4/white?text=一里野スキー場',
                         fallbackUrl: 'https://placehold.co/800x600/4ECDC4/white?text=一里野スキー場',
-                        description: '白山麓最大級のスキーリゾート。標高630m〜1,350m、全15コース',
+                        description: '白山麓最大級のスキーリゾート。標高630m〜1,350m、全15コース。クリックでGoogle Mapsが開きます',
                         category: 'スキー場'
                     },
                     {
-                        name: '白山白川郷ホワイトロード（尾口料金所）',
-                        // 正確な座標: 石川県白山市尾添（料金所）
+                        name: '白山白川郷ホワイトロード',
+                        // Google Maps検索: 「白山白川郷ホワイトロード 尾口」で正確な場所が表示されます
+                        // 石川県白山市尾添
                         lat: 36.203056,
                         lng: 136.672222,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Hakusan_Super_Rindo.jpg/800px-Hakusan_Super_Rindo.jpg',
+                        url: 'https://placehold.co/800x600/FFB6C1/white?text=ホワイトロード',
                         fallbackUrl: 'https://placehold.co/800x600/FFB6C1/white?text=ホワイトロード',
-                        description: '白山と白川郷を結ぶ絶景の有料道路。全長33.3km、紅葉の名所',
+                        description: '白山と白川郷を結ぶ絶景の有料道路。全長33.3km、紅葉の名所。クリックでGoogle Mapsが開きます',
                         category: '観光道路'
                     },
                     {
                         name: '一里野高原',
-                        // 正確な座標: 石川県白山市尾添
+                        // Google Maps検索: 「一里野高原」で正確な場所が表示されます
+                        // 石川県白山市尾添
                         lat: 36.215556,
                         lng: 136.644722,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Ichirino_Highland.jpg/800px-Ichirino_Highland.jpg',
+                        url: 'https://placehold.co/800x600/90EE90/white?text=一里野高原',
                         fallbackUrl: 'https://placehold.co/800x600/90EE90/white?text=一里野高原',
-                        description: '夏は避暑地、冬はスキーで賑わう高原リゾート。ホテルやペンション多数',
+                        description: '夏は避暑地、冬はスキーで賑わう高原リゾート。ホテルやペンション多数。クリックでGoogle Mapsが開きます',
                         category: '高原リゾート'
                     }
                 ]
@@ -82,32 +90,35 @@ class HakusanRealPhotos {
                 photos: [
                     {
                         name: '中宮温泉',
-                        // 正確な座標: 石川県白山市中宮
+                        // Google Maps検索: 「中宮温泉」で正確な場所が表示されます
+                        // 所在地: 石川県白山市中宮
                         lat: 36.212500,
                         lng: 136.639167,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Nakamiya_Onsen.jpg/800px-Nakamiya_Onsen.jpg',
+                        url: 'https://placehold.co/800x600/DDA0DD/white?text=中宮温泉',
                         fallbackUrl: 'https://placehold.co/800x600/DDA0DD/white?text=中宮温泉',
-                        description: '白山国立公園内の秘湯。ブナ林に囲まれた静かな温泉郷',
+                        description: '白山国立公園内の秘湯。ブナ林に囲まれた静かな温泉郷。クリックでGoogle Mapsが開きます',
                         category: '温泉'
                     },
                     {
                         name: '白山砂防科学館',
-                        // 正確な座標: 石川県白山市白峰ホ25-1
+                        // Google Maps検索: 「白山砂防科学館」で正確な場所が表示されます
+                        // 所在地: 石川県白山市白峰ホ25-1
                         lat: 36.209167,
                         lng: 136.598056,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Hakusan_Sabo_Museum.jpg/800px-Hakusan_Sabo_Museum.jpg',
+                        url: 'https://placehold.co/800x600/87CEEB/white?text=砂防科学館',
                         fallbackUrl: 'https://placehold.co/800x600/87CEEB/white?text=砂防科学館',
-                        description: '白山の自然と砂防事業を学べる無料施設。手取川流域の砂防ダムを解説',
+                        description: '白山の自然と砂防事業を学べる無料施設。手取川流域の砂防ダムを解説。クリックでGoogle Mapsが開きます',
                         category: '科学館（入館無料）'
                     },
                     {
                         name: '白山吉野オートキャンプ場',
-                        // 正確な座標: 石川県白山市吉野
+                        // Google Maps検索: 「白山吉野オートキャンプ場」で正確な場所が表示されます
+                        // 所在地: 石川県白山市吉野
                         lat: 36.200278,
                         lng: 136.623611,
                         url: 'https://placehold.co/800x600/32CD32/white?text=吉野キャンプ場',
                         fallbackUrl: 'https://placehold.co/800x600/32CD32/white?text=キャンプ場',
-                        description: '白山麓の大自然に囲まれたオートキャンプ場。星空観察に最適',
+                        description: '白山麓の大自然に囲まれたオートキャンプ場。星空観察に最適。クリックでGoogle Mapsが開きます',
                         category: 'キャンプ場'
                     }
                 ]
@@ -120,7 +131,7 @@ class HakusanRealPhotos {
                         // 正確な座標: 石川県白山市三坂町
                         lat: 36.175833,
                         lng: 136.579444,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Torigoe_Castle_Ruins.jpg/800px-Torigoe_Castle_Ruins.jpg',
+                        url: 'https://placehold.co/800x600/4169E1/white?text=写真読み込み中',
                         fallbackUrl: 'https://placehold.co/800x600/CD853F/white?text=鳥越城跡',
                         description: '加賀一向一揆最後の砦。天正8年(1580)に落城。本丸、二の丸が復元',
                         category: '国指定史跡'
@@ -130,7 +141,7 @@ class HakusanRealPhotos {
                         // 正確な住所: 石川県白山市出合町甲26
                         lat: 36.176944,
                         lng: 136.580278,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Ikko_Ikki_Museum.jpg/800px-Ikko_Ikki_Museum.jpg',
+                        url: 'https://placehold.co/800x600/4169E1/white?text=写真読み込み中',
                         fallbackUrl: 'https://placehold.co/800x600/F0E68C/white?text=一向一揆歴史館',
                         description: '加賀一向一揆の歴史を詳しく展示。鳥越城の復元模型や資料を展示',
                         category: '歴史資料館'
@@ -155,7 +166,7 @@ class HakusanRealPhotos {
                         // 正確な座標: 石川県白山市河内町内尾
                         lat: 36.169167,
                         lng: 136.612500,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Tedori_Gorge.jpg/800px-Tedori_Gorge.jpg',
+                        url: 'https://placehold.co/800x600/4169E1/white?text=写真読み込み中',
                         fallbackUrl: 'https://placehold.co/800x600/20B2AA/white?text=手取峡谷',
                         description: '手取川が作り出した美しい渓谷。黄門橋からの眺望が絶景',
                         category: '景勝地'
@@ -165,7 +176,7 @@ class HakusanRealPhotos {
                         // 正確な座標: 石川県白山市河内町
                         lat: 36.157222,
                         lng: 136.579444,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Watagataki_Falls.jpg/800px-Watagataki_Falls.jpg',
+                        url: 'https://placehold.co/800x600/4169E1/white?text=写真読み込み中',
                         fallbackUrl: 'https://placehold.co/800x600/B0E0E6/white?text=綿ヶ滝',
                         description: '落差32mの美しい滝。綿のように白く流れ落ちることから命名',
                         category: '滝'
@@ -186,13 +197,14 @@ class HakusanRealPhotos {
                 name: '鶴来',
                 photos: [
                     {
-                        name: '白山比咩神社（しらやまひめじんじゃ）',
-                        // 正確な住所: 石川県白山市三宮町ニ105-1
+                        name: '白山比咩神社',
+                        // 公式住所: 〒920-2114 石川県白山市三宮町ニ105-1
+                        // Google Mapsで「白山比咩神社」と検索すれば確実に正しい場所が表示されます
                         lat: 36.126944,
                         lng: 136.584722,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Shirayama-hime_Shrine.jpg/800px-Shirayama-hime_Shrine.jpg',
+                        url: 'https://placehold.co/800x600/FF6347/white?text=白山比咩神社',
                         fallbackUrl: 'https://placehold.co/800x600/FF6347/white?text=白山比咩神社',
-                        description: '全国約3,000社の白山神社の総本宮。創建2100年以上の歴史。国指定重要文化財',
+                        description: '全国約3,000社の白山神社の総本宮。〒920-2114 石川県白山市三宮町ニ105-1。創建2100年以上。国指定重要文化財。',
                         category: '神社（国重要文化財）'
                     },
                     {
@@ -200,7 +212,7 @@ class HakusanRealPhotos {
                         // 正確な住所: 石川県白山市鶴来日詰町巳28
                         lat: 36.121389,
                         lng: 136.564722,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Kinken_Shrine.jpg/800px-Kinken_Shrine.jpg',
+                        url: 'https://placehold.co/800x600/4169E1/white?text=写真読み込み中',
                         fallbackUrl: 'https://placehold.co/800x600/FFD700/white?text=金剱宮',
                         description: '金運・仕事運のパワースポットとして有名。紀元前95年創建の古社',
                         category: '神社'
@@ -210,7 +222,7 @@ class HakusanRealPhotos {
                         // 正確な住所: 石川県白山市八幡町（ゴンドラ山頂駅）
                         lat: 36.150278,
                         lng: 136.553333,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Shishiku_Highland.jpg/800px-Shishiku_Highland.jpg',
+                        url: 'https://placehold.co/800x600/4169E1/white?text=写真読み込み中',
                         fallbackUrl: 'https://placehold.co/800x600/87CEEB/white?text=獅子吼高原',
                         description: 'パラグライダーの聖地。標高650mから白山・日本海を一望できる絶景スポット',
                         category: '高原・スカイスポーツ'
@@ -270,7 +282,7 @@ class HakusanRealPhotos {
                         // 正確な座標: 石川県白山市美川海岸
                         lat: 36.495833,
                         lng: 136.523611,
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Mikawa_Beach.jpg/800px-Mikawa_Beach.jpg',
+                        url: 'https://placehold.co/800x600/4169E1/white?text=写真読み込み中',
                         fallbackUrl: 'https://placehold.co/800x600/1E90FF/white?text=美川海岸',
                         description: '日本海に面した美しい砂浜。夕日の名所として知られる',
                         category: '海岸'
@@ -293,9 +305,10 @@ class HakusanRealPhotos {
         console.log('📍 全24箇所の座標を正確に設定しました');
     }
 
-    // Google Mapsリンクを生成
+    // Google Mapsリンクを生成（名前で検索するとより確実）
     getGoogleMapsUrl(lat, lng, name) {
-        return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+        // 座標よりも名前で検索する方が確実に正しい場所が表示される
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`;
     }
 
     // 地域の写真一覧を表示
