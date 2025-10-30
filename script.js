@@ -460,34 +460,40 @@ function showCompletionCelebration() {
     }
 }
 
-// Create confetti effect
+// Create confetti effect (optimized)
 function createConfetti() {
     const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd'];
+    const fragment = document.createDocumentFragment();
+    const confettiElements = [];
     
+    // Create all confetti elements at once using DocumentFragment
     for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-            const confetti = document.createElement('div');
-            confetti.style.cssText = `
-                position: fixed;
-                width: 10px;
-                height: 10px;
-                background: ${colors[Math.floor(Math.random() * colors.length)]};
-                top: -10px;
-                left: ${Math.random() * 100}%;
-                z-index: 1001;
-                border-radius: 50%;
-                animation: confettiFall 3s ease-in-out forwards;
-            `;
-            
-            document.body.appendChild(confetti);
-            
-            setTimeout(() => {
-                confetti.remove();
-            }, 3000);
-        }, i * 100);
+        const confetti = document.createElement('div');
+        confetti.style.cssText = `
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            top: -10px;
+            left: ${Math.random() * 100}%;
+            z-index: 1001;
+            border-radius: 50%;
+            animation: confettiFall 3s ease-in-out forwards;
+            animation-delay: ${i * 0.1}s;
+        `;
+        confettiElements.push(confetti);
+        fragment.appendChild(confetti);
     }
     
-    // Add confetti animation
+    // Single DOM append operation
+    document.body.appendChild(fragment);
+    
+    // Single cleanup timeout instead of 50
+    setTimeout(() => {
+        confettiElements.forEach(el => el.remove());
+    }, 3000 + (50 * 100));
+    
+    // Add confetti animation style once
     if (!document.querySelector('#confetti-style')) {
         const style = document.createElement('style');
         style.id = 'confetti-style';

@@ -673,17 +673,25 @@ class HakusanAvatarSystem {
         this.updateCustomizerUI();
         document.getElementById('avatar-customizer').style.display = 'flex';
         
-        // アニメーション開始
-        this.animationInterval = setInterval(() => {
-            this.updateAnimation();
-        }, 50);
+        // アニメーション開始 (using requestAnimationFrame for better performance)
+        this.isAnimating = true;
+        this.animate();
+    }
+    
+    animate() {
+        if (!this.isAnimating) return;
+        
+        this.updateAnimation();
+        this.animationFrame = requestAnimationFrame(() => this.animate());
     }
     
     closeCustomizer() {
         document.getElementById('avatar-customizer').style.display = 'none';
         
-        if (this.animationInterval) {
-            clearInterval(this.animationInterval);
+        this.isAnimating = false;
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+            this.animationFrame = null;
         }
     }
     

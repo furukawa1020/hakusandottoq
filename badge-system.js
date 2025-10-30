@@ -58,7 +58,6 @@ class HakusanBadgeSystem {
     }
     
     createBadgeImageOptimized(ctx, regionData, rarityData, colorCache) {
-    createBadgeImageOptimized(ctx, regionData, rarityData, colorCache) {
         
         // 背景グラデーション
         const gradient = ctx.createRadialGradient(60, 60, 20, 60, 60, 60);
