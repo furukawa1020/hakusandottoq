@@ -106,6 +106,10 @@ const domCache = {
     pwaInstallSection: null,
     pwaInstallBtn: null,
     
+    // Incentive system containers
+    shareContainer: null,
+    statsContainer: null,
+    
     // Map for town cards (populated on init)
     townCards: new Map(),
     stampStatuses: new Map(),
@@ -125,6 +129,10 @@ const domCache = {
         // PWA elements
         this.pwaInstallSection = document.getElementById('pwaInstallSection');
         this.pwaInstallBtn = document.getElementById('pwaInstallBtn');
+        
+        // Incentive system containers
+        this.shareContainer = document.querySelector('.share-container');
+        this.statsContainer = document.querySelector('.stats-container');
         
         // Cache town-specific elements
         for (const townCode in towns) {
@@ -785,20 +793,18 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// Update incentive content containers
+// Update incentive content containers (optimized with cache)
 function updateIncentiveContent() {
     if (!window.incentiveSystem) return;
     
-    // Update share section
-    const shareContainer = document.querySelector('.share-container');
-    if (shareContainer) {
-        shareContainer.innerHTML = window.incentiveSystem.createShareSection();
+    // Update share section - use cached element
+    if (domCache.shareContainer) {
+        domCache.shareContainer.innerHTML = window.incentiveSystem.createShareSection();
     }
     
-    // Update stats dashboard  
-    const statsContainer = document.querySelector('.stats-container');
-    if (statsContainer) {
-        statsContainer.innerHTML = window.incentiveSystem.createStatsSection();
+    // Update stats dashboard - use cached element
+    if (domCache.statsContainer) {
+        domCache.statsContainer.innerHTML = window.incentiveSystem.createStatsSection();
     }
     
     // Update secret content visibility

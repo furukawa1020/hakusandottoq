@@ -71,6 +71,16 @@ class HakusanRPGEngine {
             totalSteps: 0
         };
         
+        // Cache UI elements for performance
+        this.uiElements = {
+            badgeCount: null,
+            currentLocation: null,
+            nearestSpot: null,
+            notification: null,
+            notificationTitle: null,
+            notificationText: null
+        };
+        
         this.init();
     }
     
@@ -79,9 +89,20 @@ class HakusanRPGEngine {
         this.setupCanvas();
         this.setupControls();
         this.loadPlayerProgress();
+        this.cacheUIElements(); // Cache UI elements after DOM is ready
         this.gameLoop();
         
         console.log('白山RPGマップエンジン初期化完了');
+    }
+    
+    cacheUIElements() {
+        // Cache frequently accessed UI elements
+        this.uiElements.badgeCount = document.getElementById('badgeCount');
+        this.uiElements.currentLocation = document.getElementById('currentLocation');
+        this.uiElements.nearestSpot = document.getElementById('nearestSpot');
+        this.uiElements.notification = document.getElementById('notification');
+        this.uiElements.notificationTitle = document.getElementById('notificationTitle');
+        this.uiElements.notificationText = document.getElementById('notificationText');
     }
     
     async loadMapImage() {
@@ -623,45 +644,39 @@ class HakusanRPGEngine {
     }
     
     updateUI() {
-        // バッジカウント更新
-        const badgeCountEl = document.getElementById('badgeCount');
-        if (badgeCountEl) {
-            badgeCountEl.textContent = `バッジ: ${this.gameState.badgesCollected}/8`;
+        // バッジカウント更新 - use cached element
+        if (this.uiElements.badgeCount) {
+            this.uiElements.badgeCount.textContent = `バッジ: ${this.gameState.badgesCollected}/8`;
         }
         
-        // 現在地更新
-        const currentLocationEl = document.getElementById('currentLocation');
-        if (currentLocationEl) {
+        // 現在地更新 - use cached element
+        if (this.uiElements.currentLocation) {
             const location = this.gameState.currentRegion || '冒険中';
-            currentLocationEl.textContent = `現在地: ${location}`;
+            this.uiElements.currentLocation.textContent = `現在地: ${location}`;
         }
         
-        // 最寄りスポット更新
-        const nearestSpotEl = document.getElementById('nearestSpot');
-        if (nearestSpotEl) {
+        // 最寄りスポット更新 - use cached element
+        if (this.uiElements.nearestSpot) {
             const nearest = this.gameState.nearestPoint;
             if (nearest) {
                 const distance = Math.round(nearest.distance);
-                nearestSpotEl.textContent = `最寄り: ${nearest.name} (${distance}m)`;
+                this.uiElements.nearestSpot.textContent = `最寄り: ${nearest.name} (${distance}m)`;
             } else {
-                nearestSpotEl.textContent = '最寄り: 探索中...';
+                this.uiElements.nearestSpot.textContent = '最寄り: 探索中...';
             }
         }
     }
     
     showNotification(title, text) {
-        const notification = document.getElementById('notification');
-        const notificationTitle = document.getElementById('notificationTitle');
-        const notificationText = document.getElementById('notificationText');
-        
-        if (notification && notificationTitle && notificationText) {
-            notificationTitle.textContent = title;
-            notificationText.textContent = text;
+        // Use cached elements
+        if (this.uiElements.notification && this.uiElements.notificationTitle && this.uiElements.notificationText) {
+            this.uiElements.notificationTitle.textContent = title;
+            this.uiElements.notificationText.textContent = text;
             
-            notification.classList.add('show');
+            this.uiElements.notification.classList.add('show');
             
             setTimeout(() => {
-                notification.classList.remove('show');
+                this.uiElements.notification.classList.remove('show');
             }, 3000);
         }
     }
