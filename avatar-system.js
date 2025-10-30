@@ -62,6 +62,9 @@ class HakusanAvatarSystem {
         // Bind animate method once for better performance
         this.boundAnimate = this.animate.bind(this);
         
+        // Cache DOM elements
+        this.customizerElement = null;
+        
         this.init();
     }
     
@@ -69,6 +72,10 @@ class HakusanAvatarSystem {
         this.loadAvatar();
         this.checkUnlocks();
         this.setupCustomizer();
+        
+        // Cache the customizer element after setup
+        this.customizerElement = document.getElementById('avatar-customizer');
+        
         console.log('アバターシステム初期化完了');
     }
     
@@ -675,7 +682,10 @@ class HakusanAvatarSystem {
     openCustomizer() {
         this.checkUnlocks();
         this.updateCustomizerUI();
-        document.getElementById('avatar-customizer').style.display = 'flex';
+        
+        if (this.customizerElement) {
+            this.customizerElement.style.display = 'flex';
+        }
         
         // アニメーション開始 (using requestAnimationFrame for better performance)
         this.isAnimating = true;
@@ -690,7 +700,9 @@ class HakusanAvatarSystem {
     }
     
     closeCustomizer() {
-        document.getElementById('avatar-customizer').style.display = 'none';
+        if (this.customizerElement) {
+            this.customizerElement.style.display = 'none';
+        }
         
         this.isAnimating = false;
         if (this.requestId) {

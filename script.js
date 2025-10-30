@@ -30,18 +30,16 @@ window.addEventListener('appinstalled', () => {
     isInstallPromptAvailable = false;
 });
 
-// PWA Install Functions
+// PWA Install Functions (optimized with cache)
 function showInstallButton() {
-    const installSection = document.getElementById('pwaInstallSection');
-    if (installSection) {
-        installSection.classList.add('show');
+    if (domCache.pwaInstallSection) {
+        domCache.pwaInstallSection.classList.add('show');
     }
 }
 
 function hideInstallButton() {
-    const installSection = document.getElementById('pwaInstallSection');
-    if (installSection) {
-        installSection.classList.remove('show');
+    if (domCache.pwaInstallSection) {
+        domCache.pwaInstallSection.classList.remove('show');
     }
 }
 
@@ -52,9 +50,10 @@ async function installPWA() {
     }
 
     try {
-        const installBtn = document.getElementById('pwaInstallBtn');
-        installBtn.disabled = true;
-        installBtn.textContent = 'インストール中...';
+        if (domCache.pwaInstallBtn) {
+            domCache.pwaInstallBtn.disabled = true;
+            domCache.pwaInstallBtn.textContent = 'インストール中...';
+        }
 
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
@@ -65,17 +64,20 @@ async function installPWA() {
             console.log('✅ ユーザーがPWAインストールを承認');
         } else {
             console.log('❌ ユーザーがPWAインストールを拒否');
-            installBtn.disabled = false;
-            installBtn.textContent = 'アプリとしてインストール';
+            if (domCache.pwaInstallBtn) {
+                domCache.pwaInstallBtn.disabled = false;
+                domCache.pwaInstallBtn.textContent = 'アプリとしてインストール';
+            }
         }
         
         deferredPrompt = null;
         isInstallPromptAvailable = false;
     } catch (error) {
         console.error('❌ PWAインストールエラー:', error);
-        const installBtn = document.getElementById('pwaInstallBtn');
-        installBtn.disabled = false;
-        installBtn.textContent = '📱 アプリとしてインストール';
+        if (domCache.pwaInstallBtn) {
+            domCache.pwaInstallBtn.disabled = false;
+            domCache.pwaInstallBtn.textContent = '📱 アプリとしてインストール';
+        }
     }
 }
 
@@ -91,19 +93,74 @@ const badges = {
     oguchi: '尾口バッジ'
 };
 
-// Cache frequently used DOM elements
+// Cache frequently used DOM elements (optimized for efficiency)
 const domCache = {
+    // Main UI elements
     stampCount: null,
     progressFill: null,
     completeSection: null,
     gameMap: null,
     zoomLevel: null,
+    
+    // PWA elements
+    pwaInstallSection: null,
+    pwaInstallBtn: null,
+    
+    // Map for town cards (populated on init)
+    townCards: new Map(),
+    stampStatuses: new Map(),
+    gymPins: new Map(),
+    
+    // Notification styles
+    confettiStyle: null,
+    
     init() {
+        // Core UI elements
         this.stampCount = document.getElementById('stampCount');
         this.progressFill = document.getElementById('progressFill');
         this.completeSection = document.getElementById('completeSection');
         this.gameMap = document.getElementById('gameMap');
         this.zoomLevel = document.getElementById('zoomLevel');
+        
+        // PWA elements
+        this.pwaInstallSection = document.getElementById('pwaInstallSection');
+        this.pwaInstallBtn = document.getElementById('pwaInstallBtn');
+        
+        // Cache town-specific elements
+        for (const townCode in towns) {
+            const townCard = document.querySelector(`[data-town="${townCode}"]`);
+            if (townCard) {
+                this.townCards.set(townCode, townCard);
+            }
+            
+            const stampStatus = document.getElementById(`stamp-${townCode}`);
+            if (stampStatus) {
+                this.stampStatuses.set(townCode, stampStatus);
+            }
+            
+            const gymPin = document.getElementById(`gym-${townCode}`);
+            if (gymPin) {
+                this.gymPins.set(townCode, gymPin);
+            }
+        }
+        
+        // Check for confetti style
+        this.confettiStyle = document.querySelector('#confetti-style');
+    },
+    
+    // Helper to get town card
+    getTownCard(townCode) {
+        return this.townCards.get(townCode);
+    },
+    
+    // Helper to get stamp status
+    getStampStatus(townCode) {
+        return this.stampStatuses.get(townCode);
+    },
+    
+    // Helper to get gym pin
+    getGymPin(townCode) {
+        return this.gymPins.get(townCode);
     }
 };
 
@@ -148,14 +205,14 @@ function getStamps() {
     return stamps ? JSON.parse(stamps) : [];
 }
 
-// バッジアイコンを確実に更新する専用関数 (optimized)
+// バッジアイコンを確実に更新する専用関数 (optimized with cache)
 function forceBadgeIconUpdate() {
     const stamps = getStamps();
     const stampSet = new Set(stamps);
     
-    // 全ての町をチェック - optimized loop
+    // 全ての町をチェック - use cached elements
     for (const townCode in towns) {
-        const townCard = document.querySelector(`[data-town="${townCode}"]`);
+        const townCard = domCache.getTownCard(townCode);
         if (!townCard) continue;
         
         const badgeIcons = townCard.querySelectorAll('.badge-icon');
@@ -233,12 +290,12 @@ function updateStampDisplay() {
     // Create stamp set for O(1) lookup instead of O(n) includes()
     const stampSet = new Set(stamps);
     
-    // Update town cards - optimized loop
+    // Update town cards - optimized with cache
     for (const townCode in towns) {
-        const townCard = document.querySelector(`[data-town="${townCode}"]`);
+        const townCard = domCache.getTownCard(townCode);
         if (!townCard) continue;
         
-        const stampStatus = document.getElementById(`stamp-${townCode}`);
+        const stampStatus = domCache.getStampStatus(townCode);
         const badgeIcon = townCard.querySelector('.badge-icon');
         const isCompleted = stampSet.has(townCode);
         
@@ -305,10 +362,10 @@ const gymIcons = {
     'yoshinodani': '💧'
 };
 
-// Separated gym pins update for better performance
+// Separated gym pins update for better performance (with cache)
 function updateGymPins(stampSet) {
     for (const townCode in towns) {
-        const gymPin = document.getElementById(`gym-${townCode}`);
+        const gymPin = domCache.getGymPin(townCode);
         if (!gymPin) continue;
         
         const isCompleted = stampSet.has(townCode);
@@ -438,7 +495,7 @@ function showStampNotification(townName, badgeName) {
     }, 5000);
 }
 
-// Close notification
+// Close notification (with cache optimization)
 function closeNotification() {
     const notification = document.querySelector('.stamp-notification');
     if (notification) {
@@ -496,8 +553,8 @@ function createConfetti() {
         confettiElements.forEach(el => el.remove());
     }, animationDuration + (confettiCount * staggerDelay));
     
-    // Add confetti animation style once
-    if (!document.querySelector('#confetti-style')) {
+    // Add confetti animation style once (check cache first)
+    if (!domCache.confettiStyle) {
         const style = document.createElement('style');
         style.id = 'confetti-style';
         style.textContent = `
@@ -513,6 +570,7 @@ function createConfetti() {
             }
         `;
         document.head.appendChild(style);
+        domCache.confettiStyle = style;
     }
 }
 
@@ -758,14 +816,13 @@ let lastY = 0;
 let mapX = 0;
 let mapY = 0;
 
-// Initialize map controls
+// Initialize map controls (optimized with cache)
 document.addEventListener('DOMContentLoaded', function() {
-    const gameMap = document.getElementById('gameMap');
-    if (gameMap) {
+    if (domCache.gameMap) {
         // Mouse wheel zoom
-        gameMap.addEventListener('wheel', function(e) {
+        domCache.gameMap.addEventListener('wheel', function(e) {
             e.preventDefault();
-            const rect = gameMap.getBoundingClientRect();
+            const rect = domCache.gameMap.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
@@ -777,12 +834,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Mouse drag to pan
-        gameMap.addEventListener('mousedown', function(e) {
+        domCache.gameMap.addEventListener('mousedown', function(e) {
             if (currentZoom > 1) {
                 isDragging = true;
                 lastX = e.clientX;
                 lastY = e.clientY;
-                gameMap.classList.add('dragging');
+                domCache.gameMap.classList.add('dragging');
             }
         });
         
@@ -806,20 +863,20 @@ document.addEventListener('DOMContentLoaded', function() {
         
         document.addEventListener('mouseup', function() {
             isDragging = false;
-            gameMap.classList.remove('dragging');
+            domCache.gameMap.classList.remove('dragging');
         });
         
         // Touch support for mobile
-        gameMap.addEventListener('touchstart', function(e) {
+        domCache.gameMap.addEventListener('touchstart', function(e) {
             if (e.touches.length === 1 && currentZoom > 1) {
                 isDragging = true;
                 lastX = e.touches[0].clientX;
                 lastY = e.touches[0].clientY;
-                gameMap.classList.add('dragging');
+                domCache.gameMap.classList.add('dragging');
             }
         });
         
-        gameMap.addEventListener('touchmove', function(e) {
+        domCache.gameMap.addEventListener('touchmove', function(e) {
             if (isDragging && e.touches.length === 1) {
                 e.preventDefault();
                 const deltaX = e.touches[0].clientX - lastX;
@@ -837,9 +894,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        gameMap.addEventListener('touchend', function() {
+        domCache.gameMap.addEventListener('touchend', function() {
             isDragging = false;
-            gameMap.classList.remove('dragging');
+            domCache.gameMap.classList.remove('dragging');
         });
     }
 });
@@ -875,8 +932,9 @@ function resetZoom() {
 }
 
 function zoomAtPoint(x, y, factor) {
-    const gameMap = document.getElementById('gameMap');
-    const rect = gameMap.getBoundingClientRect();
+    if (!domCache.gameMap) return;
+    
+    const rect = domCache.gameMap.getBoundingClientRect();
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     
