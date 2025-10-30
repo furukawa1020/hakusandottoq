@@ -57,6 +57,10 @@ class HakusanAvatarSystem {
         this.currentAnimation = 'idle';
         this.animationFrame = 0;
         this.lastAnimationTime = 0;
+        this.isAnimating = false;
+        
+        // Bind animate method once for better performance
+        this.boundAnimate = this.animate.bind(this);
         
         this.init();
     }
@@ -675,23 +679,23 @@ class HakusanAvatarSystem {
         
         // アニメーション開始 (using requestAnimationFrame for better performance)
         this.isAnimating = true;
-        this.animate();
+        this.requestId = requestAnimationFrame(this.boundAnimate);
     }
     
     animate() {
         if (!this.isAnimating) return;
         
         this.updateAnimation();
-        this.animationFrame = requestAnimationFrame(() => this.animate());
+        this.requestId = requestAnimationFrame(this.boundAnimate);
     }
     
     closeCustomizer() {
         document.getElementById('avatar-customizer').style.display = 'none';
         
         this.isAnimating = false;
-        if (this.animationFrame) {
-            cancelAnimationFrame(this.animationFrame);
-            this.animationFrame = null;
+        if (this.requestId) {
+            cancelAnimationFrame(this.requestId);
+            this.requestId = null;
         }
     }
     

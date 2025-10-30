@@ -463,11 +463,14 @@ function showCompletionCelebration() {
 // Create confetti effect (optimized)
 function createConfetti() {
     const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd'];
+    const confettiCount = 50;
+    const staggerDelay = 100; // ms between each confetti appearance
+    const animationDuration = 3000; // ms
     const fragment = document.createDocumentFragment();
     const confettiElements = [];
     
     // Create all confetti elements at once using DocumentFragment
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < confettiCount; i++) {
         const confetti = document.createElement('div');
         confetti.style.cssText = `
             position: fixed;
@@ -478,8 +481,8 @@ function createConfetti() {
             left: ${Math.random() * 100}%;
             z-index: 1001;
             border-radius: 50%;
-            animation: confettiFall 3s ease-in-out forwards;
-            animation-delay: ${i * 0.1}s;
+            animation: confettiFall ${animationDuration}ms ease-in-out forwards;
+            animation-delay: ${i * staggerDelay}ms;
         `;
         confettiElements.push(confetti);
         fragment.appendChild(confetti);
@@ -488,10 +491,10 @@ function createConfetti() {
     // Single DOM append operation
     document.body.appendChild(fragment);
     
-    // Single cleanup timeout instead of 50
+    // Single cleanup timeout instead of many
     setTimeout(() => {
         confettiElements.forEach(el => el.remove());
-    }, 3000 + (50 * 100));
+    }, animationDuration + (confettiCount * staggerDelay));
     
     // Add confetti animation style once
     if (!document.querySelector('#confetti-style')) {
