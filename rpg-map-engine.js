@@ -347,11 +347,12 @@ class HakusanRPGEngine {
         let nearestPoint = null;
         let nearestDistance = Infinity;
         
-        Object.entries(this.badgePoints).forEach(([id, point]) => {
-            const distance = Math.sqrt(
-                Math.pow(this.player.x - point.x, 2) + 
-                Math.pow(this.player.y - point.y, 2)
-            );
+        // Use for...in for better performance
+        for (const id in this.badgePoints) {
+            const point = this.badgePoints[id];
+            const dx = this.player.x - point.x;
+            const dy = this.player.y - point.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
             
             if (distance < nearestDistance) {
                 nearestDistance = distance;
@@ -362,7 +363,7 @@ class HakusanRPGEngine {
             if (distance < 30 && !point.discovered) {
                 this.discoverBadgePoint(id, point);
             }
-        });
+        }
         
         this.gameState.nearestPoint = nearestPoint;
     }
@@ -398,17 +399,19 @@ class HakusanRPGEngine {
     }
     
     updateGameState() {
-        // 現在地域の判定
+        // 現在地域の判定 - optimized with for...in
         let currentRegion = null;
-        Object.entries(this.badgePoints).forEach(([id, point]) => {
-            const distance = Math.sqrt(
-                Math.pow(this.player.x - point.x, 2) + 
-                Math.pow(this.player.y - point.y, 2)
-            );
+        for (const id in this.badgePoints) {
+            const point = this.badgePoints[id];
+            const dx = this.player.x - point.x;
+            const dy = this.player.y - point.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
             if (distance < 80) {
                 currentRegion = point.name;
+                break; // Exit early when found
             }
-        });
+        }
         
         this.gameState.currentRegion = currentRegion;
     }
@@ -454,7 +457,10 @@ class HakusanRPGEngine {
         this.ctx.scale(this.scale, this.scale);
         this.ctx.translate(-this.camera.x, -this.camera.y);
         
-        Object.entries(this.badgePoints).forEach(([id, point]) => {
+        // Optimized loop
+        for (const id in this.badgePoints) {
+            const point = this.badgePoints[id];
+            
             if (point.discovered) {
                 // 発見済みポイント
                 this.ctx.fillStyle = '#FFD700';
@@ -477,7 +483,7 @@ class HakusanRPGEngine {
             this.ctx.font = '12px monospace';
             this.ctx.textAlign = 'center';
             this.ctx.fillText(point.name, point.x, point.y - 15);
-        });
+        }
         
         this.ctx.restore();
     }
@@ -602,8 +608,9 @@ class HakusanRPGEngine {
             this.miniMapCtx.arc(playerX, playerY, 3, 0, Math.PI * 2);
             this.miniMapCtx.fill();
             
-            // バッジポイント
-            Object.values(this.badgePoints).forEach(point => {
+            // バッジポイント - optimized loop
+            for (const id in this.badgePoints) {
+                const point = this.badgePoints[id];
                 const pointX = offsetX + (point.x / this.mapWidth) * drawWidth;
                 const pointY = offsetY + (point.y / this.mapHeight) * drawHeight;
                 
@@ -611,7 +618,7 @@ class HakusanRPGEngine {
                 this.miniMapCtx.beginPath();
                 this.miniMapCtx.arc(pointX, pointY, 2, 0, Math.PI * 2);
                 this.miniMapCtx.fill();
-            });
+            }
         }
     }
     

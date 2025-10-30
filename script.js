@@ -91,8 +91,27 @@ const badges = {
     oguchi: '尾口バッジ'
 };
 
+// Cache frequently used DOM elements
+const domCache = {
+    stampCount: null,
+    progressFill: null,
+    completeSection: null,
+    gameMap: null,
+    zoomLevel: null,
+    init() {
+        this.stampCount = document.getElementById('stampCount');
+        this.progressFill = document.getElementById('progressFill');
+        this.completeSection = document.getElementById('completeSection');
+        this.gameMap = document.getElementById('gameMap');
+        this.zoomLevel = document.getElementById('zoomLevel');
+    }
+};
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize DOM cache
+    domCache.init();
+    
     updateStampDisplay();
     
     // Check for stamp parameter in URL
@@ -114,12 +133,11 @@ document.addEventListener('DOMContentLoaded', function() {
         window.history.replaceState({path: newURL}, '', newURL);
     }
     
-    // Initialize incentive content when available
+    // Initialize incentive content when available - single timeout instead of cascade
     setTimeout(() => {
         if (window.incentiveSystem) {
             updateIncentiveContent();
         }
-        // 確実にバッジアイコンが表示されるように
         forceBadgeIconUpdate();
     }, 500);
 });
@@ -130,247 +148,204 @@ function getStamps() {
     return stamps ? JSON.parse(stamps) : [];
 }
 
-// バッジアイコンを確実に更新する専用関数
+// バッジアイコンを確実に更新する専用関数 (optimized)
 function forceBadgeIconUpdate() {
     const stamps = getStamps();
+    const stampSet = new Set(stamps);
     
-    console.log('Force updating badge icons...', stamps);
-    
-    const gymBadgeImages = {
-        'tsurugi': 'images/badges/tsurugi.png',     // 鶴来バッジ
-        'mikawa': 'images/badges/mikawa.png',       // 美川バッジ
-        'mattou': 'images/badges/mattou.png',       // 松任バッジ
-        'kawachi': 'images/badges/kawachi.png',     // 河内バッジ
-        'shiramine': 'images/badges/shiramine.png', // 白峰バッジ
-        'yoshinodani': 'images/badges/yoshinodani.png', // 吉野谷バッジ
-        'torigoe': 'images/badges/torigoe.png',     // 鳥越バッジ
-        'oguchi': 'images/badges/oguchi.png'        // 尾口バッジ
-    };
-    
-    // 全ての町をチェック
-    Object.keys(towns).forEach(townCode => {
+    // 全ての町をチェック - optimized loop
+    for (const townCode in towns) {
         const townCard = document.querySelector(`[data-town="${townCode}"]`);
-        if (!townCard) {
-            console.warn(`Town card not found: ${townCode}`);
-            return;
-        }
+        if (!townCard) continue;
         
-        // バッジアイコン要素を確実に取得
         const badgeIcons = townCard.querySelectorAll('.badge-icon');
+        const isObtained = stampSet.has(townCode);
+        const imageUrl = regionBadgeImages[townCode] || 'images/badges/default-badge.svg';
         
         badgeIcons.forEach(badgeIcon => {
-            if (stamps.includes(townCode)) {
-                // 取得済みの場合は専用アイコン
-                const imageUrl = gymBadgeImages[townCode] || 'images/badges/default-badge.svg';
-                badgeIcon.innerHTML = `<img src="${imageUrl}" alt="${townCode} badge" style="width: 100%; height: 100%; object-fit: contain;">`;
-                console.log(`Updated ${townCode} to image: ${imageUrl}`);
-            } else {
-                // 未取得の場合は？マーク
-                badgeIcon.innerHTML = '<span style="font-size: 2rem; color: #bdc3c7;">？</span>';
-                console.log(`Reset ${townCode} to ？`);
-            }
+            badgeIcon.innerHTML = isObtained
+                ? `<img src="${imageUrl}" alt="${townCode} badge" style="width: 100%; height: 100%; object-fit: contain;">`
+                : '<span style="font-size: 2rem; color: #bdc3c7;">？</span>';
         });
-    });
+    }
 }
 
-// Add stamp to localStorage
+// Add stamp to localStorage (optimized)
 function addStamp(townCode) {
     const stamps = getStamps();
-    if (!stamps.includes(townCode)) {
-        stamps.push(townCode);
-        localStorage.setItem('hakusan_badges', JSON.stringify(stamps));
-        
-        // Get town and badge information
-        const townData = towns[townCode];
-        const badgeName = badges[townCode] || townData || townCode;
-        
-        // Fire incentive system event
-        if (window.incentiveSystem) {
-            window.incentiveSystem.onBadgeAcquired(townCode, badgeName);
-        }
-        
-        // Dispatch custom event for other systems
-        window.dispatchEvent(new CustomEvent('badgeAcquired', {
-            detail: { gymId: townCode, badgeName: badgeName }
-        }));
-        
-        updateStampDisplay();
-        showStampNotification(badgeName, `${badgeName}バッジ`);
-        
-        // 確実にバッジアイコンを更新
-        setTimeout(() => {
-            forceBadgeIconUpdate();
-        }, 200);
-        
-        return true;
+    if (stamps.includes(townCode)) return false;
+    
+    stamps.push(townCode);
+    localStorage.setItem('hakusan_badges', JSON.stringify(stamps));
+    
+    // Get town and badge information
+    const townData = towns[townCode];
+    const badgeName = badges[townCode] || townData || townCode;
+    
+    // Fire incentive system event
+    if (window.incentiveSystem) {
+        window.incentiveSystem.onBadgeAcquired(townCode, badgeName);
     }
-    return false;
+    
+    // Dispatch custom event for other systems
+    window.dispatchEvent(new CustomEvent('badgeAcquired', {
+        detail: { gymId: townCode, badgeName: badgeName }
+    }));
+    
+    updateStampDisplay();
+    showStampNotification(badgeName, `${badgeName}バッジ`);
+    
+    // Single delayed update instead of cascade
+    setTimeout(forceBadgeIconUpdate, 200);
+    
+    return true;
 }
 
-// Update stamp display
+// Badge image mapping - defined once to avoid recreation
+const regionBadgeImages = {
+    'tsurugi': 'images/badges/tsurugi.png',
+    'mikawa': 'images/badges/mikawa.png',
+    'mattou': 'images/badges/mattou.png',
+    'kawachi': 'images/badges/kawachi.png',
+    'shiramine': 'images/badges/shiramine.png',
+    'yoshinodani': 'images/badges/yoshinodani.png',
+    'torigoe': 'images/badges/torigoe.png',
+    'oguchi': 'images/badges/oguchi.png'
+};
+
+// Update stamp display (optimized version)
 function updateStampDisplay() {
     const stamps = getStamps();
     const stampCount = stamps.length;
     const totalStamps = Object.keys(towns).length;
     
-    // Update counter
-    document.getElementById('stampCount').textContent = `${stampCount}/${totalStamps} バッジ獲得`;
-    
-    // Update progress bar
-    const progressFill = document.getElementById('progressFill');
-    const progressPercent = (stampCount / totalStamps) * 100;
-    progressFill.style.width = `${progressPercent}%`;
-    
-    // Update town cards - 確実にバッジアイコンを更新
-    Object.keys(towns).forEach(townCode => {
-        const townCard = document.querySelector(`[data-town="${townCode}"]`);
-        const stampStatus = document.getElementById(`stamp-${townCode}`);
-        
-        if (!townCard) {
-            console.warn(`Town card not found for: ${townCode}`);
-            return;
-        }
-        
-        // より確実にbadgeIconを取得（複数の方法で試行）
-        let badgeIcon = townCard.querySelector('.badge-icon');
-        if (!badgeIcon) {
-            // フォールバック: 他の可能なセレクターも試す
-            badgeIcon = townCard.querySelector('.badge-icon, .gym-badge, [class*="badge"]');
-        }
-        
-        console.log(`Updating ${townCode}: card found=${!!townCard}, icon found=${!!badgeIcon}, completed=${stamps.includes(townCode)}`);
-        
-        if (stamps.includes(townCode)) {
-            // バッジ取得済みの場合
-            townCard.classList.add('completed');
-            if (stampStatus) {
-                stampStatus.textContent = '✅ 獲得済み';
-                stampStatus.classList.add('obtained');
-            }
-            
-            // バッジアイコンを地域特徴画像に更新
-            if (badgeIcon) {
-                const regionBadgeImages = {
-                    'tsurugi': 'images/badges/tsurugi.png',     // 鶴来地域バッジ
-                    'mikawa': 'images/badges/mikawa.png',       // 美川地域バッジ
-                    'mattou': 'images/badges/mattou.png',       // 松任地域バッジ
-                    'kawachi': 'images/badges/kawachi.png',     // 河内地域バッジ
-                    'shiramine': 'images/badges/shiramine.png', // 白峰地域バッジ
-                    'yoshinodani': 'images/badges/yoshinodani.png', // 吉野谷地域バッジ
-                    'torigoe': 'images/badges/torigoe.png',     // 鳥越地域バッジ
-                    'oguchi': 'images/badges/oguchi.png'       // 尾口地域バッジ
-                };
-                
-                // 画像要素を作成または更新
-                const badgeImage = regionBadgeImages[townCode];
-                if (badgeImage) {
-                    badgeIcon.innerHTML = `<img src="${badgeImage}" alt="${towns[townCode]}バッジ" class="badge-img obtained">`;
-                }
-                
-                console.log(`Badge image updated for ${townCode}: ${badgeImage}`);
-            } else {
-                console.error(`Badge icon element not found for ${townCode}`);
-            }
-        } else {
-            // バッジ未取得の場合
-            townCard.classList.remove('completed');
-            if (stampStatus) {
-                stampStatus.textContent = '未取得';
-                stampStatus.classList.remove('obtained');
-            }
-            
-            // バッジアイコンを未取得画像に戻す
-            if (badgeIcon) {
-                badgeIcon.innerHTML = `<img src="images/badges/unknown.png" alt="未取得バッジ" class="badge-img unknown">`;
-                console.log(`Badge icon reset for ${townCode}: unknown`);
-            }
-        }
-    });
-    
-    // Update gym pins on map
-    Object.keys(towns).forEach(townCode => {
-        const gymPin = document.getElementById(`gym-${townCode}`);
-        if (gymPin) {
-            if (stamps.includes(townCode)) {
-                gymPin.classList.add('completed');
-                
-                // Add rarity effects
-                const badgeRarities = {
-                    'oguchi': 'rare',
-                    'kawachi': 'uncommon',
-                    'mattou': 'common',
-                    'mikawa': 'uncommon', 
-                    'shiramine': 'legendary',
-                    'torigoe': 'rare',
-                    'tsurugi': 'uncommon',
-                    'yoshinodani': 'rare'
-                };
-                
-                const rarity = badgeRarities[townCode];
-                gymPin.classList.add(`badge-rarity`, rarity);
-                
-                // Add rarity indicator
-                if (!gymPin.querySelector('.rarity-indicator')) {
-                    const rarityIndicator = document.createElement('div');
-                    rarityIndicator.className = `rarity-indicator ${rarity}`;
-                    const rarityIcons = {
-                        'legendary': '🐉',
-                        'rare': '💎',
-                        'uncommon': '🌟', 
-                        'common': '⭐'
-                    };
-                    rarityIndicator.textContent = rarityIcons[rarity];
-                    gymPin.appendChild(rarityIndicator);
-                }
-                
-                // Update badge appearance based on specific gym
-                const badgeElement = gymPin.querySelector('.gym-badge');
-                if (badgeElement) {
-                    const gymIcons = {
-                        'oguchi': '🧚‍♀️',
-                        'kawachi': '🌊', 
-                        'mattou': '⭐',
-                        'mikawa': '🌍',
-                        'shiramine': '❄️',
-                        'torigoe': '🌿',
-                        'tsurugi': '⚔️',
-                        'yoshinodani': '💧'
-                    };
-                    badgeElement.textContent = gymIcons[townCode];
-                    badgeElement.classList.add('premium-badge');
-                }
-            } else {
-                gymPin.classList.remove('completed', 'badge-rarity', 'legendary', 'rare', 'uncommon', 'common');
-                
-                // Remove rarity indicator
-                const rarityIndicator = gymPin.querySelector('.rarity-indicator');
-                if (rarityIndicator) {
-                    rarityIndicator.remove();
-                }
-                
-                // Reset badge to unknown/locked state
-                const badgeElement = gymPin.querySelector('.gym-badge');
-                if (badgeElement) {
-                    badgeElement.textContent = '？';
-                    badgeElement.classList.remove('premium-badge');
-                }
-            }
-        }
-    });
-    
-    // Show complete section if all stamps collected
-    const completeSection = document.getElementById('completeSection');
-    if (stampCount === totalStamps) {
-        completeSection.style.display = 'block';
-        showCompletionCelebration();
-    } else {
-        completeSection.style.display = 'none';
+    // Update counter using cached element
+    if (domCache.stampCount) {
+        domCache.stampCount.textContent = `${stampCount}/${totalStamps} バッジ獲得`;
     }
     
-    // 最後に確実にバッジアイコンを更新
-    setTimeout(() => {
-        forceBadgeIconUpdate();
-    }, 100);
+    // Update progress bar using cached element
+    if (domCache.progressFill) {
+        const progressPercent = (stampCount / totalStamps) * 100;
+        domCache.progressFill.style.width = `${progressPercent}%`;
+    }
+    
+    // Create stamp set for O(1) lookup instead of O(n) includes()
+    const stampSet = new Set(stamps);
+    
+    // Update town cards - optimized loop
+    for (const townCode in towns) {
+        const townCard = document.querySelector(`[data-town="${townCode}"]`);
+        if (!townCard) continue;
+        
+        const stampStatus = document.getElementById(`stamp-${townCode}`);
+        const badgeIcon = townCard.querySelector('.badge-icon');
+        const isCompleted = stampSet.has(townCode);
+        
+        // Update card status
+        townCard.classList.toggle('completed', isCompleted);
+        
+        if (stampStatus) {
+            stampStatus.textContent = isCompleted ? '✅ 獲得済み' : '未取得';
+            stampStatus.classList.toggle('obtained', isCompleted);
+        }
+        
+        // Update badge icon
+        if (badgeIcon) {
+            const badgeImage = regionBadgeImages[townCode];
+            if (isCompleted && badgeImage) {
+                badgeIcon.innerHTML = `<img src="${badgeImage}" alt="${towns[townCode]}バッジ" class="badge-img obtained">`;
+            } else {
+                badgeIcon.innerHTML = `<img src="images/badges/unknown.png" alt="未取得バッジ" class="badge-img unknown">`;
+            }
+        }
+    }
+    
+    // Update gym pins on map - optimized
+    updateGymPins(stampSet);
+    
+    // Show complete section if all stamps collected
+    if (domCache.completeSection) {
+        if (stampCount === totalStamps) {
+            domCache.completeSection.style.display = 'block';
+            showCompletionCelebration();
+        } else {
+            domCache.completeSection.style.display = 'none';
+        }
+    }
+}
+
+// Badge rarities - defined once
+const badgeRarities = {
+    'oguchi': 'rare',
+    'kawachi': 'uncommon',
+    'mattou': 'common',
+    'mikawa': 'uncommon',
+    'shiramine': 'legendary',
+    'torigoe': 'rare',
+    'tsurugi': 'uncommon',
+    'yoshinodani': 'rare'
+};
+
+const rarityIcons = {
+    'legendary': '🐉',
+    'rare': '💎',
+    'uncommon': '🌟',
+    'common': '⭐'
+};
+
+const gymIcons = {
+    'oguchi': '🧚‍♀️',
+    'kawachi': '🌊',
+    'mattou': '⭐',
+    'mikawa': '🌍',
+    'shiramine': '❄️',
+    'torigoe': '🌿',
+    'tsurugi': '⚔️',
+    'yoshinodani': '💧'
+};
+
+// Separated gym pins update for better performance
+function updateGymPins(stampSet) {
+    for (const townCode in towns) {
+        const gymPin = document.getElementById(`gym-${townCode}`);
+        if (!gymPin) continue;
+        
+        const isCompleted = stampSet.has(townCode);
+        const rarity = badgeRarities[townCode];
+        
+        if (isCompleted) {
+            gymPin.classList.add('completed', 'badge-rarity', rarity);
+            
+            // Add rarity indicator if not exists
+            if (!gymPin.querySelector('.rarity-indicator')) {
+                const rarityIndicator = document.createElement('div');
+                rarityIndicator.className = `rarity-indicator ${rarity}`;
+                rarityIndicator.textContent = rarityIcons[rarity];
+                gymPin.appendChild(rarityIndicator);
+            }
+            
+            // Update badge appearance
+            const badgeElement = gymPin.querySelector('.gym-badge');
+            if (badgeElement) {
+                badgeElement.textContent = gymIcons[townCode];
+                badgeElement.classList.add('premium-badge');
+            }
+        } else {
+            gymPin.classList.remove('completed', 'badge-rarity', 'legendary', 'rare', 'uncommon', 'common');
+            
+            // Remove rarity indicator
+            const rarityIndicator = gymPin.querySelector('.rarity-indicator');
+            if (rarityIndicator) rarityIndicator.remove();
+            
+            // Reset badge to unknown/locked state
+            const badgeElement = gymPin.querySelector('.gym-badge');
+            if (badgeElement) {
+                badgeElement.textContent = '？';
+                badgeElement.classList.remove('premium-badge');
+            }
+        }
+    }
 }
 
 // Show stamp notification
@@ -919,16 +894,14 @@ function zoomAtPoint(x, y, factor) {
 }
 
 function updateMapTransform() {
-    const gameMap = document.getElementById('gameMap');
-    if (gameMap) {
-        gameMap.style.transform = `scale(${currentZoom}) translate(${mapX/currentZoom}px, ${mapY/currentZoom}px)`;
+    if (domCache.gameMap) {
+        domCache.gameMap.style.transform = `scale(${currentZoom}) translate(${mapX/currentZoom}px, ${mapY/currentZoom}px)`;
     }
 }
 
 function updateZoomDisplay() {
-    const zoomLevel = document.getElementById('zoomLevel');
-    if (zoomLevel) {
-        zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
+    if (domCache.zoomLevel) {
+        domCache.zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
     }
 }
 

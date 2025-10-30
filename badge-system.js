@@ -33,25 +33,50 @@ class HakusanBadgeSystem {
     }
     
     generateBadgeImages() {
-        Object.entries(this.regions).forEach(([regionId, regionData]) => {
-            Object.entries(this.rarityLevels).forEach(([rarity, rarityData]) => {
-                const badgeImage = this.createBadgeImage(regionData, rarityData);
+        // Batch canvas operations for better performance
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 120;
+        tempCanvas.height = 120;
+        const tempCtx = tempCanvas.getContext('2d');
+        
+        // Pre-cache color calculations
+        const colorCache = new Map();
+        
+        for (const regionId in this.regions) {
+            const regionData = this.regions[regionId];
+            
+            for (const rarity in this.rarityLevels) {
+                const rarityData = this.rarityLevels[rarity];
+                
+                // Clear canvas for reuse
+                tempCtx.clearRect(0, 0, 120, 120);
+                
+                const badgeImage = this.createBadgeImageOptimized(tempCtx, regionData, rarityData, colorCache);
                 this.badgeImages.set(`${regionId}_${rarity}`, badgeImage);
-            });
-        });
+            }
+        }
     }
     
-    createBadgeImage(regionData, rarityData) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 120;
-        canvas.height = 120;
-        const ctx = canvas.getContext('2d');
+    createBadgeImageOptimized(ctx, regionData, rarityData, colorCache) {
+    createBadgeImageOptimized(ctx, regionData, rarityData, colorCache) {
         
         // 背景グラデーション
         const gradient = ctx.createRadialGradient(60, 60, 20, 60, 60, 60);
         gradient.addColorStop(0, rarityData.color);
-        gradient.addColorStop(0.7, this.darkenColor(rarityData.color, 0.3));
-        gradient.addColorStop(1, this.darkenColor(rarityData.color, 0.6));
+        
+        // Cache darkened colors
+        const cacheKey1 = `${rarityData.color}_0.3`;
+        const cacheKey2 = `${rarityData.color}_0.6`;
+        
+        if (!colorCache.has(cacheKey1)) {
+            colorCache.set(cacheKey1, this.darkenColor(rarityData.color, 0.3));
+        }
+        if (!colorCache.has(cacheKey2)) {
+            colorCache.set(cacheKey2, this.darkenColor(rarityData.color, 0.6));
+        }
+        
+        gradient.addColorStop(0.7, colorCache.get(cacheKey1));
+        gradient.addColorStop(1, colorCache.get(cacheKey2));
         
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -89,7 +114,7 @@ class HakusanBadgeSystem {
         // 装飾パターン（レアリティに応じて）
         this.addRarityEffects(ctx, rarityData, 60, 60, 55);
         
-        return canvas.toDataURL('image/png');
+        return ctx.canvas.toDataURL('image/png');
     }
     
     addRarityEffects(ctx, rarityData, centerX, centerY, radius) {
@@ -362,11 +387,13 @@ class HakusanBadgeSystem {
         const byRegion = {};
         const byRarity = {};
         
-        this.collectedBadges.forEach(badgeKey => {
+        // Optimized loop
+        for (let i = 0; i < this.collectedBadges.length; i++) {
+            const badgeKey = this.collectedBadges[i];
             const [regionId, rarity] = badgeKey.split('_');
             byRegion[regionId] = (byRegion[regionId] || 0) + 1;
             byRarity[rarity] = (byRarity[rarity] || 0) + 1;
-        });
+        }
         
         return {
             total: collected,
@@ -813,17 +840,20 @@ ${window.location.href}
     
     getCompletedRegions() {
         const completedRegions = [];
-        Object.keys(this.regions).forEach(regionId => {
+        const rarityKeys = Object.keys(this.rarityLevels);
+        
+        for (const regionId in this.regions) {
             let hasAllRarities = true;
-            Object.keys(this.rarityLevels).forEach(rarity => {
-                if (!this.collectedBadges.includes(`${regionId}_${rarity}`)) {
+            for (let i = 0; i < rarityKeys.length; i++) {
+                if (!this.collectedBadges.includes(`${regionId}_${rarityKeys[i]}`)) {
                     hasAllRarities = false;
+                    break;
                 }
-            });
+            }
             if (hasAllRarities) {
                 completedRegions.push(regionId);
             }
-        });
+        }
         return completedRegions;
     }
 
