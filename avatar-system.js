@@ -57,6 +57,13 @@ class HakusanAvatarSystem {
         this.currentAnimation = 'idle';
         this.animationFrame = 0;
         this.lastAnimationTime = 0;
+        this.isAnimating = false;
+        
+        // Bind animate method once for better performance
+        this.boundAnimate = this.animate.bind(this);
+        
+        // Cache DOM elements
+        this.customizerElement = null;
         
         this.init();
     }
@@ -65,6 +72,10 @@ class HakusanAvatarSystem {
         this.loadAvatar();
         this.checkUnlocks();
         this.setupCustomizer();
+        
+        // Cache the customizer element after setup
+        this.customizerElement = document.getElementById('avatar-customizer');
+        
         console.log('アバターシステム初期化完了');
     }
     
@@ -671,19 +682,32 @@ class HakusanAvatarSystem {
     openCustomizer() {
         this.checkUnlocks();
         this.updateCustomizerUI();
-        document.getElementById('avatar-customizer').style.display = 'flex';
         
-        // アニメーション開始
-        this.animationInterval = setInterval(() => {
-            this.updateAnimation();
-        }, 50);
+        if (this.customizerElement) {
+            this.customizerElement.style.display = 'flex';
+        }
+        
+        // アニメーション開始 (using requestAnimationFrame for better performance)
+        this.isAnimating = true;
+        this.requestId = requestAnimationFrame(this.boundAnimate);
+    }
+    
+    animate() {
+        if (!this.isAnimating) return;
+        
+        this.updateAnimation();
+        this.requestId = requestAnimationFrame(this.boundAnimate);
     }
     
     closeCustomizer() {
-        document.getElementById('avatar-customizer').style.display = 'none';
+        if (this.customizerElement) {
+            this.customizerElement.style.display = 'none';
+        }
         
-        if (this.animationInterval) {
-            clearInterval(this.animationInterval);
+        this.isAnimating = false;
+        if (this.requestId) {
+            cancelAnimationFrame(this.requestId);
+            this.requestId = null;
         }
     }
     

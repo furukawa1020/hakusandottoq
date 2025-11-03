@@ -71,6 +71,16 @@ class HakusanRPGEngine {
             totalSteps: 0
         };
         
+        // Cache UI elements for performance
+        this.uiElements = {
+            badgeCount: null,
+            currentLocation: null,
+            nearestSpot: null,
+            notification: null,
+            notificationTitle: null,
+            notificationText: null
+        };
+        
         this.init();
     }
     
@@ -79,9 +89,20 @@ class HakusanRPGEngine {
         this.setupCanvas();
         this.setupControls();
         this.loadPlayerProgress();
+        this.cacheUIElements(); // Cache UI elements after DOM is ready
         this.gameLoop();
         
         console.log('白山RPGマップエンジン初期化完了');
+    }
+    
+    cacheUIElements() {
+        // Cache frequently accessed UI elements
+        this.uiElements.badgeCount = document.getElementById('badgeCount');
+        this.uiElements.currentLocation = document.getElementById('currentLocation');
+        this.uiElements.nearestSpot = document.getElementById('nearestSpot');
+        this.uiElements.notification = document.getElementById('notification');
+        this.uiElements.notificationTitle = document.getElementById('notificationTitle');
+        this.uiElements.notificationText = document.getElementById('notificationText');
     }
     
     async loadMapImage() {
@@ -347,11 +368,12 @@ class HakusanRPGEngine {
         let nearestPoint = null;
         let nearestDistance = Infinity;
         
-        Object.entries(this.badgePoints).forEach(([id, point]) => {
-            const distance = Math.sqrt(
-                Math.pow(this.player.x - point.x, 2) + 
-                Math.pow(this.player.y - point.y, 2)
-            );
+        // Use for...in for better performance
+        for (const id in this.badgePoints) {
+            const point = this.badgePoints[id];
+            const dx = this.player.x - point.x;
+            const dy = this.player.y - point.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
             
             if (distance < nearestDistance) {
                 nearestDistance = distance;
@@ -362,7 +384,7 @@ class HakusanRPGEngine {
             if (distance < 30 && !point.discovered) {
                 this.discoverBadgePoint(id, point);
             }
-        });
+        }
         
         this.gameState.nearestPoint = nearestPoint;
     }
@@ -398,17 +420,19 @@ class HakusanRPGEngine {
     }
     
     updateGameState() {
-        // 現在地域の判定
+        // 現在地域の判定 - optimized with for...in
         let currentRegion = null;
-        Object.entries(this.badgePoints).forEach(([id, point]) => {
-            const distance = Math.sqrt(
-                Math.pow(this.player.x - point.x, 2) + 
-                Math.pow(this.player.y - point.y, 2)
-            );
+        for (const id in this.badgePoints) {
+            const point = this.badgePoints[id];
+            const dx = this.player.x - point.x;
+            const dy = this.player.y - point.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
             if (distance < 80) {
                 currentRegion = point.name;
+                break; // Exit early when found
             }
-        });
+        }
         
         this.gameState.currentRegion = currentRegion;
     }
@@ -454,7 +478,10 @@ class HakusanRPGEngine {
         this.ctx.scale(this.scale, this.scale);
         this.ctx.translate(-this.camera.x, -this.camera.y);
         
-        Object.entries(this.badgePoints).forEach(([id, point]) => {
+        // Optimized loop
+        for (const id in this.badgePoints) {
+            const point = this.badgePoints[id];
+            
             if (point.discovered) {
                 // 発見済みポイント
                 this.ctx.fillStyle = '#FFD700';
@@ -477,7 +504,7 @@ class HakusanRPGEngine {
             this.ctx.font = '12px monospace';
             this.ctx.textAlign = 'center';
             this.ctx.fillText(point.name, point.x, point.y - 15);
-        });
+        }
         
         this.ctx.restore();
     }
@@ -602,8 +629,9 @@ class HakusanRPGEngine {
             this.miniMapCtx.arc(playerX, playerY, 3, 0, Math.PI * 2);
             this.miniMapCtx.fill();
             
-            // バッジポイント
-            Object.values(this.badgePoints).forEach(point => {
+            // バッジポイント - optimized loop
+            for (const id in this.badgePoints) {
+                const point = this.badgePoints[id];
                 const pointX = offsetX + (point.x / this.mapWidth) * drawWidth;
                 const pointY = offsetY + (point.y / this.mapHeight) * drawHeight;
                 
@@ -611,50 +639,44 @@ class HakusanRPGEngine {
                 this.miniMapCtx.beginPath();
                 this.miniMapCtx.arc(pointX, pointY, 2, 0, Math.PI * 2);
                 this.miniMapCtx.fill();
-            });
+            }
         }
     }
     
     updateUI() {
-        // バッジカウント更新
-        const badgeCountEl = document.getElementById('badgeCount');
-        if (badgeCountEl) {
-            badgeCountEl.textContent = `バッジ: ${this.gameState.badgesCollected}/8`;
+        // バッジカウント更新 - use cached element
+        if (this.uiElements.badgeCount) {
+            this.uiElements.badgeCount.textContent = `バッジ: ${this.gameState.badgesCollected}/8`;
         }
         
-        // 現在地更新
-        const currentLocationEl = document.getElementById('currentLocation');
-        if (currentLocationEl) {
+        // 現在地更新 - use cached element
+        if (this.uiElements.currentLocation) {
             const location = this.gameState.currentRegion || '冒険中';
-            currentLocationEl.textContent = `現在地: ${location}`;
+            this.uiElements.currentLocation.textContent = `現在地: ${location}`;
         }
         
-        // 最寄りスポット更新
-        const nearestSpotEl = document.getElementById('nearestSpot');
-        if (nearestSpotEl) {
+        // 最寄りスポット更新 - use cached element
+        if (this.uiElements.nearestSpot) {
             const nearest = this.gameState.nearestPoint;
             if (nearest) {
                 const distance = Math.round(nearest.distance);
-                nearestSpotEl.textContent = `最寄り: ${nearest.name} (${distance}m)`;
+                this.uiElements.nearestSpot.textContent = `最寄り: ${nearest.name} (${distance}m)`;
             } else {
-                nearestSpotEl.textContent = '最寄り: 探索中...';
+                this.uiElements.nearestSpot.textContent = '最寄り: 探索中...';
             }
         }
     }
     
     showNotification(title, text) {
-        const notification = document.getElementById('notification');
-        const notificationTitle = document.getElementById('notificationTitle');
-        const notificationText = document.getElementById('notificationText');
-        
-        if (notification && notificationTitle && notificationText) {
-            notificationTitle.textContent = title;
-            notificationText.textContent = text;
+        // Use cached elements
+        if (this.uiElements.notification && this.uiElements.notificationTitle && this.uiElements.notificationText) {
+            this.uiElements.notificationTitle.textContent = title;
+            this.uiElements.notificationText.textContent = text;
             
-            notification.classList.add('show');
+            this.uiElements.notification.classList.add('show');
             
             setTimeout(() => {
-                notification.classList.remove('show');
+                this.uiElements.notification.classList.remove('show');
             }, 3000);
         }
     }

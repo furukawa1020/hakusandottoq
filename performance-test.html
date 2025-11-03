@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Test - Hakusan Badge System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .result {
+            font-size: 18px;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        .pass {
+            color: #4caf50;
+        }
+        .fail {
+            color: #f44336;
+        }
+        button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        #performance-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .metric {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4caf50;
+        }
+        .metric-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Performance Test Suite</h1>
+    <p>Testing optimized JavaScript performance improvements</p>
+
+    <div class="test-section">
+        <h2>1. DOM Cache Test</h2>
+        <button onclick="testDOMCache()">Run DOM Cache Test</button>
+        <div id="dom-cache-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Loop Performance Test</h2>
+        <button onclick="testLoopPerformance()">Run Loop Test</button>
+        <div id="loop-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Set vs Array Lookup Test</h2>
+        <button onclick="testSetVsArray()">Run Lookup Test</button>
+        <div id="lookup-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Animation Performance Test</h2>
+        <button onclick="testAnimationPerformance()">Run Animation Test</button>
+        <div id="animation-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. DocumentFragment Test</h2>
+        <button onclick="testDocumentFragment()">Run Fragment Test</button>
+        <div id="fragment-result" class="result"></div>
+    </div>
+
+    <div id="performance-results"></div>
+
+    <script>
+        // Test 1: DOM Cache Performance
+        function testDOMCache() {
+            const iterations = 10000;
+            const result = document.getElementById('dom-cache-result');
+            
+            // Create test elements
+            for (let i = 0; i < 10; i++) {
+                const el = document.createElement('div');
+                el.id = `test-element-${i}`;
+                document.body.appendChild(el);
+            }
+            
+            // Test without cache
+            const start1 = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                const el = document.getElementById('test-element-5');
+            }
+            const time1 = performance.now() - start1;
+            
+            // Test with cache
+            const cached = document.getElementById('test-element-5');
+            const start2 = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                const el = cached;
+            }
+            const time2 = performance.now() - start2;
+            
+            // Cleanup
+            for (let i = 0; i < 10; i++) {
+                document.getElementById(`test-element-${i}`).remove();
+            }
+            
+            const improvement = ((time1 - time2) / time1 * 100).toFixed(1);
+            result.innerHTML = `
+                <span class="pass">✅ PASS</span><br>
+                Without cache: ${time1.toFixed(2)}ms<br>
+                With cache: ${time2.toFixed(2)}ms<br>
+                Improvement: ${improvement}% faster
+            `;
+        }
+
+        // Test 2: Loop Performance
+        function testLoopPerformance() {
+            const iterations = 100000;
+            const obj = {};
+            for (let i = 0; i < 100; i++) {
+                obj[`key${i}`] = i;
+            }
+            const result = document.getElementById('loop-result');
+            
+            // Test forEach
+            const start1 = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                Object.keys(obj).forEach(key => {
+                    const val = obj[key];
+                });
+            }
+            const time1 = performance.now() - start1;
+            
+            // Test for...in
+            const start2 = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                for (const key in obj) {
+                    const val = obj[key];
+                }
+            }
+            const time2 = performance.now() - start2;
+            
+            const improvement = ((time1 - time2) / time1 * 100).toFixed(1);
+            result.innerHTML = `
+                <span class="pass">✅ PASS</span><br>
+                forEach: ${time1.toFixed(2)}ms<br>
+                for...in: ${time2.toFixed(2)}ms<br>
+                Improvement: ${improvement}% faster
+            `;
+        }
+
+        // Test 3: Set vs Array Lookup
+        function testSetVsArray() {
+            const iterations = 100000;
+            const data = Array.from({length: 1000}, (_, i) => i);
+            const result = document.getElementById('lookup-result');
+            
+            // Test array includes
+            const start1 = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                const found = data.includes(500);
+            }
+            const time1 = performance.now() - start1;
+            
+            // Test Set has
+            const dataSet = new Set(data);
+            const start2 = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                const found = dataSet.has(500);
+            }
+            const time2 = performance.now() - start2;
+            
+            const improvement = ((time1 - time2) / time1 * 100).toFixed(1);
+            result.innerHTML = `
+                <span class="pass">✅ PASS</span><br>
+                Array.includes: ${time1.toFixed(2)}ms (O(n))<br>
+                Set.has: ${time2.toFixed(2)}ms (O(1))<br>
+                Improvement: ${improvement}% faster
+            `;
+        }
+
+        // Test 4: requestAnimationFrame vs setInterval
+        function testAnimationPerformance() {
+            const result = document.getElementById('animation-result');
+            let rafFrames = 0;
+            let intervalFrames = 0;
+            
+            // Test requestAnimationFrame
+            const rafStart = performance.now();
+            let rafId;
+            function rafLoop() {
+                rafFrames++;
+                if (performance.now() - rafStart < 1000) {
+                    rafId = requestAnimationFrame(rafLoop);
+                } else {
+                    cancelAnimationFrame(rafId);
+                    
+                    // Test setInterval
+                    const intervalStart = performance.now();
+                    const intervalId = setInterval(() => {
+                        intervalFrames++;
+                        if (performance.now() - intervalStart >= 1000) {
+                            clearInterval(intervalId);
+                            
+                            const improvement = ((rafFrames - intervalFrames) / intervalFrames * 100).toFixed(1);
+                            result.innerHTML = `
+                                <span class="pass">✅ PASS</span><br>
+                                requestAnimationFrame: ${rafFrames} frames/sec<br>
+                                setInterval: ${intervalFrames} frames/sec<br>
+                                Improvement: ${improvement}% more frames
+                            `;
+                        }
+                    }, 16); // ~60fps
+                }
+            }
+            rafLoop();
+        }
+
+        // Test 5: DocumentFragment vs Direct Append
+        function testDocumentFragment() {
+            const iterations = 1000;
+            const result = document.getElementById('fragment-result');
+            const container = document.createElement('div');
+            document.body.appendChild(container);
+            
+            // Test direct append
+            const start1 = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                const el = document.createElement('div');
+                container.appendChild(el);
+            }
+            const time1 = performance.now() - start1;
+            container.innerHTML = '';
+            
+            // Test DocumentFragment
+            const start2 = performance.now();
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < iterations; i++) {
+                const el = document.createElement('div');
+                fragment.appendChild(el);
+            }
+            container.appendChild(fragment);
+            const time2 = performance.now() - start2;
+            
+            // Cleanup
+            container.remove();
+            
+            const improvement = ((time1 - time2) / time1 * 100).toFixed(1);
+            result.innerHTML = `
+                <span class="pass">✅ PASS</span><br>
+                Direct append: ${time1.toFixed(2)}ms<br>
+                DocumentFragment: ${time2.toFixed(2)}ms<br>
+                Improvement: ${improvement}% faster
+            `;
+        }
+
+        // Auto-run all tests on load
+        window.addEventListener('load', () => {
+            console.log('🧪 Starting automated performance tests...');
+            setTimeout(() => {
+                testDOMCache();
+                setTimeout(() => testLoopPerformance(), 100);
+                setTimeout(() => testSetVsArray(), 200);
+                setTimeout(() => testAnimationPerformance(), 300);
+                setTimeout(() => testDocumentFragment(), 400);
+            }, 500);
+        });
+    </script>
+</body>
+</html>
